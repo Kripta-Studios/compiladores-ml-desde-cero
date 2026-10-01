@@ -58,6 +58,7 @@
 \newcommand{\N}{\mathbb{N}}
 \newcommand{\dd}{\mathrm{d}}
 \begin{document}
+\hypersetup{pageanchor=false}
 \begin{titlepage}
 \centering\vspace*{.8cm}
 {\large INGENIERÍA INFORMÁTICA · SISTEMAS DE INTELIGENCIA ARTIFICIAL\par}
@@ -79,10 +80,11 @@ Con el compilador \textbf{Lumbre}, laboratorios resueltos, proyectos de investig
 \vspace{.3cm}{\small Corte de investigación: 1 de octubre de 2026\par}
 \vspace{.35cm}
 \begin{minipage}{.87\textwidth}\footnotesize
-Material didáctico independiente. El temario de referencia es el facilitado por el estudiante; no se atribuye a una universidad ni a Tiny Corp. Los ejemplos, diagramas y el compilador Lumbre son elaboración original. Los resultados externos se atribuyen a sus fuentes. Las pruebas locales son de CPU; no se presentan como validación de GPU ni como entrenamiento de un modelo de frontera.
+Material didáctico independiente. Los ejemplos, diagramas y el compilador Lumbre son elaboración original. Incluye validación en CPU y CUDA sobre una RTX 5070 Ti Laptop, comparaciones reproducibles y entrenamiento de un decoder pequeño. Los resultados externos se atribuyen a sus fuentes. HIP queda pendiente de validación en hardware compatible.
 \end{minipage}
 \end{titlepage}
 \pagenumbering{arabic}
+\hypersetup{pageanchor=true}
 
 % SOURCE: 00_inicio.md
 \chapter*{Empieza aquí}
@@ -1593,7 +1595,7 @@ Un bucle cuyo número de iteraciones depende de una búsqueda, una estructura de
 \section{Un manifiesto de operaciones soportadas}
 Un proyecto serio mantiene un catálogo con operación, tipos, formas, backward, backends y tests. «Soporta atención» es demasiado impreciso si solo funciona para una longitud, un layout, una máscara y forward sin gradiente.
 
-En Lumbre se distinguen las operaciones generales del IR, el laboratorio de vistas, el kernel de atención online y las extensiones GPU pendientes de validación. El catálogo de la entrega permite saber qué constituye una implementación ejecutada y qué constituye una práctica avanzada.
+En Lumbre se distinguen las operaciones generales del IR, el laboratorio de vistas, el kernel de atención online y los backends de dispositivo. C y CUDA cuentan con pruebas ejecutadas; HIP sigue pendiente de hardware compatible. El catálogo de la entrega permite saber qué constituye una implementación ejecutada y qué constituye una práctica avanzada.
 
 \begin{practica}[Descomponer una capa sin inventar una instrucción]
 Describe una capa que normaliza cada fila por la raíz de la media de sus cuadrados y luego aplica una proyección lineal. Enumera qué operaciones primitivas necesita y dónde aparecen reducciones.
@@ -3401,6 +3403,8 @@ No copies ese destino sin comprobar el dispositivo. El código GPU implementado 
 
 La revisión local ejecutó el decoder de depuración de 2.736 parámetros durante 20 pasos en CUDA, con atención online y GEMM bloqueada. La pérdida pasó de 3,1800122 a 2,9162602; se conservan checkpoint, evaluación y registro en \texttt{code/reports\allowbreak{}/validation\_\allowbreak{}20261001/dec\allowbreak{}oder\_cuda/}. HIP sigue pendiente. La aceptación del laboratorio exige volver a comprobar los resultados y medir en el dispositivo del estudiante.
 
+También se ejecutó el modelo principal de 75.584 parámetros durante 600 actualizaciones en CUDA. Una campaña posterior repite esa configuración en CPU y CUDA en el mismo host, con tareas secuenciales y carpetas de salida nuevas. El capítulo «CPU y CUDA en la misma máquina» incluye las órdenes completas, los resultados y el análisis de por qué 447 kernels pequeños pueden limitar la ventaja de una GPU.
+
 \section{Qué medir al aumentar el tamaño}
 Registra por separado construcción del grafo, compilación, primera ejecución, ejecución estable, copia del batch, checkpoint y evaluación. Cuenta tokens procesados y actualizaciones; no compares solo segundos entre configuraciones con contextos o batches distintos.
 
@@ -4798,6 +4802,8 @@ python laboratorio_gpu.py
 Para HIP, selecciona \texttt{LUMBRE\_BACKEND=hip} y un entorno donde \texttt{hipcc} conozca la arquitectura apropiada. El ejemplo entregado depende de la selección del toolchain; un port de producción debe hacer explícita esa arquitectura también en el manifiesto y en la clave de caché.
 
 \section{Leer el kernel generado}
+Para contrastar la prueba aislada con la batería completa, ejecuta \texttt{python -m py\allowbreak{}test -q --ba\allowbreak{}ckend=cuda} desde \texttt{code/}. El capítulo «CPU y CUDA en la misma máquina» desarrolla el protocolo de comparación, muestra las medidas y conserva la distinción entre las pruebas tensoriales de GPU y las pruebas que siguen ejecutándose en el host.
+
 Busca el índice global construido a partir de bloque e hilo. Después localiza la condición que protege \texttt{q<257}. Si el grid contiene más posiciones, no es necesariamente un error: el redondeo del número de bloques necesita la máscara. El error sería ejecutar cargas o escrituras de los hilos sobrantes sin protección.
 
 Localiza también las llamadas del host. Una función \texttt{\_\_global\_\_} describe trabajo del dispositivo; la sintaxis de lanzamiento y el runtime son otra parte. El programa debe comprobar errores del lanzamiento y esperar antes de leer la salida. El runtime educativo sincroniza para simplificar la observación, lo que es correcto pero limita concurrencia.
@@ -5625,6 +5631,170 @@ Una pregunta de port es si el mecanismo ganador depende de una instrucción o la
 
 \begin{comprueba}[El mapa mental final]
 Una intención matemática se expresa como programa; el compilador la transforma; el runtime la ejecuta sobre una máquina; las pruebas y medidas permiten evaluar qué se ha conservado y qué se ha mejorado. El entrenamiento añade gradientes, estado y datos, pero no elimina ninguna de esas obligaciones.
+
+\end{comprueba}
+
+% SOURCE: 22_cpu_cuda_validacion.md
+\chapter{CPU y CUDA en la misma máquina: de la prueba a la medida}
+\label{ch:cpu-cuda-validacion}
+Disponer de una GPU cambia las preguntas que podemos contestar. Ya podemos compilar el mismo grafo para dos destinos, comprobar sus resultados y observar cuánto cuesta ejecutarlo en cada uno. El objetivo de este capítulo es construir una comparación que puedas repetir y explicar. Los informes que acompañan al libro incluyen tanto la primera validación de CUDA como una campaña posterior con tareas ejecutadas en secuencia.
+
+\section{El entorno que realmente ejecutó el código}
+La máquina de validación ofrece una NVIDIA GeForce RTX 5070 Ti Laptop de 12 GB. Dentro de Ubuntu 24.04 en WSL2 usamos Python 3.12.3, GCC 13.3.0, NumPy 2.3.5 y pytest 9.0.2. El controlador observado es 591.86; el compilador CUDA es \texttt{nvcc} 12.9.86 y el destino es \texttt{sm\_120}. Puedes consultar el inventario completo en \texttt{code/reports\allowbreak{}/validation\_\allowbreak{}20261001/env\allowbreak{}ironment.jso\allowbreak{}n}.
+
+Hay tres piezas que conviene distinguir al diagnosticar una ejecución. El controlador permite utilizar el dispositivo. El toolkit aporta el compilador y sus cabeceras y bibliotecas. El runtime de Lumbre genera y carga una biblioteca anfitriona que reserva memoria, copia datos y lanza kernels. Ver una GPU en \texttt{nvidia-smi} solo comprueba una parte de esa cadena.
+
+En esta máquina también existía un toolkit Windows 12.4. La validación de Lumbre utilizó el toolkit Linux 12.9 dentro de WSL, porque el runtime suministrado carga bibliotecas POSIX. Un \texttt{nvcc} encontrado en una terminal Windows no identifica por sí mismo el compilador que utilizará Python dentro de WSL. Registra el ejecutable que resuelve cada entorno.
+
+Desde una terminal WSL y con el entorno Python del proyecto activado, comprueba:
+
+\begin{lstlisting}[language=bash]
+python --version
+cc --version
+command -v nvcc
+nvcc --version
+nvidia-smi
+\end{lstlisting}
+Si usas el toolkit aislado de la validación local, su directorio es \texttt{\textasciitilde{}/.local/opt\allowbreak{}/cuda-12.9.1\allowbreak{}/bin}. En otra instalación utiliza la ruta de tu propio toolkit. El valor de \texttt{LUMBRE\_CUDA\_ARCH} debe corresponder a tu dispositivo; el valor siguiente describe la RTX validada.
+
+\begin{lstlisting}[language=bash]
+export LUMBRE_CUDA_ARCH=sm_120
+export LUMBRE_CACHE="$HOME/.cache/lumbre-comparacion"
+\end{lstlisting}
+\begin{comprueba}[Qué significa seleccionar un backend]
+La variable \texttt{LUMBRE\_CUDA\_ARCH} configura el destino del compilador CUDA. Para seleccionar el dispositivo también debes pasar \texttt{backend="cuda"} a \texttt{Program}, \texttt{--backend cuda} a los ejemplos o \texttt{--backend=cuda} a pytest. Una variable de arquitectura no convierte una ejecución CPU en una ejecución CUDA.
+
+\end{comprueba}
+\section{La escalera de aceptación}
+El primer escalón comprueba tamaños pequeños y bordes. Con bloques de 128 hilos, 257 elementos requieren tres bloques: se lanzan 384 hilos y 127 posiciones deben quedar enmascaradas. También interesa probar 127, 128 y 129 para cruzar el límite del bloque. El tamaño cero comprueba que el renderer omite el kernel cuando la salida está vacía; lanzar una grid de tamaño cero sería otra operación.
+
+El segundo escalón comprueba matrices irregulares. En una GEMM por tiles, un hilo cuya salida queda fuera de la matriz puede seguir participando en cargas compartidas y barreras. Las pruebas deben ejercer bordes en M, N y K, broadcasting entre lotes y una dimensión de reducción vacía admitida por el contrato. El kernel compartido de Lumbre usa tiles de 16 por 16 y enmascara las cargas de los tiles incompletos.
+
+El tercer escalón comprueba operaciones compuestas y gradientes. Las pruebas existentes incluyen movimientos, reducciones, gather/scatter, softmax, convolución por composición, atención online y causalidad del decoder. Finalmente, el entrenamiento debe mantener pérdidas y gradientes finitos, guardar sus pesos y reanudar el estado del optimizador y del generador de números aleatorios.
+
+Desde \texttt{code/}, ejecuta cada backend de forma explícita:
+
+\begin{lstlisting}[language=bash]
+python -m pytest -q --backend=cpu
+python -m pytest -q --backend=cuda
+python examples/validate_book.py --backend cpu \
+  --output reports/comparacion/ejemplos_cpu.json
+python examples/validate_book.py --backend cuda \
+  --output reports/comparacion/ejemplos_cuda.json
+\end{lstlisting}
+La batería registrada superó 61 pruebas en cada selección de backend, sin omisiones. Esa cifra corresponde a la batería completa: el tokenizador, los mapas lógicos y la convolución C independiente mantienen su trabajo en el host. Los \texttt{Program} tensoriales seleccionan CUDA cuando se pide ese backend. El archivo \texttt{tests/conftest.py} implementa esta selección; un compilador o dispositivo ausente provoca fallos en las pruebas que lo necesitan.
+
+\section{Comparar valores y gradientes antes de comparar segundos}
+Para un mismo grafo, utiliza las mismas entradas, dtypes y formas. La comprobación elemento a elemento de una referencia finita suele expresar dos márgenes:
+
+\[
+|y_{\mathrm{CUDA}}-y_{\mathrm{CPU}}|
+\leq \mathrm{atol}+\mathrm{rtol}|y_{\mathrm{CPU}}|.
+\]
+La tolerancia absoluta protege la comparación cerca de cero. La relativa escala con la magnitud de la referencia. Una tolerancia debe apoyarse en la operación, la precisión y la longitud de la reducción. Aumentarla hasta ocultar un índice incorrecto destruye el valor de la prueba.
+
+En el decoder de depuración de 2.736 parámetros, las historias de veinte pasos registradas en CPU y CUDA difieren como máximo en \texttt{4.76837158203125e-7} en la pérdida. Ese resultado pertenece a esa configuración y esas entradas. Las reducciones y las transformaciones de coma flotante pueden producir diferencias que crezcan a lo largo de un entrenamiento de muchas actualizaciones.
+
+La igualdad exacta tiene otro papel en la prueba de reanudación. Dentro de cada backend, compara diez actualizaciones continuas con seis seguidas de cuatro al cargar el checkpoint. Deben coincidir los pesos, los momentos de AdamW, el contador de pasos, la configuración y el estado del RNG. Los informes \texttt{resume\_cpu.json} y \texttt{resume\_cuda.json} de la primera revisión registran esa igualdad. No se exige identidad bit a bit entre los checkpoints CPU y CUDA de dos entrenamientos completos.
+
+\begin{practica}[Localizar una divergencia]
+Un modelo guarda pesos finitos, pero su pérdida CUDA se separa mucho de la CPU desde el primer paso. Compara primero el forward con los mismos pesos y el mismo batch. Después compara la pérdida, los gradientes por parámetro y la actualización del optimizador. Si el forward ya diverge, inspeccionar el muestreo de texto no resolverá la primera diferencia.
+
+\end{practica}
+\section{Medir con una frontera explícita}
+El benchmark de Lumbre construye el grafo, compila el programa y carga entradas antes de medir. Ejecuta tres calentamientos y después cronometra \texttt{run(read=[])}. La medida incluye la llamada Python y la sincronización que hace el runtime; excluye la compilación, la carga inicial de entradas y la copia de los resultados al host. Su unidad de observación es una llamada residente al programa.
+
+En CUDA, una medida de host que solo cronometra el lanzamiento puede terminar antes que el trabajo de la GPU. Lumbre sincroniza al final de \texttt{run}, de modo que esta medida incluye la finalización del programa. Aun así, no equivale al tiempo aislado de una instrucción del dispositivo ni al de todo el proceso Python.
+
+Para repetir la campaña, desde \texttt{code/} y con la arquitectura configurada:
+
+\begin{lstlisting}[language=bash]
+python examples/bench_kernels.py --backend cpu --repeat 30 \
+  --output reports/comparacion/kernels_cpu.json
+python examples/bench_kernels.py --backend cuda --repeat 30 \
+  --output reports/comparacion/kernels_cuda.json
+\end{lstlisting}
+Espera a que termine una orden antes de lanzar la siguiente. La campaña incorporada a este capítulo ejecutó sus tareas en secuencia en el mismo host WSL. No fijó frecuencias, potencia ni carga del escritorio: las cifras son observaciones locales que conviene repetir antes de defender una mejora de rendimiento. Los JSON conservan las treinta muestras, mínimo, máximo, mediana, error numérico y metadatos del programa.
+
+En GEMM, el campo \texttt{shape} usa el orden \textbf{[M,N,K]}: la entrada A tiene forma [M,K] y B tiene forma [K,N]. En atención la forma es [B,H,T,D]. La tabla utiliza microsegundos por llamada residente y redondea la mediana para facilitar la lectura.
+
+{\small
+\begin{longtable}{@{}P{0.22\textwidth}P{0.23\textwidth}P{0.23\textwidth}P{0.23\textwidth}@{}}
+\toprule
+\textbf{Operación y forma} & \textbf{Variante} & \textbf{CPU (us)} & \textbf{CUDA (us)}\\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Operación y forma} & \textbf{Variante} & \textbf{CPU (us)} & \textbf{CUDA (us)}\\
+\midrule
+\endhead
+gemm 31x47x65 & reference & 329.94 & 464.43\\
+gemm 31x47x65 & blocked & 97.92 & 205.93\\
+gemm 128x128x128 & reference & 12840.66 & 364.82\\
+gemm 128x128x128 & blocked & 1644.77 & 423.72\\
+gemm 256x256x256 & reference & 106237.30 & 415.52\\
+gemm 256x256x256 & blocked & 12203.57 & 426.81\\
+attention 1x2x16x32 & dense & 49.18 & 1583.98\\
+attention 1x2x16x32 & online & 40.28 & 581.51\\
+attention 1x2x64x32 & dense & 828.06 & 954.86\\
+attention 1x2x64x32 & online & 671.03 & 550.33\\
+attention 1x2x128x32 & dense & 3143.98 & 1313.48\\
+attention 1x2x128x32 & online & 2369.11 & 896.29\\
+\bottomrule
+\end{longtable}
+}
+Las formas pequeñas permiten estudiar cuánto pesa el coste de llamada y sincronización frente a la cantidad de aritmética. Al aumentar una dimensión, vuelve a medir: la relación entre memoria, paralelismo y trabajo cambia. Una variante denominada \texttt{blocked} tampoco tiene que ganar en todas las formas o en todos los dispositivos. La implementación CPU bloquea bucles; la CUDA utiliza memoria compartida y barreras. Comparten el contrato matemático, pero realizan trabajos de gestión distintos.
+
+Para calcular un cociente comparable, divide la mediana CPU por la mediana CUDA de la misma fila. Un resultado mayor que uno indica menor tiempo CUDA en ese ensayo; uno menor que uno indica menor tiempo CPU. Conserva ambas latencias y las muestras originales. Un cociente aislado omite la escala del trabajo y la variación de las medidas.
+
+\section{Entrenar la misma configuración en ambos destinos}
+La configuración principal tiene vocabulario 24, lote 2, contexto 32, dimensión 64, dos capas, dos cabezas de consulta, una cabeza de claves/valores y dimensión intermedia 128. Usa atención online y GEMM bloqueada: 75.584 parámetros, 447 unidades de kernel y una arena planificada de 2.100.160 bytes.
+
+\begin{lstlisting}[language=bash]
+python examples/train_decoder.py --backend cpu --steps 600 \
+  --dim 64 --layers 2 --context 32 --batch 2 \
+  --heads 2 --kv-heads 1 --hidden 128 \
+  --online --gemm blocked --output reports/comparacion/decoder_cpu
+python examples/train_decoder.py --backend cuda --steps 600 \
+  --dim 64 --layers 2 --context 32 --batch 2 \
+  --heads 2 --kv-heads 1 --hidden 128 \
+  --online --gemm blocked --output reports/comparacion/decoder_cuda
+\end{lstlisting}
+Los reportes de esta campaña están en \texttt{code/reports\allowbreak{}/book\_gpu\_ex\allowbreak{}tension/}. Cada ejecución conserva su historia de entrenamiento, configuración, checkpoint y evaluación. El tiempo del bucle excluye compilación, evaluación y generación posteriores; incluye el trabajo que realiza el entrenador para alimentar los lotes y actualizar los parámetros.
+
+{\small
+\begin{longtable}{@{}P{0.17\textwidth}P{0.18\textwidth}P{0.18\textwidth}P{0.18\textwidth}P{0.17\textwidth}@{}}
+\toprule
+\textbf{Backend} & \textbf{Pasos} & \textbf{Pérdida final} & \textbf{Evaluación} & \textbf{Bucle (s)}\\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Backend} & \textbf{Pasos} & \textbf{Pérdida final} & \textbf{Evaluación} & \textbf{Bucle (s)}\\
+\midrule
+\endhead
+cpu & 600 & 0.2746565 & 0.3321578 & 18.744\\
+cuda & 600 & 0.2508018 & 0.3293002 & 28.685\\
+\bottomrule
+\end{longtable}
+}
+El plan contiene muchos kernels pequeños. Tras cada \texttt{run}, el runtime sincroniza; las asignaciones del optimizador también requieren operaciones explícitas. Una GPU puede resolver una GEMM grande con rapidez y dedicar una fracción considerable del paso a gestionar cientos de lanzamientos y transferencias pequeñas. Para explicar el tiempo total, inspecciona el plan, el tamaño de cada operación y las copias del entrenador. El número de parámetros por sí solo no identifica el cuello de botella.
+
+La arena contabiliza los buffers que administra Lumbre. No es la memoria total que verás en \texttt{nvidia-smi}: ese inventario incluye otros usos del dispositivo y del runtime. Del mismo modo, un entrenamiento que reduce su pérdida sobre las seis frases repetidas del corpus de demostración verifica aprendizaje y ejecución, pero requiere otra evaluación para estudiar generalización lingüística.
+
+\section{WMMA: una comprobación con alcance propio}
+La demostración \texttt{kernels/wmma\_demo.cu} multiplica un tile de 16 por 16 con entradas FP16 y acumulación FP32. Un warp participa en las operaciones colectivas de carga, multiplicación y escritura. El programa comprueba errores de reserva, transferencia, lanzamiento y sincronización, y compara la salida con una referencia calculada en el host.
+
+La RTX de validación ejecutó este programa con error absoluto máximo cero para los datos deterministas de la demostración. Esos valores tienen una estructura numérica sencilla; el cero observado no garantiza error cero para cualquier entrada FP16. Cambiar valores, distribuciones y escalas forma parte de la siguiente prueba.
+
+El entrenamiento de Lumbre utiliza el renderer tensorial y su GEMM compartida. La demostración WMMA es un programa separado. Integrarla requiere reconocer la operación, adaptar formas y tipos, resolver los tiles de borde y verificar el error de la nueva ruta. Conserva una comparación contra el kernel anterior para detectar una conversión o un layout incorrectos.
+
+\section{Qué entregar al terminar la comparación}
+Tu informe debe permitir que otra persona reconstruya el experimento. Incluye el commit del código, el entorno, el destino CUDA, las formas, dtypes y semillas, las órdenes exactas y la política de caché. Adjunta resultados numéricos y muestras de tiempo. Identifica qué incluye cada reloj y qué trabajo quedó fuera.
+
+Un experimento siguiente puede estudiar una sola hipótesis: fusionar operaciones elemento a elemento, agrupar transferencias del optimizador o reducir sincronizaciones conservando las dependencias. Mantén el caso original, comprueba valores y gradientes y repite la medida. Una mejora que solo funciona al reutilizar por accidente un buffer no supera la prueba de corrección.
+
+\begin{comprueba}[Puerta de salida]
+Puedes completar este capítulo cuando reproduces una prueba de bordes, explicas una comparación numérica CPU/CUDA, localizas las treinta muestras de un benchmark y distingues el tiempo de una llamada residente del tiempo de entrenamiento. También debes poder señalar qué evidencia valida WMMA y qué parte del renderer sigue utilizando la GEMM compartida.
 
 \end{comprueba}
 
@@ -7556,7 +7726,7 @@ El programa \texttt{examples/validate\_book.py} verificó además los tres ejemp
 \textbf{Componente} & \textbf{Evidencia de esta edición} & \textbf{Límite que se conserva}\\\midrule\endhead
 Compilador C y runtime & Pruebas y ejemplos ejecutados & Subconjunto estático; no todo operador de cualquier framework.\\
 Autodiferenciación & Comparación analítica, diferencial y entrenamiento & Convenciones explícitas en máximos; no todos los puntos son suaves.\\
-GEMM bloqueada & Pruebas y tiempos CPU & No se midió competitividad frente a BLAS o PyTorch.\\
+GEMM bloqueada & Pruebas y tiempos CPU/CUDA & No se midió competitividad frente a BLAS o PyTorch.\\
 Convolución C & Compilación y comparación numérica & No es una biblioteca de convoluciones optimizada completa.\\
 Convolución por IR & Pruebas forward y gradientes & Límite didáctico de posiciones; grafos costosos al crecer.\\
 Atención online & Comparación forward y gradientes; benchmark & Backward recompone operaciones densas.\\
@@ -7580,6 +7750,11 @@ La revisión CUDA repite las 600 actualizaciones de la configuración de 75.584 
 \begin{cuidado}[Una evaluación reservada no siempre es independiente]
 El corpus de demostración repite frases. Un corte del texto puede dejar secuencias prácticamente iguales en entrenamiento y evaluación. La pérdida demuestra que el sistema aprende ese material de depuración; no demuestra generalización lingüística independiente. La ruta de experimentación con documentos separados se desarrolla en los capítulos de datos y proyectos.
 \end{cuidado}
+
+\section{Campaña secuencial CPU/CUDA}
+El capítulo \ref{ch:cpu-cuda-validacion}, p.\pageref{ch:cpu-cuda-validacion}, amplía la validación con doce casos de kernels por backend y treinta muestras residentes por caso. Repite también las 600 actualizaciones del modelo principal en CPU y CUDA dentro del mismo host WSL. Las tareas se ejecutan en secuencia; los informes no presuponen aislamiento de frecuencias, potencia o carga del escritorio.
+
+Los archivos de \texttt{reports/book\_gpu\_extension/} conservan muestras de tiempo, referencias numéricas, metadatos de compilación, configuraciones, historias y checkpoints. \texttt{campaign.json} documenta el orden de las tareas. El capítulo desarrolla cómo interpretar las diferencias entre una llamada residente, la compilación y el bucle de entrenamiento; las tablas proceden de esos JSON.
 
 \section{Cómo distinguir reportes históricos}
 El paquete conserva un registro de la configuración final y uno de la ruta BPE de depuración. No se mezclan sus pérdidas ni vocabularios. Las muestras de generación son resultados del modelo, no ejemplos editados para mejorar su aspecto. Los archivos de reportes pueden contener rutas de caché del entorno original: son procedencia del ensayo; el runtime creará sus propias rutas al reproducirlo.
@@ -7633,6 +7808,14 @@ Atención ahorra memoria pero pierde tiempo & Conserva el resultado y realiza ab
 \bottomrule\end{longtable}
 
 \section{Compilar el libro}
+Para reconstruir el PDF y eliminar los auxiliares al terminar, usa desde la raíz del repositorio:
+
+\begin{lstlisting}[language=bash]
+python build_book.py --pdf --report code/reports/book_gpu_extension/book_build.json
+\end{lstlisting}
+
+La opción \texttt{--pdf} compila una copia autocontenida en una carpeta temporal. Ejecuta tres pasadas, comprueba referencias y cajas desbordadas y copia el PDF final al repositorio solo si supera esas comprobaciones. Al terminar elimina la carpeta temporal y sus archivos auxiliares, incluso si una pasada falla. El informe JSON conserva el resultado, los hashes y los tiempos sin acumular archivos \texttt{.aux}, \texttt{.toc}, \texttt{.out} o registros LaTeX. Ejecutar el constructor sin \texttt{--pdf} regenera únicamente el fuente. Las órdenes directas de LaTeX que se muestran a continuación permiten estudiar las pasadas por separado y dejan sus auxiliares en el directorio de trabajo.
+
 El archivo principal \texttt{Compiladores\_ML\_Desde\_Cero\_2026.tex} contiene los listados incrustados y los diagramas vectoriales; no necesita copiar fuentes tipográficas del paquete. Requiere una distribución LaTeX con los paquetes declarados en su preámbulo. Dos o tres pasadas actualizan referencias, páginas e índice.
 
 \begin{lstlisting}[language=bash]

@@ -177,6 +177,8 @@ Para HIP, selecciona `LUMBRE_BACKEND=hip` y un entorno donde `hipcc` conozca la 
 
 ## Leer el kernel generado
 
+Para contrastar la prueba aislada con la batería completa, ejecuta `python -m pytest -q --backend=cuda` desde `code/`. El capítulo «CPU y CUDA en la misma máquina» desarrolla el protocolo de comparación, muestra las medidas y conserva la distinción entre las pruebas tensoriales de GPU y las pruebas que siguen ejecutándose en el host.
+
 Busca el índice global construido a partir de bloque e hilo. Después localiza la condición que protege `q<257`. Si el grid contiene más posiciones, no es necesariamente un error: el redondeo del número de bloques necesita la máscara. El error sería ejecutar cargas o escrituras de los hilos sobrantes sin protección.
 
 Localiza también las llamadas del host. Una función `__global__` describe trabajo del dispositivo; la sintaxis de lanzamiento y el runtime son otra parte. El programa debe comprobar errores del lanzamiento y esperar antes de leer la salida. El runtime educativo sincroniza para simplificar la observación, lo que es correcto pero limita concurrencia.

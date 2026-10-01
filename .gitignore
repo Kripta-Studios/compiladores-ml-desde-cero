@@ -27,6 +27,9 @@ dist/
 /*.fls
 /*.fdb_latexmk
 /*.synctex.gz
+**/latex_pass*.log
+**/latex_final.log
+**/pdf_build.log
 
 # Local editor and OS metadata
 .vscode/

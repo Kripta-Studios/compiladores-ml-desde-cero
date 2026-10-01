@@ -1,0 +1,29 @@
+{
+  "sequence": [
+    {
+      "backend": "cpu",
+      "task": "kernels",
+      "returncode": 0,
+      "wall_seconds": 8.926488450990291
+    },
+    {
+      "backend": "cpu",
+      "task": "decoder",
+      "returncode": 0,
+      "wall_seconds": 93.82013474000269
+    },
+    {
+      "backend": "cuda",
+      "task": "kernels",
+      "returncode": 0,
+      "wall_seconds": 6.131358165002894
+    },
+    {
+      "backend": "cuda",
+      "task": "decoder",
+      "returncode": 0,
+      "wall_seconds": 34.202888311003335
+    }
+  ],
+  "scope": "Same WSL host, sequential tasks, 30 resident benchmark samples; no power/frequency isolation; training times exclude JIT compilation, evaluation and sampling."
+}

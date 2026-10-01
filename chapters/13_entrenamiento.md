@@ -197,6 +197,8 @@ No copies ese destino sin comprobar el dispositivo. El código GPU implementado 
 
 La revisión local ejecutó el decoder de depuración de 2.736 parámetros durante 20 pasos en CUDA, con atención online y GEMM bloqueada. La pérdida pasó de 3,1800122 a 2,9162602; se conservan checkpoint, evaluación y registro en `code/reports/validation_20261001/decoder_cuda/`. HIP sigue pendiente. La aceptación del laboratorio exige volver a comprobar los resultados y medir en el dispositivo del estudiante.
 
+También se ejecutó el modelo principal de 75.584 parámetros durante 600 actualizaciones en CUDA. Una campaña posterior repite esa configuración en CPU y CUDA en el mismo host, con tareas secuenciales y carpetas de salida nuevas. El capítulo «CPU y CUDA en la misma máquina» incluye las órdenes completas, los resultados y el análisis de por qué 447 kernels pequeños pueden limitar la ventaja de una GPU.
+
 ## Qué medir al aumentar el tamaño
 
 Registra por separado construcción del grafo, compilación, primera ejecución, ejecución estable, copia del batch, checkpoint y evaluación. Cuenta tokens procesados y actualizaciones; no compares solo segundos entre configuraciones con contextos o batches distintos.

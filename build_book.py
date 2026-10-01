@@ -1,5 +1,12 @@
 from pathlib import Path
-import re,json
+import argparse
+import hashlib
+import json
+import re
+import shutil
+import subprocess
+import tempfile
+import time
 ROOT=Path(__file__).parent
 SPECIAL={'\\':r'\textbackslash{}','&':r'\&','%':r'\%','$':r'\$','#':r'\#','_':r'\_','{':r'\{','}':r'\}','~':r'\textasciitilde{}','^':r'\textasciicircum{}',
 '→':r'\ensuremath{\rightarrow}','←':r'\ensuremath{\leftarrow}','↔':r'\ensuremath{\leftrightarrow}','×':r'\ensuremath{\times}','≤':r'\ensuremath{\leq}','≥':r'\ensuremath{\geq}','≠':r'\ensuremath{\neq}','∈':r'\ensuremath{\in}','∞':r'\ensuremath{\infty}','−':'-','–':'--','—':'---','·':r'\ensuremath{\cdot}','²':r'\ensuremath{^2}','³':r'\ensuremath{^3}','…':r'\ldots{}','μ':r'\ensuremath{\mu}','ε':r'\ensuremath{\varepsilon}'}
@@ -105,4 +112,58 @@ def build():
     tex+='\n\\clearpage\n\\renewcommand{\\contentsname}{Índice detallado}\n\\tableofcontents\n\\end{document}\n'
     (ROOT/'Compiladores_ML_Desde_Cero_2026.tex').write_text(tex,encoding='utf-8',newline='\n')
     print(len(tex), 'characters;',len(files),'embedded source files')
-if __name__=='__main__':build()
+def compile_pdf(engine='pdflatex', report=None):
+    """Compile a self-contained snapshot and remove its temporary auxiliaries."""
+    executable = shutil.which(engine)
+    if not executable:
+        raise RuntimeError(f'LaTeX engine not found: {engine}')
+    source = ROOT/'Compiladores_ML_Desde_Cero_2026.tex'
+    source_bytes = source.read_bytes()
+    passes = []
+    with tempfile.TemporaryDirectory(prefix='lumbre-book-') as directory:
+        work = Path(directory).resolve()
+        if not work.is_relative_to(Path(tempfile.gettempdir()).resolve()):
+            raise RuntimeError('Unexpected temporary build directory')
+        (work/source.name).write_bytes(source_bytes)
+        for number in range(1, 4):
+            start = time.perf_counter()
+            result = subprocess.run([executable, '-interaction=nonstopmode', '-halt-on-error', source.name],
+                                    cwd=work, stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
+                                    text=True, encoding='utf-8', errors='replace')
+            passes.append({'pass': number, 'returncode': result.returncode, 'seconds': time.perf_counter()-start})
+            print(f'LaTeX pass {number}: exit {result.returncode}', flush=True)
+            if result.returncode:
+                raise RuntimeError(result.stdout[-12000:])
+        log = (work/source.with_suffix('.log').name).read_text(encoding='utf-8', errors='replace')
+        unresolved = ('There were undefined references', 'There were undefined citations',
+                      'Label(s) may have changed', 'Rerun to get cross-references right')
+        if any(message in log for message in unresolved):
+            raise RuntimeError('LaTeX references did not converge after three passes')
+        if 'Overfull' in log:
+            raise RuntimeError('LaTeX reported overflowing boxes; revise the layout before publishing')
+        pdf = work/source.with_suffix('.pdf').name
+        target = source.with_suffix('.pdf')
+        shutil.copyfile(pdf, target)
+        summary = {'passes': passes, 'source_sha256': hashlib.sha256(source_bytes).hexdigest(),
+                   'pdf_sha256': hashlib.sha256(target.read_bytes()).hexdigest(),
+                   'engine': subprocess.check_output([executable, '--version'], text=True).splitlines()[0],
+                   'references_converged': True, 'overfull_boxes': log.count('Overfull'),
+                   'underfull_boxes': log.count('Underfull'),
+                   'duplicate_page_destinations': log.count('destination with the same identifier')}
+    summary['temporary_directory_removed'] = not work.exists()
+    if report:
+        report = Path(report)
+        report.parent.mkdir(parents=True, exist_ok=True)
+        report.write_text(json.dumps(summary, indent=2), encoding='utf-8', newline='\n')
+    print(json.dumps(summary, indent=2), flush=True)
+
+
+if __name__=='__main__':
+    parser = argparse.ArgumentParser(description='Regenerate the book; optionally compile in a temporary directory.')
+    parser.add_argument('--pdf', action='store_true', help='Compile three LaTeX passes and clean all temporary files')
+    parser.add_argument('--engine', default='pdflatex', help='LaTeX executable (default: pdflatex)')
+    parser.add_argument('--report', type=Path, help='Optional structured build report in JSON')
+    args = parser.parse_args()
+    build()
+    if args.pdf:
+        compile_pdf(args.engine, args.report)

@@ -22,7 +22,7 @@ El programa \texttt{examples/validate\_book.py} verificó además los tres ejemp
 \textbf{Componente} & \textbf{Evidencia de esta edición} & \textbf{Límite que se conserva}\\\midrule\endhead
 Compilador C y runtime & Pruebas y ejemplos ejecutados & Subconjunto estático; no todo operador de cualquier framework.\\
 Autodiferenciación & Comparación analítica, diferencial y entrenamiento & Convenciones explícitas en máximos; no todos los puntos son suaves.\\
-GEMM bloqueada & Pruebas y tiempos CPU & No se midió competitividad frente a BLAS o PyTorch.\\
+GEMM bloqueada & Pruebas y tiempos CPU/CUDA & No se midió competitividad frente a BLAS o PyTorch.\\
 Convolución C & Compilación y comparación numérica & No es una biblioteca de convoluciones optimizada completa.\\
 Convolución por IR & Pruebas forward y gradientes & Límite didáctico de posiciones; grafos costosos al crecer.\\
 Atención online & Comparación forward y gradientes; benchmark & Backward recompone operaciones densas.\\
@@ -46,6 +46,11 @@ La revisión CUDA repite las 600 actualizaciones de la configuración de 75.584 
 \begin{cuidado}[Una evaluación reservada no siempre es independiente]
 El corpus de demostración repite frases. Un corte del texto puede dejar secuencias prácticamente iguales en entrenamiento y evaluación. La pérdida demuestra que el sistema aprende ese material de depuración; no demuestra generalización lingüística independiente. La ruta de experimentación con documentos separados se desarrolla en los capítulos de datos y proyectos.
 \end{cuidado}
+
+\section{Campaña secuencial CPU/CUDA}
+El capítulo \ref{ch:cpu-cuda-validacion}, p.\pageref{ch:cpu-cuda-validacion}, amplía la validación con doce casos de kernels por backend y treinta muestras residentes por caso. Repite también las 600 actualizaciones del modelo principal en CPU y CUDA dentro del mismo host WSL. Las tareas se ejecutan en secuencia; los informes no presuponen aislamiento de frecuencias, potencia o carga del escritorio.
+
+Los archivos de \texttt{reports/book\_gpu\_extension/} conservan muestras de tiempo, referencias numéricas, metadatos de compilación, configuraciones, historias y checkpoints. \texttt{campaign.json} documenta el orden de las tareas. El capítulo desarrolla cómo interpretar las diferencias entre una llamada residente, la compilación y el bucle de entrenamiento; las tablas proceden de esos JSON.
 
 \section{Cómo distinguir reportes históricos}
 El paquete conserva un registro de la configuración final y uno de la ruta BPE de depuración. No se mezclan sus pérdidas ni vocabularios. Las muestras de generación son resultados del modelo, no ejemplos editados para mejorar su aspecto. Los archivos de reportes pueden contener rutas de caché del entorno original: son procedencia del ensayo; el runtime creará sus propias rutas al reproducirlo.
@@ -99,6 +104,14 @@ Atención ahorra memoria pero pierde tiempo & Conserva el resultado y realiza ab
 \bottomrule\end{longtable}
 
 \section{Compilar el libro}
+Para reconstruir el PDF y eliminar los auxiliares al terminar, usa desde la raíz del repositorio:
+
+\begin{lstlisting}[language=bash]
+python build_book.py --pdf --report code/reports/book_gpu_extension/book_build.json
+\end{lstlisting}
+
+La opción \texttt{--pdf} compila una copia autocontenida en una carpeta temporal. Ejecuta tres pasadas, comprueba referencias y cajas desbordadas y copia el PDF final al repositorio solo si supera esas comprobaciones. Al terminar elimina la carpeta temporal y sus archivos auxiliares, incluso si una pasada falla. El informe JSON conserva el resultado, los hashes y los tiempos sin acumular archivos \texttt{.aux}, \texttt{.toc}, \texttt{.out} o registros LaTeX. Ejecutar el constructor sin \texttt{--pdf} regenera únicamente el fuente. Las órdenes directas de LaTeX que se muestran a continuación permiten estudiar las pasadas por separado y dejan sus auxiliares en el directorio de trabajo.
+
 El archivo principal \texttt{Compiladores\_ML\_Desde\_Cero\_2026.tex} contiene los listados incrustados y los diagramas vectoriales; no necesita copiar fuentes tipográficas del paquete. Requiere una distribución LaTeX con los paquetes declarados en su preámbulo. Dos o tres pasadas actualizan referencias, páginas e índice.
 
 \begin{lstlisting}[language=bash]

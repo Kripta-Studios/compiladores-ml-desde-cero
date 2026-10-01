@@ -1,0 +1,140 @@
+[
+  {
+    "op": "gemm",
+    "shape": [
+      31,
+      47,
+      65
+    ],
+    "strategy": "reference",
+    "cpu_us": 329.93500000000006,
+    "cuda_us": 464.4295
+  },
+  {
+    "op": "gemm",
+    "shape": [
+      31,
+      47,
+      65
+    ],
+    "strategy": "blocked",
+    "cpu_us": 97.918,
+    "cuda_us": 205.9335
+  },
+  {
+    "op": "gemm",
+    "shape": [
+      128,
+      128,
+      128
+    ],
+    "strategy": "reference",
+    "cpu_us": 12840.656,
+    "cuda_us": 364.82300000000004
+  },
+  {
+    "op": "gemm",
+    "shape": [
+      128,
+      128,
+      128
+    ],
+    "strategy": "blocked",
+    "cpu_us": 1644.7700000000002,
+    "cuda_us": 423.7205
+  },
+  {
+    "op": "gemm",
+    "shape": [
+      256,
+      256,
+      256
+    ],
+    "strategy": "reference",
+    "cpu_us": 106237.296,
+    "cuda_us": 415.52350000000007
+  },
+  {
+    "op": "gemm",
+    "shape": [
+      256,
+      256,
+      256
+    ],
+    "strategy": "blocked",
+    "cpu_us": 12203.571500000002,
+    "cuda_us": 426.8145
+  },
+  {
+    "op": "attention",
+    "shape": [
+      1,
+      2,
+      16,
+      32
+    ],
+    "strategy": "dense",
+    "cpu_us": 49.179,
+    "cuda_us": 1583.9830000000002
+  },
+  {
+    "op": "attention",
+    "shape": [
+      1,
+      2,
+      16,
+      32
+    ],
+    "strategy": "online",
+    "cpu_us": 40.2775,
+    "cuda_us": 581.5115
+  },
+  {
+    "op": "attention",
+    "shape": [
+      1,
+      2,
+      64,
+      32
+    ],
+    "strategy": "dense",
+    "cpu_us": 828.0645000000001,
+    "cuda_us": 954.863
+  },
+  {
+    "op": "attention",
+    "shape": [
+      1,
+      2,
+      64,
+      32
+    ],
+    "strategy": "online",
+    "cpu_us": 671.0310000000001,
+    "cuda_us": 550.334
+  },
+  {
+    "op": "attention",
+    "shape": [
+      1,
+      2,
+      128,
+      32
+    ],
+    "strategy": "dense",
+    "cpu_us": 3143.9835000000003,
+    "cuda_us": 1313.4845
+  },
+  {
+    "op": "attention",
+    "shape": [
+      1,
+      2,
+      128,
+      32
+    ],
+    "strategy": "online",
+    "cpu_us": 2369.106,
+    "cuda_us": 896.2875000000001
+  }
+]

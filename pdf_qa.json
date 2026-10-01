@@ -1,10 +1,10 @@
 {
-  "pages": 305,
-  "toc_items": 663,
+  "pages": 312,
+  "toc_items": 672,
   "extreme_bbox_issues": [],
   "few_words_pages": [],
-  "text_words": 105721,
-  "rendered_pages": 305,
+  "text_words": 108364,
+  "rendered_pages": 312,
   "visual_sample_pages": [
     1,
     2,
@@ -24,14 +24,26 @@
     221,
     240,
     241,
+    242,
+    243,
+    244,
+    245,
+    246,
     261,
     281,
-    290,
+    284,
+    285,
+    286,
+    288,
+    289,
+    297,
     301,
-    304,
-    305
+    311,
+    312
   ],
   "references_converged": true,
   "embedded_source_files": 21,
-  "validation_report": "code/reports/validation_20261001/validation.json"
+  "pdf_sha256": "ed90027052ba83ea57753e7fac5f9e58b0f404040f04ed6ac0d617a81130b942",
+  "validation_report": "code/reports/book_gpu_extension/pdf_qa.json",
+  "runtime_validation_report": "code/reports/validation_20261001/validation.json"
 }

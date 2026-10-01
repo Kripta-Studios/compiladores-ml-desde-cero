@@ -257,7 +257,7 @@ Un bucle cuyo número de iteraciones depende de una búsqueda, una estructura de
 
 Un proyecto serio mantiene un catálogo con operación, tipos, formas, backward, backends y tests. «Soporta atención» es demasiado impreciso si solo funciona para una longitud, un layout, una máscara y forward sin gradiente.
 
-En Lumbre se distinguen las operaciones generales del IR, el laboratorio de vistas, el kernel de atención online y las extensiones GPU pendientes de validación. El catálogo de la entrega permite saber qué constituye una implementación ejecutada y qué constituye una práctica avanzada.
+En Lumbre se distinguen las operaciones generales del IR, el laboratorio de vistas, el kernel de atención online y los backends de dispositivo. C y CUDA cuentan con pruebas ejecutadas; HIP sigue pendiente de hardware compatible. El catálogo de la entrega permite saber qué constituye una implementación ejecutada y qué constituye una práctica avanzada.
 
 ::: practica Descomponer una capa sin inventar una instrucción
 Describe una capa que normaliza cada fila por la raíz de la media de sus cuadrados y luego aplica una proyección lineal. Enumera qué operaciones primitivas necesita y dónde aparecen reducciones.

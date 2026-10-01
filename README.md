@@ -4,7 +4,7 @@ Libro y código para construir un compilador de aprendizaje automático desde ce
 
 Empieza con programas, arrays y tensores. Aprende a construir una representación intermedia, generar código C y CUDA, planificar memoria, calcular gradientes y entrenar un modelo pequeño con tu propio compilador.
 
-**Edición del 1 de octubre de 2026 · 305 páginas · 68 capítulos · 12 laboratorios · 5 proyectos finales.**
+**Edición del 1 de octubre de 2026 · 312 páginas · 69 capítulos · 12 laboratorios · 5 proyectos finales.**
 
 [Leer el libro en PDF](Compiladores_ML_Desde_Cero_2026.pdf) · [Guía del código](code/README.md) · [Resultados de validación](code/reports/validation_20261001/validation.json)
 
@@ -21,7 +21,7 @@ Empieza con programas, arrays y tensores. Aprende a construir una representació
 
 Lumbre es un compilador didáctico original. Python construye y diferencia grafos; el código nativo generado ejecuta los cálculos tensoriales. NumPy proporciona almacenamiento, datos y referencias numéricas. Puedes estudiar y ejecutar el proyecto sin depender de PyTorch ni de tinygrad.
 
-El libro incluye 15 diagramas vectoriales, 122 bloques de código, los 21 archivos completos del proyecto ejecutable y 69 referencias bibliográficas con enlaces. Empieza por **«Empieza aquí»** y el capítulo 1. Encontrarás el índice detallado al final y 663 marcadores navegables en el PDF.
+El libro incluye 15 diagramas vectoriales, 128 bloques de código, los 21 archivos completos del proyecto ejecutable y 69 referencias bibliográficas con enlaces. Empieza por **«Empieza aquí»** y el capítulo 1. Encontrarás el índice detallado al final y 672 marcadores navegables en el PDF.
 
 ## Ejecutar en CPU
 
@@ -86,7 +86,8 @@ La revisión local utiliza Ubuntu 24.04 bajo WSL2, Python 3.12.3, GCC 13.3.0, Nu
 | WMMA | Compilación y ejecución; error absoluto máximo cero. | [Registro WMMA](code/reports/validation_20261001/wmma_run.log) |
 | Reanudación | Checkpoints idénticos para 10 pasos frente a 6 + 4, dentro de cada backend. | [CPU](code/reports/validation_20261001/resume_cpu.json), [CUDA](code/reports/validation_20261001/resume_cuda.json) |
 | Decoder principal en CUDA | 600 pasos; pérdida final 0,2508018 y evaluación 0,3293002. | [Informe y checkpoint](code/reports/validation_20261001/decoder_cuda_75584/) |
-| Libro | Tres pasadas LaTeX, referencias resueltas y 305 páginas renderizadas; 21 archivos incrustados coinciden con el código. | [Compilación](code/reports/validation_20261001/book_build.json), [revisión PDF](pdf_qa.json) |
+| Campaña secuencial CPU/CUDA | 30 muestras por caso y 600 pasos de entrenamiento por backend en el mismo host WSL. | [Orden de ejecución](code/reports/book_gpu_extension/campaign.json), [tablas del libro](code/reports/book_gpu_extension/table_provenance.json) |
+| Libro | Tres pasadas LaTeX, referencias resueltas y 312 páginas renderizadas; 21 archivos incrustados coinciden con el código. | [Compilación](code/reports/book_gpu_extension/book_build.json), [revisión PDF](pdf_qa.json) |
 
 Al seleccionar CUDA, los programas tensoriales de las pruebas se ejecutan en la GPU. Las pruebas de tokenización, estructuras del host y convolución C independiente mantienen su ejecución en CPU. El verificador de mapas enumera índices en CPU y comprueba un contrato lógico.
 
@@ -100,15 +101,15 @@ Desde la raíz del repositorio, edita los Markdown de `chapters/` o el código y
 python build_book.py
 ```
 
-Compila con una distribución TeX que incluya los paquetes del preámbulo: babel con español, Latin Modern, TikZ, tcolorbox, listings y titlesec, entre otros.
+Compila con una distribución TeX que incluya los paquetes del preámbulo: babel con español, Latin Modern, TikZ, tcolorbox, listings y titlesec, entre otros. Esta orden ejecuta tres pasadas en una carpeta temporal y elimina los auxiliares al terminar:
 
 ```bash
-pdflatex -interaction=nonstopmode -halt-on-error Compiladores_ML_Desde_Cero_2026.tex
-pdflatex -interaction=nonstopmode -halt-on-error Compiladores_ML_Desde_Cero_2026.tex
-pdflatex -interaction=nonstopmode -halt-on-error Compiladores_ML_Desde_Cero_2026.tex
+python build_book.py --pdf --report code/reports/book_gpu_extension/book_build.json
 ```
 
 También puedes usar `latexmk -pdf Compiladores_ML_Desde_Cero_2026.tex`. El constructor usa la biblioteca estándar de Python y produce el mismo fuente UTF-8 en Windows y Linux. El `.tex` principal es autocontenido: incorpora texto, diagramas, bibliografía y listados. No necesita BibTeX, imágenes externas ni `--shell-escape`.
+
+El capítulo **CPU y CUDA en la misma máquina** añade una campaña secuencial con treinta muestras por caso y entrenamiento de 600 pasos en ambos backends. Consulta sus [resultados y checkpoints](code/reports/book_gpu_extension/). La opción `--pdf` conserva el PDF y un resumen JSON; limpia los archivos temporales de LaTeX sin borrar los registros de ejecución de CPU/CUDA.
 
 ## Estructura del repositorio
 
