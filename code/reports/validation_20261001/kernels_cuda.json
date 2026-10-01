@@ -1,0 +1,367 @@
+{
+  "system": "Linux-6.6.87.2-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+  "backend": "cuda",
+  "records": [
+    {
+      "op": "gemm",
+      "shape": [
+        31,
+        47,
+        65
+      ],
+      "strategy": "reference",
+      "max_abs_error": 0.0,
+      "median_seconds": 0.00046465400000000005,
+      "min_seconds": 0.00037346700000000005,
+      "max_seconds": 0.001048941,
+      "samples_seconds": [
+        0.000380062,
+        0.00037346700000000005,
+        0.00046465400000000005,
+        0.000504836,
+        0.001048941
+      ],
+      "gflops": 0.407636650066501,
+      "compiler": {
+        "backend": "cuda",
+        "kernels": 1,
+        "arena_bytes": 26176,
+        "gemm_strategy": "reference",
+        "compile_seconds": 14.078543813986471,
+        "sha256": "bf657ed7bca64cca669e913429816982f38933e91aaa91bcf28061f7912e58a0",
+        "source": "/home/alvaro/.cache/lumbre-validation-20261001/cuda/bf657ed7bca64cca669e913429816982f38933e91aaa91bcf28061f7912e58a0.cu"
+      }
+    },
+    {
+      "op": "gemm",
+      "shape": [
+        31,
+        47,
+        65
+      ],
+      "strategy": "blocked",
+      "max_abs_error": 0.0,
+      "median_seconds": 0.00053421,
+      "min_seconds": 0.000372653,
+      "max_seconds": 0.000639151,
+      "samples_seconds": [
+        0.000639151,
+        0.00053421,
+        0.000372653,
+        0.000540326,
+        0.000462404
+      ],
+      "gflops": 0.3545609404541285,
+      "compiler": {
+        "backend": "cuda",
+        "kernels": 1,
+        "arena_bytes": 26176,
+        "gemm_strategy": "blocked",
+        "compile_seconds": 15.124213497998426,
+        "sha256": "dcf7db187f1475b6762993996678a02d4f6f7fa98857f076a888e7c750c1d0de",
+        "source": "/home/alvaro/.cache/lumbre-validation-20261001/cuda/dcf7db187f1475b6762993996678a02d4f6f7fa98857f076a888e7c750c1d0de.cu"
+      }
+    },
+    {
+      "op": "gemm",
+      "shape": [
+        128,
+        128,
+        128
+      ],
+      "strategy": "reference",
+      "max_abs_error": 0.0,
+      "median_seconds": 0.00041680700000000005,
+      "min_seconds": 0.00024030600000000003,
+      "max_seconds": 0.001129084,
+      "samples_seconds": [
+        0.001129084,
+        0.000619497,
+        0.000364017,
+        0.00024030600000000003,
+        0.00041680700000000005
+      ],
+      "gflops": 10.062940401672716,
+      "compiler": {
+        "backend": "cuda",
+        "kernels": 1,
+        "arena_bytes": 196608,
+        "gemm_strategy": "reference",
+        "compile_seconds": 14.330250733008143,
+        "sha256": "155c99333afc6ae75eafced21b608126fb712d16338c4d026c54a6ad771359d7",
+        "source": "/home/alvaro/.cache/lumbre-validation-20261001/cuda/155c99333afc6ae75eafced21b608126fb712d16338c4d026c54a6ad771359d7.cu"
+      }
+    },
+    {
+      "op": "gemm",
+      "shape": [
+        128,
+        128,
+        128
+      ],
+      "strategy": "blocked",
+      "max_abs_error": 0.0,
+      "median_seconds": 0.00038094400000000003,
+      "min_seconds": 0.00032467,
+      "max_seconds": 0.0005217360000000001,
+      "samples_seconds": [
+        0.00035174500000000004,
+        0.00038094400000000003,
+        0.00047316000000000003,
+        0.0005217360000000001,
+        0.00032467
+      ],
+      "gflops": 11.01029022638498,
+      "compiler": {
+        "backend": "cuda",
+        "kernels": 1,
+        "arena_bytes": 196608,
+        "gemm_strategy": "blocked",
+        "compile_seconds": 15.23487145701074,
+        "sha256": "74c02bb9e0138c6331c9e0f0550647aea9b0eba11e0128e82242ba53df0d3d93",
+        "source": "/home/alvaro/.cache/lumbre-validation-20261001/cuda/74c02bb9e0138c6331c9e0f0550647aea9b0eba11e0128e82242ba53df0d3d93.cu"
+      }
+    },
+    {
+      "op": "gemm",
+      "shape": [
+        256,
+        256,
+        256
+      ],
+      "strategy": "reference",
+      "max_abs_error": 0.0,
+      "median_seconds": 0.00032763700000000003,
+      "min_seconds": 0.000258174,
+      "max_seconds": 0.0004997690000000001,
+      "samples_seconds": [
+        0.0004997690000000001,
+        0.00036785100000000004,
+        0.00032763700000000003,
+        0.00029049,
+        0.000258174
+      ],
+      "gflops": 102.41343926357523,
+      "compiler": {
+        "backend": "cuda",
+        "kernels": 1,
+        "arena_bytes": 786432,
+        "gemm_strategy": "reference",
+        "compile_seconds": 13.856734992004931,
+        "sha256": "b21a3794608b090efbe8e8222b47ee07f49102afa6b4b3f9bd1a94f292b7005b",
+        "source": "/home/alvaro/.cache/lumbre-validation-20261001/cuda/b21a3794608b090efbe8e8222b47ee07f49102afa6b4b3f9bd1a94f292b7005b.cu"
+      }
+    },
+    {
+      "op": "gemm",
+      "shape": [
+        256,
+        256,
+        256
+      ],
+      "strategy": "blocked",
+      "max_abs_error": 0.0,
+      "median_seconds": 0.0007143140000000001,
+      "min_seconds": 0.000471664,
+      "max_seconds": 0.001094645,
+      "samples_seconds": [
+        0.0007143140000000001,
+        0.00095635,
+        0.000471664,
+        0.001094645,
+        0.000548609
+      ],
+      "gflops": 46.9743446159532,
+      "compiler": {
+        "backend": "cuda",
+        "kernels": 1,
+        "arena_bytes": 786432,
+        "gemm_strategy": "blocked",
+        "compile_seconds": 13.653252410993446,
+        "sha256": "61df64fef540a753166815ab31e55b1baf81794944322843716a434ede61102b",
+        "source": "/home/alvaro/.cache/lumbre-validation-20261001/cuda/61df64fef540a753166815ab31e55b1baf81794944322843716a434ede61102b.cu"
+      }
+    },
+    {
+      "op": "attention",
+      "shape": [
+        1,
+        2,
+        16,
+        32
+      ],
+      "strategy": "dense",
+      "max_abs_error": 0.0,
+      "median_seconds": 0.0009554660000000001,
+      "min_seconds": 0.00042170600000000004,
+      "max_seconds": 0.0020673320000000003,
+      "samples_seconds": [
+        0.0009554660000000001,
+        0.0020673320000000003,
+        0.000618975,
+        0.00042170600000000004,
+        0.0018500880000000002
+      ],
+      "compiler": {
+        "backend": "cuda",
+        "kernels": 8,
+        "arena_bytes": 22528,
+        "gemm_strategy": "blocked",
+        "compile_seconds": 0.0,
+        "sha256": "9198832fbe962d9ad821576f2dbbce8b0ec1d3568d4500534f4351a2340d187f",
+        "source": "/home/alvaro/.cache/lumbre-validation-20261001/cuda/9198832fbe962d9ad821576f2dbbce8b0ec1d3568d4500534f4351a2340d187f.cu"
+      }
+    },
+    {
+      "op": "attention",
+      "shape": [
+        1,
+        2,
+        16,
+        32
+      ],
+      "strategy": "online",
+      "max_abs_error": 2.384185791015625e-07,
+      "median_seconds": 0.00044790700000000005,
+      "min_seconds": 0.000269936,
+      "max_seconds": 0.001159076,
+      "samples_seconds": [
+        0.001159076,
+        0.00044790700000000005,
+        0.000269936,
+        0.000356632,
+        0.0005066080000000001
+      ],
+      "compiler": {
+        "backend": "cuda",
+        "kernels": 1,
+        "arena_bytes": 16384,
+        "gemm_strategy": "blocked",
+        "compile_seconds": 11.639734445983777,
+        "sha256": "9128870a9163affe056eeea1e84672639d00aa9aab6d1454a3c9d69a0dd8b20f",
+        "source": "/home/alvaro/.cache/lumbre-validation-20261001/cuda/9128870a9163affe056eeea1e84672639d00aa9aab6d1454a3c9d69a0dd8b20f.cu"
+      }
+    },
+    {
+      "op": "attention",
+      "shape": [
+        1,
+        2,
+        64,
+        32
+      ],
+      "strategy": "dense",
+      "max_abs_error": 0.0,
+      "median_seconds": 0.002455132,
+      "min_seconds": 0.000667557,
+      "max_seconds": 0.0027092920000000003,
+      "samples_seconds": [
+        0.000691629,
+        0.0026451490000000003,
+        0.0027092920000000003,
+        0.000667557,
+        0.002455132
+      ],
+      "compiler": {
+        "backend": "cuda",
+        "kernels": 8,
+        "arena_bytes": 131072,
+        "gemm_strategy": "blocked",
+        "compile_seconds": 0.0,
+        "sha256": "c67b626b3741a21f86d63a28de1bf2308eeb5cc5fc7273876e5f0c04ea154af9",
+        "source": "/home/alvaro/.cache/lumbre-validation-20261001/cuda/c67b626b3741a21f86d63a28de1bf2308eeb5cc5fc7273876e5f0c04ea154af9.cu"
+      }
+    },
+    {
+      "op": "attention",
+      "shape": [
+        1,
+        2,
+        64,
+        32
+      ],
+      "strategy": "online",
+      "max_abs_error": 3.5762786865234375e-07,
+      "median_seconds": 0.0008331930000000001,
+      "min_seconds": 0.000529901,
+      "max_seconds": 0.001770085,
+      "samples_seconds": [
+        0.000529901,
+        0.000578562,
+        0.0008331930000000001,
+        0.0008497610000000001,
+        0.001770085
+      ],
+      "compiler": {
+        "backend": "cuda",
+        "kernels": 1,
+        "arena_bytes": 65536,
+        "gemm_strategy": "blocked",
+        "compile_seconds": 15.867245942004956,
+        "sha256": "66e0051951effb1ced6d48bbcd0281415df0b20dcf5657f52a6520c74afbf638",
+        "source": "/home/alvaro/.cache/lumbre-validation-20261001/cuda/66e0051951effb1ced6d48bbcd0281415df0b20dcf5657f52a6520c74afbf638.cu"
+      }
+    },
+    {
+      "op": "attention",
+      "shape": [
+        1,
+        2,
+        128,
+        32
+      ],
+      "strategy": "dense",
+      "max_abs_error": 0.0,
+      "median_seconds": 0.0009047430000000001,
+      "min_seconds": 0.000502747,
+      "max_seconds": 0.001832756,
+      "samples_seconds": [
+        0.0009047430000000001,
+        0.001832756,
+        0.0008504830000000001,
+        0.000502747,
+        0.001107268
+      ],
+      "compiler": {
+        "backend": "cuda",
+        "kernels": 8,
+        "arena_bytes": 393216,
+        "gemm_strategy": "blocked",
+        "compile_seconds": 0.0,
+        "sha256": "df2887db2f5b63c196729db6fcd47ff848f13cac1c809f0ffe2ea98ae54b4783",
+        "source": "/home/alvaro/.cache/lumbre-validation-20261001/cuda/df2887db2f5b63c196729db6fcd47ff848f13cac1c809f0ffe2ea98ae54b4783.cu"
+      }
+    },
+    {
+      "op": "attention",
+      "shape": [
+        1,
+        2,
+        128,
+        32
+      ],
+      "strategy": "online",
+      "max_abs_error": 3.5762786865234375e-07,
+      "median_seconds": 0.001054234,
+      "min_seconds": 0.000987943,
+      "max_seconds": 0.00142704,
+      "samples_seconds": [
+        0.000987943,
+        0.0010349950000000001,
+        0.00142704,
+        0.001054234,
+        0.0010905720000000002
+      ],
+      "compiler": {
+        "backend": "cuda",
+        "kernels": 1,
+        "arena_bytes": 131072,
+        "gemm_strategy": "blocked",
+        "compile_seconds": 10.812864269973943,
+        "sha256": "f21c4961c2220b0e706eb75e759b45141b9d7170df61adf922ba360c4d6d421d",
+        "source": "/home/alvaro/.cache/lumbre-validation-20261001/cuda/f21c4961c2220b0e706eb75e759b45141b9d7170df61adf922ba360c4d6d421d.cu"
+      }
+    }
+  ],
+  "scope": "local cuda resident microbenchmark; no cross-system comparison"
+}

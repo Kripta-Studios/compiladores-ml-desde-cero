@@ -1,0 +1,233 @@
+{
+  "date": "2026-10-01",
+  "status": "PASS",
+  "environment": {
+    "system": "Linux-6.6.87.2-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+    "python": "3.12.3 (main, Aug 31 2026, 10:18:26) [GCC 13.3.0]",
+    "numpy": "2.3.5",
+    "pytest": "9.0.2",
+    "gcc": "cc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+    "nvcc": "nvcc: NVIDIA (R) Cuda compiler driver\nCopyright (c) 2005-2025 NVIDIA Corporation\nBuilt on Tue_May_27_02:21:03_PDT_2025\nCuda compilation tools, release 12.9, V12.9.86\nBuild cuda_12.9.r12.9/compiler.36037853_0",
+    "gpu": "name, driver_version, compute_cap, memory.total [MiB]\nNVIDIA GeForce RTX 5070 Ti Laptop GPU, 591.86, 12.0, 12227 MiB",
+    "cuda_arch": "sm_120",
+    "toolkit_root": "/home/alvaro/.local/opt/cuda-12.9.1",
+    "python_executable": "/home/alvaro/.venvs/lumbre-validation-20261001/bin/python",
+    "scope": "Local WSL2 validation; Windows display driver preserved; HIP not executed"
+  },
+  "tests": {
+    "cpu": {
+      "tests": 61,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 14.325
+    },
+    "cuda": {
+      "tests": 61,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "seconds": 672.137
+    }
+  },
+  "worked_examples": {
+    "cpu": [
+      {
+        "example": "linear_mse",
+        "status": "PASS",
+        "loss": 7.5
+      },
+      {
+        "example": "convolution_gradients",
+        "status": "PASS"
+      },
+      {
+        "example": "regression_step",
+        "status": "PASS",
+        "before": 11.666666984558105,
+        "after": 3.207406997680664
+      }
+    ],
+    "cuda": [
+      {
+        "example": "linear_mse",
+        "status": "PASS",
+        "loss": 7.5
+      },
+      {
+        "example": "convolution_gradients",
+        "status": "PASS"
+      },
+      {
+        "example": "regression_step",
+        "status": "PASS",
+        "before": 11.666666984558105,
+        "after": 3.207406997680664
+      }
+    ]
+  },
+  "boundaries": {
+    "cpu": [
+      {
+        "count": 0,
+        "status": "PASS"
+      },
+      {
+        "count": 1,
+        "status": "PASS"
+      },
+      {
+        "count": 127,
+        "status": "PASS"
+      },
+      {
+        "count": 128,
+        "status": "PASS"
+      },
+      {
+        "count": 129,
+        "status": "PASS"
+      },
+      {
+        "count": 257,
+        "status": "PASS"
+      }
+    ],
+    "cuda": [
+      {
+        "count": 0,
+        "status": "PASS"
+      },
+      {
+        "count": 1,
+        "status": "PASS"
+      },
+      {
+        "count": 127,
+        "status": "PASS"
+      },
+      {
+        "count": 128,
+        "status": "PASS"
+      },
+      {
+        "count": 129,
+        "status": "PASS"
+      },
+      {
+        "count": 257,
+        "status": "PASS"
+      }
+    ]
+  },
+  "resident_benchmark_records": {
+    "cpu": 12,
+    "cuda": 12
+  },
+  "wmma": {
+    "compiled": true,
+    "executed": true,
+    "max_absolute_error": 0,
+    "log": "wmma_run.log"
+  },
+  "checkpoint_resume": {
+    "cpu": {
+      "status": "PASS",
+      "exact_arrays": true,
+      "steps": "10 == 6 + 4"
+    },
+    "cuda": {
+      "status": "PASS",
+      "exact_arrays": true,
+      "steps": "10 == 6 + 4"
+    }
+  },
+  "cuda_main_training": {
+    "parameters": 75584,
+    "steps": 600,
+    "initial_loss": 3.2164368629455566,
+    "final_loss": 0.25080180168151855,
+    "validation_loss": 0.3293001502752304,
+    "train_seconds_excluding_compile": 32.49298861701391,
+    "report": "decoder_cuda_75584/report.json"
+  },
+  "small_decoder_cpu_cuda_max_loss_difference": 4.76837158203125e-07,
+  "pdf": {
+    "file": "Compiladores_ML_Desde_Cero_2026.pdf",
+    "pages": 305,
+    "bookmarks": 663,
+    "text_words": 105721,
+    "blank_pages": [],
+    "outside_page_words": [],
+    "suspect_text_pages": [],
+    "rendered_pages": 305,
+    "visual_sample_pages": [
+      1,
+      2,
+      3,
+      10,
+      21,
+      41,
+      61,
+      81,
+      87,
+      101,
+      121,
+      141,
+      161,
+      181,
+      201,
+      221,
+      240,
+      241,
+      261,
+      281,
+      290,
+      301,
+      304,
+      305
+    ],
+    "layout_visual_review": "PASS",
+    "focused_visual_pages": [
+      280,
+      302
+    ]
+  },
+  "book_build": {
+    "passes": [
+      {
+        "pass": 1,
+        "returncode": 0,
+        "seconds": 146.60966779501177
+      },
+      {
+        "pass": 2,
+        "returncode": 0,
+        "seconds": 113.25944053800777
+      },
+      {
+        "pass": 3,
+        "returncode": 0,
+        "seconds": 137.5348543500004
+      }
+    ],
+    "windows_linux_builder_sha256": "26628e5fa1321e8196597875d8ff70b3f8c9c76dcb490888d1e13e8bb8eb5bb1",
+    "references_converged": true,
+    "overfull_boxes": 0,
+    "underfull_boxes": 18
+  },
+  "embedded_source_files": 21,
+  "original_manifest_checked": 74,
+  "original_manifest_all_matched": true,
+  "fixes": [
+    "Explicit UTF-8 and LF output in book builder; portable embedded file paths",
+    "TOC chapter spacing and reserved page-number width",
+    "Explicit pytest backend and isolated example/benchmark outputs",
+    "Documentation updated with actual CUDA validation and original results preserved"
+  ],
+  "limits": [
+    "HIP not executed: no AMD device",
+    "No industrial/SOTA speed or language-quality claim",
+    "Text snippets include illustrative fragments and exercises; executable appendix matches tested sources"
+  ]
+}

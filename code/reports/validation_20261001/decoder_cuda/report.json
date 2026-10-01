@@ -1,0 +1,134 @@
+{
+  "config": {
+    "vocab": 24,
+    "batch": 2,
+    "context": 8,
+    "dim": 16,
+    "heads": 2,
+    "kv_heads": 1,
+    "layers": 1,
+    "hidden": 32,
+    "rope_base": 10000.0,
+    "eps": 1e-05,
+    "online": true
+  },
+  "parameters": 2736,
+  "backend": "cuda",
+  "steps": 20,
+  "train_seconds_excluding_compile": 0.775663993001217,
+  "history": [
+    {
+      "step": 1,
+      "loss": 3.1800122261047363,
+      "grad_norm": 2.1940553188323975
+    },
+    {
+      "step": 2,
+      "loss": 3.183565378189087,
+      "grad_norm": 1.905131459236145
+    },
+    {
+      "step": 3,
+      "loss": 3.1798088550567627,
+      "grad_norm": 2.1712398529052734
+    },
+    {
+      "step": 4,
+      "loss": 3.147514820098877,
+      "grad_norm": 1.8158392906188965
+    },
+    {
+      "step": 5,
+      "loss": 3.045273780822754,
+      "grad_norm": 1.7376623153686523
+    },
+    {
+      "step": 6,
+      "loss": 3.1284632682800293,
+      "grad_norm": 1.8884470462799072
+    },
+    {
+      "step": 7,
+      "loss": 3.0646800994873047,
+      "grad_norm": 1.640426754951477
+    },
+    {
+      "step": 8,
+      "loss": 3.09336519241333,
+      "grad_norm": 1.2115408182144165
+    },
+    {
+      "step": 9,
+      "loss": 3.1086678504943848,
+      "grad_norm": 2.172673225402832
+    },
+    {
+      "step": 10,
+      "loss": 3.045259714126587,
+      "grad_norm": 1.6996803283691406
+    },
+    {
+      "step": 11,
+      "loss": 3.0692296028137207,
+      "grad_norm": 1.154606580734253
+    },
+    {
+      "step": 12,
+      "loss": 3.0286898612976074,
+      "grad_norm": 1.5818469524383545
+    },
+    {
+      "step": 13,
+      "loss": 3.1620543003082275,
+      "grad_norm": 1.5782725811004639
+    },
+    {
+      "step": 14,
+      "loss": 2.9829821586608887,
+      "grad_norm": 1.7393221855163574
+    },
+    {
+      "step": 15,
+      "loss": 3.0168025493621826,
+      "grad_norm": 1.2288907766342163
+    },
+    {
+      "step": 16,
+      "loss": 2.909334897994995,
+      "grad_norm": 1.6088273525238037
+    },
+    {
+      "step": 17,
+      "loss": 2.9569573402404785,
+      "grad_norm": 1.109684944152832
+    },
+    {
+      "step": 18,
+      "loss": 2.958878755569458,
+      "grad_norm": 1.4620803594589233
+    },
+    {
+      "step": 19,
+      "loss": 2.8789260387420654,
+      "grad_norm": 1.3135333061218262
+    },
+    {
+      "step": 20,
+      "loss": 2.916260242462158,
+      "grad_norm": 1.4035404920578003
+    }
+  ],
+  "validation_loss": 2.9382405281066895,
+  "sample": "el sol rlivenl .sloissh sjml l  s.phll. n   nvl\nmio ouavnsaetsmpmidlli\nzzpatb artyrdlo ",
+  "compiler": {
+    "backend": "cuda",
+    "kernels": 251,
+    "arena_bytes": 82688,
+    "gemm_strategy": "blocked",
+    "compile_seconds": 48.68951155699324,
+    "sha256": "3e7f6159ac910d93ad43491609dd0d7a9174a8677b390b25ffb2b221b561541e",
+    "source": "/home/alvaro/.cache/lumbre-validation-20261001/cuda/3e7f6159ac910d93ad43491609dd0d7a9174a8677b390b25ffb2b221b561541e.cu"
+  },
+  "corpus": "original repeated teaching corpus",
+  "warning": "debugging-scale training; not SOTA quality, not an independent language benchmark"
+}

@@ -1,0 +1,134 @@
+{
+  "config": {
+    "vocab": 24,
+    "batch": 2,
+    "context": 8,
+    "dim": 16,
+    "heads": 2,
+    "kv_heads": 1,
+    "layers": 1,
+    "hidden": 32,
+    "rope_base": 10000.0,
+    "eps": 1e-05,
+    "online": true
+  },
+  "parameters": 2736,
+  "backend": "cpu",
+  "steps": 20,
+  "train_seconds_excluding_compile": 0.06213047500932589,
+  "history": [
+    {
+      "step": 1,
+      "loss": 3.1800122261047363,
+      "grad_norm": 2.1940555572509766
+    },
+    {
+      "step": 2,
+      "loss": 3.183565378189087,
+      "grad_norm": 1.905131220817566
+    },
+    {
+      "step": 3,
+      "loss": 3.1798088550567627,
+      "grad_norm": 2.1712403297424316
+    },
+    {
+      "step": 4,
+      "loss": 3.147514820098877,
+      "grad_norm": 1.815839409828186
+    },
+    {
+      "step": 5,
+      "loss": 3.045273780822754,
+      "grad_norm": 1.7376620769500732
+    },
+    {
+      "step": 6,
+      "loss": 3.1284632682800293,
+      "grad_norm": 1.8884458541870117
+    },
+    {
+      "step": 7,
+      "loss": 3.0646800994873047,
+      "grad_norm": 1.6404261589050293
+    },
+    {
+      "step": 8,
+      "loss": 3.09336519241333,
+      "grad_norm": 1.2115410566329956
+    },
+    {
+      "step": 9,
+      "loss": 3.1086676120758057,
+      "grad_norm": 2.1726739406585693
+    },
+    {
+      "step": 10,
+      "loss": 3.045259714126587,
+      "grad_norm": 1.6996806859970093
+    },
+    {
+      "step": 11,
+      "loss": 3.0692296028137207,
+      "grad_norm": 1.1546066999435425
+    },
+    {
+      "step": 12,
+      "loss": 3.0286898612976074,
+      "grad_norm": 1.5818471908569336
+    },
+    {
+      "step": 13,
+      "loss": 3.1620543003082275,
+      "grad_norm": 1.5782724618911743
+    },
+    {
+      "step": 14,
+      "loss": 2.9829819202423096,
+      "grad_norm": 1.739321231842041
+    },
+    {
+      "step": 15,
+      "loss": 3.0168025493621826,
+      "grad_norm": 1.2288908958435059
+    },
+    {
+      "step": 16,
+      "loss": 2.909334897994995,
+      "grad_norm": 1.608826756477356
+    },
+    {
+      "step": 17,
+      "loss": 2.9569573402404785,
+      "grad_norm": 1.1096848249435425
+    },
+    {
+      "step": 18,
+      "loss": 2.958878993988037,
+      "grad_norm": 1.4620805978775024
+    },
+    {
+      "step": 19,
+      "loss": 2.8789260387420654,
+      "grad_norm": 1.3135340213775635
+    },
+    {
+      "step": 20,
+      "loss": 2.916259765625,
+      "grad_norm": 1.403540849685669
+    }
+  ],
+  "validation_loss": 2.9382404685020447,
+  "sample": "el sol rlivenl .sloissh sjml l  s.phll. n   nvl\nmio ouavnsaetsmpmidlli\nzzpatb artyrdlo ",
+  "compiler": {
+    "backend": "cpu",
+    "kernels": 251,
+    "arena_bytes": 82688,
+    "gemm_strategy": "blocked",
+    "compile_seconds": 43.60207028797595,
+    "sha256": "dacf7de08db6c0cca392e56890b26f255a813ed60bd072f03fae032fec9460d3",
+    "source": "/home/alvaro/.cache/lumbre-validation-20261001/cpu/dacf7de08db6c0cca392e56890b26f255a813ed60bd072f03fae032fec9460d3.c"
+  },
+  "corpus": "original repeated teaching corpus",
+  "warning": "debugging-scale training; not SOTA quality, not an independent language benchmark"
+}

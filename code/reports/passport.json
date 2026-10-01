@@ -1,0 +1,319 @@
+{
+  "valid_cases": [
+    {
+      "status": "LOGICAL_MAP_VALIDATED",
+      "rows": 0,
+      "columns": 7,
+      "tile": [
+        4,
+        8
+      ],
+      "grid": [
+        0,
+        1
+      ],
+      "valid_writes": 0,
+      "masked_participants": 0,
+      "missing": [],
+      "duplicate_writes": {},
+      "out_of_range": [],
+      "scope": "finite logical output map only; no device execution or race proof"
+    },
+    {
+      "status": "LOGICAL_MAP_VALIDATED",
+      "rows": 0,
+      "columns": 7,
+      "tile": [
+        8,
+        8
+      ],
+      "grid": [
+        0,
+        1
+      ],
+      "valid_writes": 0,
+      "masked_participants": 0,
+      "missing": [],
+      "duplicate_writes": {},
+      "out_of_range": [],
+      "scope": "finite logical output map only; no device execution or race proof"
+    },
+    {
+      "status": "LOGICAL_MAP_VALIDATED",
+      "rows": 0,
+      "columns": 7,
+      "tile": [
+        16,
+        16
+      ],
+      "grid": [
+        0,
+        1
+      ],
+      "valid_writes": 0,
+      "masked_participants": 0,
+      "missing": [],
+      "duplicate_writes": {},
+      "out_of_range": [],
+      "scope": "finite logical output map only; no device execution or race proof"
+    },
+    {
+      "status": "LOGICAL_MAP_VALIDATED",
+      "rows": 1,
+      "columns": 1,
+      "tile": [
+        4,
+        8
+      ],
+      "grid": [
+        1,
+        1
+      ],
+      "valid_writes": 1,
+      "masked_participants": 31,
+      "missing": [],
+      "duplicate_writes": {},
+      "out_of_range": [],
+      "scope": "finite logical output map only; no device execution or race proof"
+    },
+    {
+      "status": "LOGICAL_MAP_VALIDATED",
+      "rows": 1,
+      "columns": 1,
+      "tile": [
+        8,
+        8
+      ],
+      "grid": [
+        1,
+        1
+      ],
+      "valid_writes": 1,
+      "masked_participants": 63,
+      "missing": [],
+      "duplicate_writes": {},
+      "out_of_range": [],
+      "scope": "finite logical output map only; no device execution or race proof"
+    },
+    {
+      "status": "LOGICAL_MAP_VALIDATED",
+      "rows": 1,
+      "columns": 1,
+      "tile": [
+        16,
+        16
+      ],
+      "grid": [
+        1,
+        1
+      ],
+      "valid_writes": 1,
+      "masked_participants": 255,
+      "missing": [],
+      "duplicate_writes": {},
+      "out_of_range": [],
+      "scope": "finite logical output map only; no device execution or race proof"
+    },
+    {
+      "status": "LOGICAL_MAP_VALIDATED",
+      "rows": 16,
+      "columns": 16,
+      "tile": [
+        4,
+        8
+      ],
+      "grid": [
+        4,
+        2
+      ],
+      "valid_writes": 256,
+      "masked_participants": 0,
+      "missing": [],
+      "duplicate_writes": {},
+      "out_of_range": [],
+      "scope": "finite logical output map only; no device execution or race proof"
+    },
+    {
+      "status": "LOGICAL_MAP_VALIDATED",
+      "rows": 16,
+      "columns": 16,
+      "tile": [
+        8,
+        8
+      ],
+      "grid": [
+        2,
+        2
+      ],
+      "valid_writes": 256,
+      "masked_participants": 0,
+      "missing": [],
+      "duplicate_writes": {},
+      "out_of_range": [],
+      "scope": "finite logical output map only; no device execution or race proof"
+    },
+    {
+      "status": "LOGICAL_MAP_VALIDATED",
+      "rows": 16,
+      "columns": 16,
+      "tile": [
+        16,
+        16
+      ],
+      "grid": [
+        1,
+        1
+      ],
+      "valid_writes": 256,
+      "masked_participants": 0,
+      "missing": [],
+      "duplicate_writes": {},
+      "out_of_range": [],
+      "scope": "finite logical output map only; no device execution or race proof"
+    },
+    {
+      "status": "LOGICAL_MAP_VALIDATED",
+      "rows": 17,
+      "columns": 23,
+      "tile": [
+        4,
+        8
+      ],
+      "grid": [
+        5,
+        3
+      ],
+      "valid_writes": 391,
+      "masked_participants": 89,
+      "missing": [],
+      "duplicate_writes": {},
+      "out_of_range": [],
+      "scope": "finite logical output map only; no device execution or race proof"
+    },
+    {
+      "status": "LOGICAL_MAP_VALIDATED",
+      "rows": 17,
+      "columns": 23,
+      "tile": [
+        8,
+        8
+      ],
+      "grid": [
+        3,
+        3
+      ],
+      "valid_writes": 391,
+      "masked_participants": 185,
+      "missing": [],
+      "duplicate_writes": {},
+      "out_of_range": [],
+      "scope": "finite logical output map only; no device execution or race proof"
+    },
+    {
+      "status": "LOGICAL_MAP_VALIDATED",
+      "rows": 17,
+      "columns": 23,
+      "tile": [
+        16,
+        16
+      ],
+      "grid": [
+        2,
+        2
+      ],
+      "valid_writes": 391,
+      "masked_participants": 633,
+      "missing": [],
+      "duplicate_writes": {},
+      "out_of_range": [],
+      "scope": "finite logical output map only; no device execution or race proof"
+    },
+    {
+      "status": "LOGICAL_MAP_VALIDATED",
+      "rows": 31,
+      "columns": 65,
+      "tile": [
+        4,
+        8
+      ],
+      "grid": [
+        8,
+        9
+      ],
+      "valid_writes": 2015,
+      "masked_participants": 289,
+      "missing": [],
+      "duplicate_writes": {},
+      "out_of_range": [],
+      "scope": "finite logical output map only; no device execution or race proof"
+    },
+    {
+      "status": "LOGICAL_MAP_VALIDATED",
+      "rows": 31,
+      "columns": 65,
+      "tile": [
+        8,
+        8
+      ],
+      "grid": [
+        4,
+        9
+      ],
+      "valid_writes": 2015,
+      "masked_participants": 289,
+      "missing": [],
+      "duplicate_writes": {},
+      "out_of_range": [],
+      "scope": "finite logical output map only; no device execution or race proof"
+    },
+    {
+      "status": "LOGICAL_MAP_VALIDATED",
+      "rows": 31,
+      "columns": 65,
+      "tile": [
+        16,
+        16
+      ],
+      "grid": [
+        2,
+        5
+      ],
+      "valid_writes": 2015,
+      "masked_participants": 545,
+      "missing": [],
+      "duplicate_writes": {},
+      "out_of_range": [],
+      "scope": "finite logical output map only; no device execution or race proof"
+    }
+  ],
+  "deliberate_bug": {
+    "status": "FAILED",
+    "rows": 3,
+    "columns": 5,
+    "tile": [
+      2,
+      4
+    ],
+    "grid": [
+      2,
+      2
+    ],
+    "valid_writes": 15,
+    "masked_participants": 17,
+    "missing": [
+      11,
+      12,
+      13,
+      14
+    ],
+    "duplicate_writes": {
+      "3": 2,
+      "4": 2,
+      "6": 2,
+      "7": 2
+    },
+    "out_of_range": [],
+    "scope": "finite logical output map only; no device execution or race proof"
+  },
+  "scope": "CPU enumeration of index maps; not a GPU backend port"
+}

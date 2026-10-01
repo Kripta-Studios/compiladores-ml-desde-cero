@@ -1,0 +1,64 @@
+{
+  "config": {
+    "vocab": 24,
+    "batch": 2,
+    "context": 8,
+    "dim": 16,
+    "heads": 2,
+    "kv_heads": 1,
+    "layers": 1,
+    "hidden": 32,
+    "rope_base": 10000.0,
+    "eps": 1e-05,
+    "online": true
+  },
+  "parameters": 2736,
+  "backend": "cuda",
+  "steps": 6,
+  "train_seconds_excluding_compile": 0.3204039419943001,
+  "history": [
+    {
+      "step": 1,
+      "loss": 3.1800122261047363,
+      "grad_norm": 2.1940553188323975
+    },
+    {
+      "step": 2,
+      "loss": 3.183565378189087,
+      "grad_norm": 1.905131459236145
+    },
+    {
+      "step": 3,
+      "loss": 3.1798088550567627,
+      "grad_norm": 2.1712398529052734
+    },
+    {
+      "step": 4,
+      "loss": 3.147514820098877,
+      "grad_norm": 1.8158392906188965
+    },
+    {
+      "step": 5,
+      "loss": 3.045273780822754,
+      "grad_norm": 1.7376623153686523
+    },
+    {
+      "step": 6,
+      "loss": 3.1284632682800293,
+      "grad_norm": 1.8884470462799072
+    }
+  ],
+  "validation_loss": 3.090007960796356,
+  "sample": "el sol vihnrniioy .sismjygom.aslojutiatlml l. tapilla n.  nyl\nnjp.pycyntbhutnrmjellj\nzz",
+  "compiler": {
+    "backend": "cuda",
+    "kernels": 251,
+    "arena_bytes": 82688,
+    "gemm_strategy": "blocked",
+    "compile_seconds": 0.0,
+    "sha256": "3e7f6159ac910d93ad43491609dd0d7a9174a8677b390b25ffb2b221b561541e",
+    "source": "/home/alvaro/.cache/lumbre-validation-20261001/cuda/3e7f6159ac910d93ad43491609dd0d7a9174a8677b390b25ffb2b221b561541e.cu"
+  },
+  "corpus": "original repeated teaching corpus",
+  "warning": "debugging-scale training; not SOTA quality, not an independent language benchmark"
+}

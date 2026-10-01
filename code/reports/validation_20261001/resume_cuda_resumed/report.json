@@ -1,0 +1,54 @@
+{
+  "config": {
+    "vocab": 24,
+    "batch": 2,
+    "context": 8,
+    "dim": 16,
+    "heads": 2,
+    "kv_heads": 1,
+    "layers": 1,
+    "hidden": 32,
+    "rope_base": 10000.0,
+    "eps": 1e-05,
+    "online": true
+  },
+  "parameters": 2736,
+  "backend": "cuda",
+  "steps": 4,
+  "train_seconds_excluding_compile": 0.19763332200818695,
+  "history": [
+    {
+      "step": 7,
+      "loss": 3.0646800994873047,
+      "grad_norm": 1.640426754951477
+    },
+    {
+      "step": 8,
+      "loss": 3.09336519241333,
+      "grad_norm": 1.2115408182144165
+    },
+    {
+      "step": 9,
+      "loss": 3.1086678504943848,
+      "grad_norm": 2.172673225402832
+    },
+    {
+      "step": 10,
+      "loss": 3.045259714126587,
+      "grad_norm": 1.6996803283691406
+    }
+  ],
+  "validation_loss": 3.030927002429962,
+  "sample": "el sol pniiov  risliygol.asloitti.tlml l  sapilla n.  nyl\nnjp.oycyntbhutnrmiellj\nzzpauc",
+  "compiler": {
+    "backend": "cuda",
+    "kernels": 251,
+    "arena_bytes": 82688,
+    "gemm_strategy": "blocked",
+    "compile_seconds": 0.0,
+    "sha256": "3e7f6159ac910d93ad43491609dd0d7a9174a8677b390b25ffb2b221b561541e",
+    "source": "/home/alvaro/.cache/lumbre-validation-20261001/cuda/3e7f6159ac910d93ad43491609dd0d7a9174a8677b390b25ffb2b221b561541e.cu"
+  },
+  "corpus": "original repeated teaching corpus",
+  "warning": "debugging-scale training; not SOTA quality, not an independent language benchmark"
+}

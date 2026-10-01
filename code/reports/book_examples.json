@@ -1,0 +1,17 @@
+[
+  {
+    "example": "linear_mse",
+    "status": "PASS",
+    "loss": 7.5
+  },
+  {
+    "example": "convolution_gradients",
+    "status": "PASS"
+  },
+  {
+    "example": "regression_step",
+    "status": "PASS",
+    "before": 11.666666984558105,
+    "after": 3.207406997680664
+  }
+]

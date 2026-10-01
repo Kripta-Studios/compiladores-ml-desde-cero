@@ -1,0 +1,298 @@
+[
+  {
+    "file": "Compiladores_ML_Desde_Cero_2026.pdf",
+    "matches": true
+  },
+  {
+    "file": "Compiladores_ML_Desde_Cero_2026.tex",
+    "matches": true
+  },
+  {
+    "file": "README.md",
+    "matches": true
+  },
+  {
+    "file": "appendices.tex",
+    "matches": true
+  },
+  {
+    "file": "bibliography.tex",
+    "matches": true
+  },
+  {
+    "file": "build_book.py",
+    "matches": true
+  },
+  {
+    "file": "chapters/00_inicio.md",
+    "matches": true
+  },
+  {
+    "file": "chapters/01_fundamentos.md",
+    "matches": true
+  },
+  {
+    "file": "chapters/02_tensores_numeros.md",
+    "matches": true
+  },
+  {
+    "file": "chapters/03_uops_renderer.md",
+    "matches": true
+  },
+  {
+    "file": "chapters/04_symbolic_rewrites.md",
+    "matches": true
+  },
+  {
+    "file": "chapters/05_movimientos_bucles.md",
+    "matches": true
+  },
+  {
+    "file": "chapters/06_schedule_memoria.md",
+    "matches": true
+  },
+  {
+    "file": "chapters/07_cpu_rapida.md",
+    "matches": true
+  },
+  {
+    "file": "chapters/08_convs_bench.md",
+    "matches": true
+  },
+  {
+    "file": "chapters/09_gpu_basica.md",
+    "matches": true
+  },
+  {
+    "file": "chapters/10_aceleradores.md",
+    "matches": true
+  },
+  {
+    "file": "chapters/11_autodiff.md",
+    "matches": true
+  },
+  {
+    "file": "chapters/12_modelo_lenguaje.md",
+    "matches": true
+  },
+  {
+    "file": "chapters/13_entrenamiento.md",
+    "matches": true
+  },
+  {
+    "file": "chapters/14_atencion_eficiente.md",
+    "matches": true
+  },
+  {
+    "file": "chapters/15_escalar.md",
+    "matches": true
+  },
+  {
+    "file": "chapters/16_atlas.md",
+    "matches": true
+  },
+  {
+    "file": "chapters/17_laboratorios_ir.md",
+    "matches": true
+  },
+  {
+    "file": "chapters/18_laboratorios_kernels.md",
+    "matches": true
+  },
+  {
+    "file": "chapters/19_laboratorios_modelos.md",
+    "matches": true
+  },
+  {
+    "file": "chapters/20_proyectos.md",
+    "matches": true
+  },
+  {
+    "file": "chapters/21_ejercicios_cierre.md",
+    "matches": true
+  },
+  {
+    "file": "code/LICENSE",
+    "matches": true
+  },
+  {
+    "file": "code/README.md",
+    "matches": true
+  },
+  {
+    "file": "code/examples/bench_kernels.py",
+    "matches": true
+  },
+  {
+    "file": "code/examples/train_decoder.py",
+    "matches": true
+  },
+  {
+    "file": "code/examples/validate_book.py",
+    "matches": true
+  },
+  {
+    "file": "code/examples/verify_launch.py",
+    "matches": true
+  },
+  {
+    "file": "code/kernels/conv.c",
+    "matches": true
+  },
+  {
+    "file": "code/kernels/wmma_demo.cu",
+    "matches": true
+  },
+  {
+    "file": "code/lumbre/__init__.py",
+    "matches": true
+  },
+  {
+    "file": "code/lumbre/compiler.py",
+    "matches": true
+  },
+  {
+    "file": "code/lumbre/ir.py",
+    "matches": true
+  },
+  {
+    "file": "code/lumbre/layout.py",
+    "matches": true
+  },
+  {
+    "file": "code/lumbre/nn.py",
+    "matches": true
+  },
+  {
+    "file": "code/lumbre/nnops.py",
+    "matches": true
+  },
+  {
+    "file": "code/lumbre/passport.py",
+    "matches": true
+  },
+  {
+    "file": "code/lumbre/symbolic.py",
+    "matches": true
+  },
+  {
+    "file": "code/lumbre/tokenizer.py",
+    "matches": true
+  },
+  {
+    "file": "code/pyproject.toml",
+    "matches": true
+  },
+  {
+    "file": "code/reports/bench_kernels.log",
+    "matches": true
+  },
+  {
+    "file": "code/reports/book_examples.json",
+    "matches": true
+  },
+  {
+    "file": "code/reports/decoder_bpe/checkpoint.npz",
+    "matches": true
+  },
+  {
+    "file": "code/reports/decoder_bpe/config.json",
+    "matches": true
+  },
+  {
+    "file": "code/reports/decoder_bpe/report.json",
+    "matches": true
+  },
+  {
+    "file": "code/reports/decoder_final/checkpoint.npz",
+    "matches": true
+  },
+  {
+    "file": "code/reports/decoder_final/config.json",
+    "matches": true
+  },
+  {
+    "file": "code/reports/decoder_final/report.json",
+    "matches": true
+  },
+  {
+    "file": "code/reports/decoder_medium/LEEME.md",
+    "matches": true
+  },
+  {
+    "file": "code/reports/decoder_medium/config.json",
+    "matches": true
+  },
+  {
+    "file": "code/reports/decoder_medium/report.json",
+    "matches": true
+  },
+  {
+    "file": "code/reports/environment.json",
+    "matches": true
+  },
+  {
+    "file": "code/reports/kernels.json",
+    "matches": true
+  },
+  {
+    "file": "code/reports/package_validation.json",
+    "matches": true
+  },
+  {
+    "file": "code/reports/passport.json",
+    "matches": true
+  },
+  {
+    "file": "code/reports/resume_check.json",
+    "matches": true
+  },
+  {
+    "file": "code/reports/tests_final.log",
+    "matches": true
+  },
+  {
+    "file": "code/reports/tests_packaged.log",
+    "matches": true
+  },
+  {
+    "file": "code/reports/train_bpe.log",
+    "matches": true
+  },
+  {
+    "file": "code/reports/train_final.log",
+    "matches": true
+  },
+  {
+    "file": "code/requirements.txt",
+    "matches": true
+  },
+  {
+    "file": "code/tests/test_conv.py",
+    "matches": true
+  },
+  {
+    "file": "code/tests/test_conv_ir.py",
+    "matches": true
+  },
+  {
+    "file": "code/tests/test_lumbre.py",
+    "matches": true
+  },
+  {
+    "file": "code/tests/test_passport.py",
+    "matches": true
+  },
+  {
+    "file": "code/tests/test_tokenizer.py",
+    "matches": true
+  },
+  {
+    "file": "pdf_qa.json",
+    "matches": true
+  },
+  {
+    "file": "preamble.tex",
+    "matches": true
+  }
+]

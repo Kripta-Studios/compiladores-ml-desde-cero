@@ -1,0 +1,367 @@
+{
+  "system": "Linux-6.6.87.2-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+  "backend": "cpu",
+  "records": [
+    {
+      "op": "gemm",
+      "shape": [
+        31,
+        47,
+        65
+      ],
+      "strategy": "reference",
+      "max_abs_error": 3.814697265625e-06,
+      "median_seconds": 0.00029364,
+      "min_seconds": 0.00027815800000000003,
+      "max_seconds": 0.0007258350000000001,
+      "samples_seconds": [
+        0.00027815800000000003,
+        0.0007258350000000001,
+        0.00044628500000000004,
+        0.00029364,
+        0.00029267700000000003
+      ],
+      "gflops": 0.6450415474730963,
+      "compiler": {
+        "backend": "cpu",
+        "kernels": 1,
+        "arena_bytes": 26176,
+        "gemm_strategy": "reference",
+        "compile_seconds": 3.54035331500927,
+        "sha256": "ba187d3e830148877869dd8ca201d56cd5be2bc367b08abe195f464dd8587d2e",
+        "source": "/home/alvaro/.cache/lumbre-validation-20261001/cpu/ba187d3e830148877869dd8ca201d56cd5be2bc367b08abe195f464dd8587d2e.c"
+      }
+    },
+    {
+      "op": "gemm",
+      "shape": [
+        31,
+        47,
+        65
+      ],
+      "strategy": "blocked",
+      "max_abs_error": 3.814697265625e-06,
+      "median_seconds": 9.6537e-05,
+      "min_seconds": 9.0776e-05,
+      "max_seconds": 0.00029867900000000005,
+      "samples_seconds": [
+        9.6537e-05,
+        9.0776e-05,
+        0.00029867900000000005,
+        0.000124742,
+        9.458300000000001e-05
+      ],
+      "gflops": 1.9620456405316096,
+      "compiler": {
+        "backend": "cpu",
+        "kernels": 1,
+        "arena_bytes": 26176,
+        "gemm_strategy": "blocked",
+        "compile_seconds": 3.4177846729871817,
+        "sha256": "18b1f18235131a18d012b15c80cf648d81da47a0668c46e42e077dba3974e453",
+        "source": "/home/alvaro/.cache/lumbre-validation-20261001/cpu/18b1f18235131a18d012b15c80cf648d81da47a0668c46e42e077dba3974e453.c"
+      }
+    },
+    {
+      "op": "gemm",
+      "shape": [
+        128,
+        128,
+        128
+      ],
+      "strategy": "reference",
+      "max_abs_error": 9.5367431640625e-06,
+      "median_seconds": 0.008746907,
+      "min_seconds": 0.008024467,
+      "max_seconds": 0.00902525,
+      "samples_seconds": [
+        0.008028685,
+        0.00902525,
+        0.008746907,
+        0.00879888,
+        0.008024467
+      ],
+      "gflops": 0.47951853152205687,
+      "compiler": {
+        "backend": "cpu",
+        "kernels": 1,
+        "arena_bytes": 196608,
+        "gemm_strategy": "reference",
+        "compile_seconds": 3.140528768999502,
+        "sha256": "1cd02c8a6a0e21fbf22655f9cab4ebec3328c22c73befb44498a4d43bce53dbd",
+        "source": "/home/alvaro/.cache/lumbre-validation-20261001/cpu/1cd02c8a6a0e21fbf22655f9cab4ebec3328c22c73befb44498a4d43bce53dbd.c"
+      }
+    },
+    {
+      "op": "gemm",
+      "shape": [
+        128,
+        128,
+        128
+      ],
+      "strategy": "blocked",
+      "max_abs_error": 9.5367431640625e-06,
+      "median_seconds": 0.001688948,
+      "min_seconds": 0.0015555010000000001,
+      "max_seconds": 0.001922532,
+      "samples_seconds": [
+        0.001688948,
+        0.001666778,
+        0.001820135,
+        0.0015555010000000001,
+        0.001922532
+      ],
+      "gflops": 2.483382555294775,
+      "compiler": {
+        "backend": "cpu",
+        "kernels": 1,
+        "arena_bytes": 196608,
+        "gemm_strategy": "blocked",
+        "compile_seconds": 3.6404333479877096,
+        "sha256": "9fcd301736928a6dc71cbe29f02ec6aedc06e775673e8da9af677ded901cfca1",
+        "source": "/home/alvaro/.cache/lumbre-validation-20261001/cpu/9fcd301736928a6dc71cbe29f02ec6aedc06e775673e8da9af677ded901cfca1.c"
+      }
+    },
+    {
+      "op": "gemm",
+      "shape": [
+        256,
+        256,
+        256
+      ],
+      "strategy": "reference",
+      "max_abs_error": 1.52587890625e-05,
+      "median_seconds": 0.156636936,
+      "min_seconds": 0.138541445,
+      "max_seconds": 0.16602887700000002,
+      "samples_seconds": [
+        0.156636936,
+        0.16602887700000002,
+        0.154756696,
+        0.156876667,
+        0.138541445
+      ],
+      "gflops": 0.21421787770414508,
+      "compiler": {
+        "backend": "cpu",
+        "kernels": 1,
+        "arena_bytes": 786432,
+        "gemm_strategy": "reference",
+        "compile_seconds": 2.9277576449967455,
+        "sha256": "a0a51cbab8df76d5e1c95765ff104015abf1ad03da096c33a707b9bab04384ea",
+        "source": "/home/alvaro/.cache/lumbre-validation-20261001/cpu/a0a51cbab8df76d5e1c95765ff104015abf1ad03da096c33a707b9bab04384ea.c"
+      }
+    },
+    {
+      "op": "gemm",
+      "shape": [
+        256,
+        256,
+        256
+      ],
+      "strategy": "blocked",
+      "max_abs_error": 1.52587890625e-05,
+      "median_seconds": 0.014267696000000002,
+      "min_seconds": 0.012875931,
+      "max_seconds": 0.018246149,
+      "samples_seconds": [
+        0.012875931,
+        0.013670078,
+        0.018246149,
+        0.014267696000000002,
+        0.016935426
+      ],
+      "gflops": 2.351776488649604,
+      "compiler": {
+        "backend": "cpu",
+        "kernels": 1,
+        "arena_bytes": 786432,
+        "gemm_strategy": "blocked",
+        "compile_seconds": 3.738793681986863,
+        "sha256": "6d004fe33acc2865fec2db77760e2824778aedde2de33d073430bab0d64d6705",
+        "source": "/home/alvaro/.cache/lumbre-validation-20261001/cpu/6d004fe33acc2865fec2db77760e2824778aedde2de33d073430bab0d64d6705.c"
+      }
+    },
+    {
+      "op": "attention",
+      "shape": [
+        1,
+        2,
+        16,
+        32
+      ],
+      "strategy": "dense",
+      "max_abs_error": 0.0,
+      "median_seconds": 8.6211e-05,
+      "min_seconds": 6.854e-05,
+      "max_seconds": 9.815300000000001e-05,
+      "samples_seconds": [
+        7.2507e-05,
+        6.854e-05,
+        8.6211e-05,
+        9.2613e-05,
+        9.815300000000001e-05
+      ],
+      "compiler": {
+        "backend": "cpu",
+        "kernels": 8,
+        "arena_bytes": 22528,
+        "gemm_strategy": "blocked",
+        "compile_seconds": 0.0,
+        "sha256": "88d6a6d1924f2dc6c1c782773a60931517e543707a1fe16e2f1d8e3ac51f8bd9",
+        "source": "/home/alvaro/.cache/lumbre-validation-20261001/cpu/88d6a6d1924f2dc6c1c782773a60931517e543707a1fe16e2f1d8e3ac51f8bd9.c"
+      }
+    },
+    {
+      "op": "attention",
+      "shape": [
+        1,
+        2,
+        16,
+        32
+      ],
+      "strategy": "online",
+      "max_abs_error": 3.5762786865234375e-07,
+      "median_seconds": 5.6488000000000005e-05,
+      "min_seconds": 5.5686e-05,
+      "max_seconds": 5.933500000000001e-05,
+      "samples_seconds": [
+        5.933500000000001e-05,
+        5.7019000000000004e-05,
+        5.6488000000000005e-05,
+        5.5857000000000004e-05,
+        5.5686e-05
+      ],
+      "compiler": {
+        "backend": "cpu",
+        "kernels": 1,
+        "arena_bytes": 16384,
+        "gemm_strategy": "blocked",
+        "compile_seconds": 3.6764510909852106,
+        "sha256": "1f46e29e05a57aa831fcee6d8821aa4e6cc3d16fc4b3bca87a0bbe1d7bc26d06",
+        "source": "/home/alvaro/.cache/lumbre-validation-20261001/cpu/1f46e29e05a57aa831fcee6d8821aa4e6cc3d16fc4b3bca87a0bbe1d7bc26d06.c"
+      }
+    },
+    {
+      "op": "attention",
+      "shape": [
+        1,
+        2,
+        64,
+        32
+      ],
+      "strategy": "dense",
+      "max_abs_error": 0.0,
+      "median_seconds": 0.001063312,
+      "min_seconds": 0.000875194,
+      "max_seconds": 0.0015101580000000002,
+      "samples_seconds": [
+        0.000934033,
+        0.0015101580000000002,
+        0.000875194,
+        0.001350606,
+        0.001063312
+      ],
+      "compiler": {
+        "backend": "cpu",
+        "kernels": 8,
+        "arena_bytes": 131072,
+        "gemm_strategy": "blocked",
+        "compile_seconds": 0.0,
+        "sha256": "d055deea0518da7396c9a2d8baa6cc2b0ce5e579a84f0ac2867de6d0a90ac8d3",
+        "source": "/home/alvaro/.cache/lumbre-validation-20261001/cpu/d055deea0518da7396c9a2d8baa6cc2b0ce5e579a84f0ac2867de6d0a90ac8d3.c"
+      }
+    },
+    {
+      "op": "attention",
+      "shape": [
+        1,
+        2,
+        64,
+        32
+      ],
+      "strategy": "online",
+      "max_abs_error": 4.172325134277344e-07,
+      "median_seconds": 0.000821428,
+      "min_seconds": 0.000573833,
+      "max_seconds": 0.000896114,
+      "samples_seconds": [
+        0.000573833,
+        0.000896114,
+        0.000821428,
+        0.000724476,
+        0.000842954
+      ],
+      "compiler": {
+        "backend": "cpu",
+        "kernels": 1,
+        "arena_bytes": 65536,
+        "gemm_strategy": "blocked",
+        "compile_seconds": 3.2456410189915914,
+        "sha256": "79b1cc7d36f9d4ea93342df1454595466a3cd22ef15b7a9618d263592b169bdd",
+        "source": "/home/alvaro/.cache/lumbre-validation-20261001/cpu/79b1cc7d36f9d4ea93342df1454595466a3cd22ef15b7a9618d263592b169bdd.c"
+      }
+    },
+    {
+      "op": "attention",
+      "shape": [
+        1,
+        2,
+        128,
+        32
+      ],
+      "strategy": "dense",
+      "max_abs_error": 0.0,
+      "median_seconds": 0.003998697,
+      "min_seconds": 0.0036244180000000003,
+      "max_seconds": 0.004037734,
+      "samples_seconds": [
+        0.0038863680000000003,
+        0.004033231,
+        0.0036244180000000003,
+        0.004037734,
+        0.003998697
+      ],
+      "compiler": {
+        "backend": "cpu",
+        "kernels": 8,
+        "arena_bytes": 393216,
+        "gemm_strategy": "blocked",
+        "compile_seconds": 0.0,
+        "sha256": "1661efb0420fa7f566b6daabc454200cbc69575d0ba7bb2d509b32c421292aae",
+        "source": "/home/alvaro/.cache/lumbre-validation-20261001/cpu/1661efb0420fa7f566b6daabc454200cbc69575d0ba7bb2d509b32c421292aae.c"
+      }
+    },
+    {
+      "op": "attention",
+      "shape": [
+        1,
+        2,
+        128,
+        32
+      ],
+      "strategy": "online",
+      "max_abs_error": 3.5762786865234375e-07,
+      "median_seconds": 0.003492279,
+      "min_seconds": 0.003043566,
+      "max_seconds": 0.006496770000000001,
+      "samples_seconds": [
+        0.003198596,
+        0.003043566,
+        0.006496770000000001,
+        0.003492279,
+        0.0037575100000000004
+      ],
+      "compiler": {
+        "backend": "cpu",
+        "kernels": 1,
+        "arena_bytes": 131072,
+        "gemm_strategy": "blocked",
+        "compile_seconds": 3.465242403006414,
+        "sha256": "c88b9e4383df663466f3c31a475e16b60af7b8eaabb65a41e5612188b094914c",
+        "source": "/home/alvaro/.cache/lumbre-validation-20261001/cpu/c88b9e4383df663466f3c31a475e16b60af7b8eaabb65a41e5612188b094914c.c"
+      }
+    }
+  ],
+  "scope": "local cpu resident microbenchmark; no cross-system comparison"
+}

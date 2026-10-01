@@ -1,0 +1,84 @@
+{
+  "config": {
+    "vocab": 24,
+    "batch": 2,
+    "context": 8,
+    "dim": 16,
+    "heads": 2,
+    "kv_heads": 1,
+    "layers": 1,
+    "hidden": 32,
+    "rope_base": 10000.0,
+    "eps": 1e-05,
+    "online": true
+  },
+  "parameters": 2736,
+  "backend": "cpu",
+  "steps": 10,
+  "train_seconds_excluding_compile": 0.030513753998093307,
+  "history": [
+    {
+      "step": 1,
+      "loss": 3.1800122261047363,
+      "grad_norm": 2.1940555572509766
+    },
+    {
+      "step": 2,
+      "loss": 3.183565378189087,
+      "grad_norm": 1.905131220817566
+    },
+    {
+      "step": 3,
+      "loss": 3.1798088550567627,
+      "grad_norm": 2.1712403297424316
+    },
+    {
+      "step": 4,
+      "loss": 3.147514820098877,
+      "grad_norm": 1.815839409828186
+    },
+    {
+      "step": 5,
+      "loss": 3.045273780822754,
+      "grad_norm": 1.7376620769500732
+    },
+    {
+      "step": 6,
+      "loss": 3.1284632682800293,
+      "grad_norm": 1.8884458541870117
+    },
+    {
+      "step": 7,
+      "loss": 3.0646800994873047,
+      "grad_norm": 1.6404261589050293
+    },
+    {
+      "step": 8,
+      "loss": 3.09336519241333,
+      "grad_norm": 1.2115410566329956
+    },
+    {
+      "step": 9,
+      "loss": 3.1086676120758057,
+      "grad_norm": 2.1726739406585693
+    },
+    {
+      "step": 10,
+      "loss": 3.045259714126587,
+      "grad_norm": 1.6996806859970093
+    }
+  ],
+  "validation_loss": 3.030927002429962,
+  "sample": "el sol pniiov  risliygol.asloitti.tlml l  sapilla n.  nyl\nnjp.oycyntbhutnrmiellj\nzzpauc",
+  "compiler": {
+    "backend": "cpu",
+    "kernels": 251,
+    "arena_bytes": 82688,
+    "gemm_strategy": "blocked",
+    "compile_seconds": 0.0,
+    "sha256": "dacf7de08db6c0cca392e56890b26f255a813ed60bd072f03fae032fec9460d3",
+    "source": "/home/alvaro/.cache/lumbre-validation-20261001/cpu/dacf7de08db6c0cca392e56890b26f255a813ed60bd072f03fae032fec9460d3.c"
+  },
+  "corpus": "original repeated teaching corpus",
+  "warning": "debugging-scale training; not SOTA quality, not an independent language benchmark"
+}

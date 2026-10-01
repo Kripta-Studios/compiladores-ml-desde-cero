@@ -1,0 +1,40 @@
+Obtaining file:///mnt/c/Users/%C3%81lvaro%20Schwiedop/Desktop/KriptaStudios/Compiladores_ML_Desde_Cero/Compiladores_ML_2026/code
+  Installing build dependencies: started
+  Installing build dependencies: finished with status 'done'
+  Checking if build backend supports build_editable: started
+  Checking if build backend supports build_editable: finished with status 'done'
+  Getting requirements to build editable: started
+  Getting requirements to build editable: finished with status 'done'
+  Preparing editable metadata (pyproject.toml): started
+  Preparing editable metadata (pyproject.toml): finished with status 'done'
+Collecting numpy==2.3.5 (from lumbre-ml-course==0.1.0)
+  Using cached numpy-2.3.5-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl.metadata (62 kB)
+Collecting pytest==9.0.2 (from lumbre-ml-course==0.1.0)
+  Downloading pytest-9.0.2-py3-none-any.whl.metadata (7.6 kB)
+Collecting iniconfig>=1.0.1 (from pytest==9.0.2->lumbre-ml-course==0.1.0)
+  Downloading iniconfig-2.3.0-py3-none-any.whl.metadata (2.5 kB)
+Collecting packaging>=22 (from pytest==9.0.2->lumbre-ml-course==0.1.0)
+  Downloading packaging-26.3-py3-none-any.whl.metadata (3.5 kB)
+Collecting pluggy<2,>=1.5 (from pytest==9.0.2->lumbre-ml-course==0.1.0)
+  Downloading pluggy-1.6.0-py3-none-any.whl.metadata (4.8 kB)
+Collecting pygments>=2.7.2 (from pytest==9.0.2->lumbre-ml-course==0.1.0)
+  Downloading pygments-2.21.0-py3-none-any.whl.metadata (2.5 kB)
+Using cached numpy-2.3.5-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (16.6 MB)
+Downloading pytest-9.0.2-py3-none-any.whl (374 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 374.8/374.8 kB 2.5 MB/s eta 0:00:00
+Downloading iniconfig-2.3.0-py3-none-any.whl (7.5 kB)
+Downloading packaging-26.3-py3-none-any.whl (129 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 130.0/130.0 kB 2.1 MB/s eta 0:00:00
+Downloading pluggy-1.6.0-py3-none-any.whl (20 kB)
+Downloading pygments-2.21.0-py3-none-any.whl (1.3 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.3/1.3 MB 5.4 MB/s eta 0:00:00
+Checking if build backend supports build_editable: started
+Checking if build backend supports build_editable: finished with status 'done'
+Building wheels for collected packages: lumbre-ml-course
+  Building editable for lumbre-ml-course (pyproject.toml): started
+  Building editable for lumbre-ml-course (pyproject.toml): finished with status 'done'
+  Created wheel for lumbre-ml-course: filename=lumbre_ml_course-0.1.0-0.editable-py3-none-any.whl size=3973 sha256=4cfa4f0b0e53eb0d71d0b219b987482b61bc84a567721127624c46f41dd6f09d
+  Stored in directory: /tmp/pip-ephem-wheel-cache-yhu48d_a/wheels/38/1d/6b/73e7ac35926a70c2e5b5890a73bdaf5c7316cba40a5ba3a7e7
+Successfully built lumbre-ml-course
+Installing collected packages: pygments, pluggy, packaging, numpy, iniconfig, pytest, lumbre-ml-course
+Successfully installed iniconfig-2.3.0 lumbre-ml-course-0.1.0 numpy-2.3.5 packaging-26.3 pluggy-1.6.0 pygments-2.21.0 pytest-9.0.2

@@ -1,0 +1,5 @@
+{
+  "status": "PASS",
+  "exact_arrays": true,
+  "steps": "10 == 6 + 4"
+}

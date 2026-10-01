@@ -1,0 +1,17 @@
+Running book_examples_cpu
+book_examples_cpu exit 0 seconds 16.315927073999774
+Running passport
+passport exit 0 seconds 2.0155927349987905
+Running kernels_cpu
+kernels_cpu exit 0 seconds 50.33221976098139
+Running decoder_cpu
+decoder_cpu exit 0 seconds 54.15381166600855
+Running resume_cpu_full
+resume_cpu_full exit 0 seconds 3.9404260860173963
+Running resume_cpu_part
+resume_cpu_part exit 0 seconds 2.8576356550038327
+Running resume_cpu_resumed
+resume_cpu_resumed exit 0 seconds 3.307887368981028
+Running decoder_bpe_cpu
+decoder_bpe_cpu exit 0 seconds 50.25200201899861
+cpu ALL EXAMPLES PASS

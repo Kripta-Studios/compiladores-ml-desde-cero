@@ -1,0 +1,35 @@
+# Python environments and generated package metadata
+__pycache__/
+*.py[cod]
+.pytest_cache/
+*.egg-info/
+.venv/
+venv/
+.cache/
+build/
+dist/
+
+# Local validation scratch files, renders and downloaded toolchains
+/tmp/
+
+# Native build outputs
+*.so
+*.dll
+*.exe
+*.o
+*.obj
+
+# LaTeX intermediates; keep the book PDF and source files
+/*.aux
+/*.log
+/*.out
+/*.toc
+/*.fls
+/*.fdb_latexmk
+/*.synctex.gz
+
+# Local editor and OS metadata
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

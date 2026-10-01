@@ -1,0 +1,1 @@
+Reporte histórico del ensayo CPU de referencia descrito en el capítulo de entrenamiento. No se redistribuye su checkpoint antiguo: para reanudar usa decoder_final/ o decoder_bpe/, que contienen el formato actual. Este ensayo no es una comparación estadística emparejada de rendimiento.

@@ -1,0 +1,7 @@
+{
+  "tests_passed": 61,
+  "tests_seconds": 7.32,
+  "fresh_compilation_cache": true,
+  "wheel_build": "passed (no dependency downloads)",
+  "gpu_execution": false
+}

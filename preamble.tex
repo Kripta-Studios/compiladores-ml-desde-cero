@@ -1,0 +1,85 @@
+\documentclass[12pt,a4paper,oneside]{report}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish,es-nodecimaldot,es-noquoting]{babel}
+\usepackage{lmodern,microtype,amsmath,amssymb,mathtools}
+\usepackage[margin=2.2cm,headheight=16pt]{geometry}
+\usepackage{parskip,fancyhdr,booktabs,tabularx,longtable,array,enumitem}
+\usepackage{xcolor,tikz,listings,tcolorbox,titlesec,needspace}
+\tcbuselibrary{breakable,skins}
+\usetikzlibrary{arrows.meta,positioning,calc,fit,matrix,decorations.pathreplacing}
+\usepackage[hidelinks,unicode]{hyperref}
+\usepackage{bookmark}
+\makeatletter
+\renewcommand{\@pnumwidth}{2.3em}
+\renewcommand{\@tocrmarg}{3.3em}
+\renewcommand{\l@chapter}[2]{\addpenalty{-\@highpenalty}\vskip1em\@plus\p@\@dottedtocline{0}{0pt}{2.5em}{\bfseries #1}{\bfseries #2}}
+\renewcommand{\l@section}{\@dottedtocline{1}{1.5em}{3.3em}}
+\makeatother
+\pdfstringdefDisableCommands{\def\times{x}\def\ensuremath#1{#1}}
+\hypersetup{pdftitle={Compiladores para aprendizaje automático: desde cero},pdfauthor={Material didáctico independiente},pdfsubject={Curso completo con compilador Lumbre, CPU, GPU, autodiferenciación y modelos de lenguaje}}
+\definecolor{azul}{RGB}{25,45,133}
+\definecolor{verde}{RGB}{16,108,53}
+\definecolor{naranja}{RGB}{174,90,9}
+\definecolor{violeta}{RGB}{94,35,125}
+\definecolor{rojo}{RGB}{166,30,35}
+\definecolor{petroleo}{RGB}{18,103,106}
+\newcommand{\cajadef}[2]{\newtcolorbox{#1}[1][]{enhanced,breakable,colback=#2!4!white,colframe=#2,fonttitle=\bfseries,title={##1},coltitle=white,colbacktitle=#2,boxrule=.8pt,arc=2mm,left=7pt,right=7pt,top=5pt,bottom=5pt,before skip=9pt,after skip=9pt}}
+\cajadef{idea}{azul}
+\cajadef{definicion}{azul}
+\cajadef{traduccion}{naranja}
+\cajadef{ejemplo}{verde}
+\cajadef{practica}{violeta}
+\cajadef{cuidado}{rojo}
+\cajadef{comprueba}{petroleo}
+\cajadef{nota}{gray}
+\pagestyle{fancy}\fancyhf{}
+\fancyhead[L]{\small\itshape Compiladores de ML: desde cero}
+\fancyhead[R]{\small\itshape Edición 01-10-2026}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{.4pt}
+\fancypagestyle{plain}{\fancyhf{}\fancyfoot[C]{\thepage}\renewcommand{\headrulewidth}{0pt}}
+\titleformat{\chapter}[display]{\normalfont\huge\bfseries}{\color{azul}\large CAPÍTULO \thechapter}{8pt}{}
+\titlespacing*{\chapter}{0pt}{0pt}{16pt}
+\titleformat{\section}{\normalfont\Large\bfseries}{\thesection}{.7em}{}
+\setcounter{tocdepth}{1}\setcounter{secnumdepth}{2}
+\setlength{\emergencystretch}{3em}
+\setlength{\LTpre}{8pt}\setlength{\LTpost}{8pt}
+\renewcommand{\arraystretch}{1.16}
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+\newcolumntype{P}[1]{>{\raggedright\arraybackslash}p{#1}}
+\setlist{leftmargin=*,topsep=5pt,itemsep=4pt}
+\linespread{1.045}
+\lstset{basicstyle=\ttfamily\footnotesize,breaklines=true,breakatwhitespace=false,columns=fullflexible,keepspaces=true,showstringspaces=false,frame=single,rulecolor=\color{gray!40},backgroundcolor=\color{gray!4},tabsize=4,xleftmargin=3pt,xrightmargin=3pt,aboveskip=9pt,belowskip=9pt,upquote=true,postbreak=\mbox{\textcolor{gray}{$\hookrightarrow$}\space},literate={á}{{\'a}}1 {é}{{\'e}}1 {í}{{\'i}}1 {ó}{{\'o}}1 {ú}{{\'u}}1 {ñ}{{\~n}}1 {ü}{{\"u}}1 {Á}{{\'A}}1 {É}{{\'E}}1 {Í}{{\'I}}1 {Ó}{{\'O}}1 {Ú}{{\'U}}1 {Ñ}{{\~N}}1 {¿}{{?`}}1 {¡}{{!`}}1}
+\tikzset{>=Stealth,box/.style={draw=azul,fill=azul!4,rounded corners=2pt,align=center,text width=3.9cm,minimum height=1.05cm,font=\small},flow/.style={->,thick,draw=azul},dot/.style={circle,draw=azul,fill=azul!4,minimum size=9mm,font=\small}}
+\newcommand{\fuentes}[1]{\par\smallskip{\footnotesize\color{gray!75!black}\textbf{Fuentes y alcance.} #1\par}}
+\newcommand{\mat}[1]{\mathbf{#1}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\dd}{\mathrm{d}}
+\begin{document}
+\begin{titlepage}
+\centering\vspace*{.8cm}
+{\large INGENIERÍA INFORMÁTICA · SISTEMAS DE INTELIGENCIA ARTIFICIAL\par}
+\vspace{1.0cm}
+{\Huge\bfseries Compiladores para\\[.3cm]aprendizaje automático\par}
+\vspace{.8cm}
+{\LARGE\color{azul}\bfseries Desde cero\par}
+\vspace{.7cm}
+{\Large Comprender una operación. Construir su compilador.\\[.2cm]Entrenar un modelo y explicar cada resultado.\par}
+\vspace{1cm}\rule{.88\textwidth}{.8pt}\vspace{.7cm}
+\begin{minipage}{.85\textwidth}\large
+De una suma en C a un Transformer: representaciones intermedias, reescrituras, memoria, kernels CPU y GPU, autodiferenciación y entrenamiento.
+\par\medskip
+Con el compilador \textbf{Lumbre}, laboratorios resueltos, proyectos de investigación, código completo y un mapa crítico de tinygrad, NVIDIA, AMD, Linux y Huawei Ascend.
+\end{minipage}
+\vspace{.65cm}\rule{.88\textwidth}{.8pt}
+\vfill
+{\large Curso de un semestre · Itinerario preparatorio incluido\par}
+\vspace{.3cm}{\small Corte de investigación: 1 de octubre de 2026\par}
+\vspace{.35cm}
+\begin{minipage}{.87\textwidth}\footnotesize
+Material didáctico independiente. El temario de referencia es el facilitado por el estudiante; no se atribuye a una universidad ni a Tiny Corp. Los ejemplos, diagramas y el compilador Lumbre son elaboración original. Los resultados externos se atribuyen a sus fuentes. Las pruebas locales son de CPU; no se presentan como validación de GPU ni como entrenamiento de un modelo de frontera.
+\end{minipage}
+\end{titlepage}
+\pagenumbering{arabic}

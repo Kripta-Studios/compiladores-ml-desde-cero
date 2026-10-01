@@ -1,0 +1,4 @@
+# Preserve reproducible source and manifest bytes across platforms.
+* text=auto eol=lf
+*.pdf binary
+*.npz binary

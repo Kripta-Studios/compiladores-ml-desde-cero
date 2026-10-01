@@ -1,0 +1,49 @@
+{
+  "config": {
+    "vocab": 286,
+    "batch": 2,
+    "context": 8,
+    "dim": 16,
+    "heads": 2,
+    "kv_heads": 1,
+    "layers": 1,
+    "hidden": 32,
+    "rope_base": 10000.0,
+    "eps": 1e-05,
+    "online": false
+  },
+  "parameters": 6928,
+  "backend": "cpu",
+  "steps": 3,
+  "train_seconds_excluding_compile": 0.01726075599435717,
+  "history": [
+    {
+      "step": 1,
+      "loss": 5.693403244018555,
+      "grad_norm": 1.8766661882400513
+    },
+    {
+      "step": 2,
+      "loss": 5.663154125213623,
+      "grad_norm": 1.7949645519256592
+    },
+    {
+      "step": 3,
+      "loss": 5.67587423324585,
+      "grad_norm": 1.8950303792953491
+    }
+  ],
+  "validation_loss": 5.608449459075928,
+  "sample": "el sol �Y ye }u�̱|}�ie\u000e\u001aڅߚ�rih��!1�Ã��|&�\n�\u001c\u0012�)���0\u0012�\u001e\u0012\r�mp�\u0004���!�e >ri��<k��ӣ�W���",
+  "compiler": {
+    "backend": "cpu",
+    "kernels": 254,
+    "arena_bytes": 259200,
+    "gemm_strategy": "blocked",
+    "compile_seconds": 35.32506325101713,
+    "sha256": "63dcaf6f957b29944bfca10e7371f403a954cac429b0703de42bae2959e49785",
+    "source": "/home/alvaro/.cache/lumbre-validation-20261001/cpu/63dcaf6f957b29944bfca10e7371f403a954cac429b0703de42bae2959e49785.c"
+  },
+  "corpus": "original repeated teaching corpus",
+  "warning": "debugging-scale training; not SOTA quality, not an independent language benchmark"
+}

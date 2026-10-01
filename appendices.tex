@@ -1,0 +1,139 @@
+\chapter{Registro de validación y alcance de la entrega}\label{app:validacion}
+\begin{idea}[Cómo leer las evidencias]
+Se separan hechos ejecutados en esta edición, derivaciones del texto, resultados de autores externos y extensiones propuestas. Un archivo de código presente no se convierte automáticamente en una prueba de ejecución. Este registro describe el paquete entregado, no todas las capacidades de los proyectos citados.
+\end{idea}
+
+\section{Entorno observado}
+Las pruebas originales se ejecutaron en Linux 6.18.44, x86\_64, glibc 2.41, con Python 3.13.5, NumPy 2.3.5, pytest 9.0.2 y GCC 14.2.0. El comando \texttt{cc} resolvía al compilador C del entorno. En aquel entorno no estaban disponibles \texttt{nvcc}, \texttt{hipcc} ni \texttt{nvidia-smi}; el archivo \texttt{reports/environment.json} conserva ese inventario histórico.
+
+La revisión local del 1 de octubre utiliza Ubuntu 24.04 bajo WSL2, Python 3.12.3, GCC 13.3.0, NumPy 2.3.5 y pytest 9.0.2. El dispositivo es una NVIDIA GeForce RTX 5070 Ti Laptop de 12 GB, controlador 591.86, CUDA Toolkit 12.9.86 y destino \texttt{sm\_120}. Se conservaron los registros originales y se guardaron las nuevas evidencias en \texttt{reports/validation\_20261001/}. HIP sigue pendiente de hardware compatible.
+
+El entorno virtualizado no ofrece una base suficiente para atribuir los resultados a un modelo comercial concreto de procesador o predecir el rendimiento del ordenador del lector. Por esa razón, la tabla local compara implementaciones en el mismo entorno y no presume equivalencia con una CPU o GPU del estudiante.
+
+\section{Batería y ejemplos numéricos}
+La ejecución original con una caché nueva produjo \textbf{61 pruebas superadas}. El tiempo informado por pytest fue 7,03 segundos; esa cifra es de la batería, no del entrenamiento ni de un kernel aislado. Comprende comprobaciones de operaciones elemento a elemento, formas vacías admitidas, broadcasting, reducciones, vistas lógicas, matmul, gradientes, arena, atención, convoluciones, tokenizador y pasaporte de índices.
+
+La revisión local repite la batería y los tres ejemplos numéricos, con selección explícita del backend mediante \texttt{pytest --backend=cuda} y \texttt{validate\_book.py --backend cuda}. Los casos de memoria, índices, tokenización y la convolución C independiente conservan su ejecución anfitriona; los programas tensoriales seleccionan CUDA. También se verifican longitudes 0, 1, 127, 128, 129 y 257, doce mediciones residentes por backend y la igualdad exacta de checkpoints de diez pasos frente a seis más cuatro, tanto en CPU como en CUDA. Los archivos \texttt{tests\_cpu.log}, \texttt{tests\_cuda.log} y \texttt{resume\_cuda.json} están en la carpeta de la revisión.
+
+El programa \texttt{examples/validate\_book.py} verificó además los tres ejemplos numéricos de integración: pérdida matricial y gradientes; convolución y gradientes calculados a mano; y un paso de regresión escalar. Su informe es \texttt{reports/book\_examples.json}. Estas comprobaciones no se presentan como ejecución automática de cada fragmento aislado del texto: algunos son pseudocódigo, contratos o ejercicios que requieren completar un contexto anterior.
+
+\begin{longtable}{@{}P{.27\textwidth}P{.29\textwidth}P{.38\textwidth}@{}}
+\toprule
+\textbf{Componente} & \textbf{Evidencia de esta edición} & \textbf{Límite que se conserva}\\\midrule\endhead
+Compilador C y runtime & Pruebas y ejemplos ejecutados & Subconjunto estático; no todo operador de cualquier framework.\\
+Autodiferenciación & Comparación analítica, diferencial y entrenamiento & Convenciones explícitas en máximos; no todos los puntos son suaves.\\
+GEMM bloqueada & Pruebas y tiempos CPU & No se midió competitividad frente a BLAS o PyTorch.\\
+Convolución C & Compilación y comparación numérica & No es una biblioteca de convoluciones optimizada completa.\\
+Convolución por IR & Pruebas forward y gradientes & Límite didáctico de posiciones; grafos costosos al crecer.\\
+Atención online & Comparación forward y gradientes; benchmark & Backward recompone operaciones densas.\\
+Decoder & 600 actualizaciones; checkpoint y evaluación & Corpus repetido, escala pequeña, no calidad de frontera.\\
+ByteBPE & Ida y vuelta, estado y entrenamiento breve & Tokenizador educativo, no réplica de uno comercial.\\
+Pasaporte de índices & 15 mapas y rechazo de un error intencional & Enumeración lógica CPU; no ejecución de hardware.\\
+CUDA y WMMA & Compilación y ejecución en RTX 5070 Ti Laptop; WMMA con error cero & Alcance local, sin comparación industrial; HIP pendiente.\\
+ZeRO, MoE distribuido, FP8/FP4 & Teoría y diseño de proyectos & No son funcionalidades ejecutadas del runtime entregado.\\
+\bottomrule
+\end{longtable}
+
+\section{Entrenamiento principal}
+La configuración fue vocabulario 24, lote 2, contexto 32, dimensión 64, dos capas, dos cabezas de consulta, una cabeza de clave/valor y dimensión intermedia 128. Se activaron atención online y GEMM bloqueada. Hay 75.584 parámetros, 447 unidades de kernel en el plan de entrenamiento y una arena de 2.100.160 bytes bajo la definición del compilador.
+
+El registro contiene 600 actualizaciones. Primera pérdida: 3,2164369. Última pérdida: 0,2746565. Pérdida de evaluación: 0,3321578, media de cuatro lotes del fragmento reservado del corpus repetido. El tiempo del bucle fue 3,4371843 segundos, sin compilación ni la evaluación y generación posteriores. La compilación de ese registro fue un acierto de caché. Todos esos campos se pueden inspeccionar en \texttt{reports/decoder\_final/report.json}.
+
+La comparación entre diez actualizaciones continuas y una ejecución de seis más cuatro reanudadas coincidió exactamente en los campos guardados del checkpoint, en el mismo entorno y configuración. El resultado se conserva en \texttt{reports/resume\_check.json}. No se extrapola identidad bit a bit a otros dispositivos, tipos o órdenes de reducción.
+
+La revisión CUDA repite las 600 actualizaciones de la configuración de 75.584 parámetros. La pérdida final es 0,2508018 y la pérdida de evaluación 0,3293002. El bucle de entrenamiento tarda 32,493 segundos, sin compilación, evaluación ni generación posteriores. Su checkpoint e informe se guardan en \texttt{reports/validation\_20261001/decoder\_cuda\_75584/}. Los tiempos proceden de entornos diferentes y no definen una comparación de velocidad CPU/GPU. Las diferencias numéricas entre backends no invalidan la comprobación exacta de reanudación dentro de cada backend.
+
+\begin{cuidado}[Una evaluación reservada no siempre es independiente]
+El corpus de demostración repite frases. Un corte del texto puede dejar secuencias prácticamente iguales en entrenamiento y evaluación. La pérdida demuestra que el sistema aprende ese material de depuración; no demuestra generalización lingüística independiente. La ruta de experimentación con documentos separados se desarrolla en los capítulos de datos y proyectos.
+\end{cuidado}
+
+\section{Cómo distinguir reportes históricos}
+El paquete conserva un registro de la configuración final y uno de la ruta BPE de depuración. No se mezclan sus pérdidas ni vocabularios. Las muestras de generación son resultados del modelo, no ejemplos editados para mejorar su aspecto. Los archivos de reportes pueden contener rutas de caché del entorno original: son procedencia del ensayo; el runtime creará sus propias rutas al reproducirlo.
+
+No se suministran bibliotecas nativas compiladas, controladores ni firmware para instalar. Los repositorios externos se enlazan en la bibliografía. El código completo del apéndice anterior y los archivos del directorio \texttt{code/} son las fuentes del compilador educativo. El manifiesto del paquete permite comprobar que no se han modificado accidentalmente.
+
+\chapter{Reproducir, modificar y reconstruir el material}\label{app:reproducir}
+
+\section{Primera instalación con una ruta única}
+Descomprime el paquete y abre una terminal en su directorio. Entra en \texttt{code/}. Utiliza un entorno virtual para no mezclar las dependencias de este curso con las de otros proyectos. El compilador nativo debe estar disponible antes de las pruebas. En Windows, utiliza la ruta Linux/WSL explicada en el libro; cambiar extensiones de bibliotecas no adapta un ABI.
+
+\begin{lstlisting}[language=bash]
+cd code
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install -e '.[test]'
+python -m pytest -q
+python examples/validate_book.py
+python examples/verify_launch.py
+\end{lstlisting}
+
+La instalación editable hace visible \texttt{lumbre} a los programas de \texttt{examples/}. Sin ella, antepone \texttt{PYTHONPATH=.} a las órdenes ejecutadas desde la raíz del código. No interpretes un fallo de importación como un fallo del algoritmo de autodiferenciación: todavía no se ha llegado a ese algoritmo.
+
+\section{Reproducción fría y caliente}
+Para estudiar una compilación limpia, utiliza una carpeta de caché nueva en lugar de borrar indiscriminadamente archivos de otros proyectos. Para estudiar tiempo caliente, conserva esa caché y registra que se reutilizó. El programa guarda la fuente generada junto al artefacto compilado.
+
+\begin{lstlisting}[language=bash]
+LUMBRE_CACHE="$PWD/cache_del_ensayo" python -m pytest -q
+python examples/bench_kernels.py --repeat 20 \
+  --output reports/mi_benchmark.json
+\end{lstlisting}
+
+El benchmark utiliza entradas residentes y excluye la copia de las salidas dentro de la región cronometrada. Si se desea tiempo extremo a extremo, se crea otro ensayo y se nombra de forma diferente. No se cambia silenciosamente la frontera medida conservando la misma etiqueta en una tabla.
+
+\section{Modificar el compilador por capas}
+Para añadir una operación, escribe primero su contrato: forma, tipo, valores especiales y efectos. Añade una referencia sencilla y pruebas. Después incorpora el nodo, su generación C y, cuando proceda, su VJP. Finalmente estudia fusión, planificación y una ruta GPU. Una operación que compila pero carece de una política para formas inválidas aún no tiene una interfaz completa.
+
+Para cambiar planificación, conserva un modo sin fusión ni reciclaje y compara resultados. Para cambiar precisión, no reutilices tolerancias sin examinarlas. Para añadir una llamada externa, declara la biblioteca, versiones, layout, workspace y stream. Esa llamada puede ser una excelente decisión de ingeniería, pero no debe atribuirse a código generado íntegramente por Lumbre.
+
+\section{Diagnóstico de problemas frecuentes}
+\begin{longtable}{@{}P{.3\textwidth}P{.64\textwidth}@{}}
+\toprule\textbf{Síntoma} & \textbf{Primera comprobación útil}\\\midrule\endhead
+No se importa \texttt{lumbre} & Confirma instalación editable o \texttt{PYTHONPATH}; comprueba el intérprete y directorio actual.\\
+No se encuentra \texttt{cc} & Comprueba el compilador nativo y PATH. Aún no es una discrepancia de resultados tensoriales.\\
+Se rechaza una forma & Lee la forma esperada y la recibida. No fuerces un reshape que cambie el número de elementos.\\
+Checkpoint incompatible & Compara arquitectura, corpus y vocabulario. El rechazo evita interpretar pesos con otra semántica.\\
+Pérdida no finita & Conserva el primer paso y reduce el caso; localiza la primera operación no finita antes de cambiar varias opciones.\\
+CPU correcta, GPU falla & Registra compilación, arquitectura y ejecución por separado; no traslades automáticamente la validación CPU.\\
+Primera ejecución muy lenta & Separa construcción, compilación, carga y ejecución. Revisa si las posteriores usan caché.\\
+Atención ahorra memoria pero pierde tiempo & Conserva el resultado y realiza ablaciones de granularidad, vectorización y tamaño; no alteres la referencia para ocultarlo.\\
+\bottomrule\end{longtable}
+
+\section{Compilar el libro}
+El archivo principal \texttt{Compiladores\_ML\_Desde\_Cero\_2026.tex} contiene los listados incrustados y los diagramas vectoriales; no necesita copiar fuentes tipográficas del paquete. Requiere una distribución LaTeX con los paquetes declarados en su preámbulo. Dos o tres pasadas actualizan referencias, páginas e índice.
+
+\begin{lstlisting}[language=bash]
+pdflatex -interaction=nonstopmode -halt-on-error \
+  Compiladores_ML_Desde_Cero_2026.tex
+pdflatex -interaction=nonstopmode -halt-on-error \
+  Compiladores_ML_Desde_Cero_2026.tex
+\end{lstlisting}
+
+El paquete incluye además los capítulos fuente y \texttt{build\_book.py}. Al ejecutar ese script desde su ubicación original se regenera el \texttt{.tex} con las fuentes del código incluidas. Si se modifica el software, conviene regenerar también los listados para que libro y paquete no diverjan. El PDF suministrado es la versión maquetada de referencia de esta edición.
+
+\chapter{Mapa de cobertura y puertas del semestre}\label{app:cobertura}
+
+\section{Correspondencia con el temario solicitado}
+Este mapa sirve para localizar los contenidos, no para sustituir su lectura. Las páginas son referencias internas del PDF y pueden cambiar al recompilar con otra edición o tipografía.
+
+\begin{longtable}{@{}P{.22\textwidth}P{.43\textwidth}P{.29\textwidth}@{}}
+\toprule\textbf{Bloque} & \textbf{Núcleo del libro} & \textbf{Práctica y evaluación}\\\midrule\endhead
+Preparación desde cero & Programas y taller, p.\pageref{ch:programa}; tensores, p.\pageref{ch:tensores}; números, p.\pageref{ch:numeros}. & Predicciones manuales y programas mínimos.\\
+Semanas 1--2: UOps, elementwise, symbolic, rewrites, renderer & UOps, p.\pageref{ch:uops}; C, p.\pageref{ch:renderer}; índices, p.\pageref{ch:symbolic}; reescrituras, p.\pageref{ch:rewrites}. & Laboratorios 1--2, pp.\pageref{lab:uno} y \pageref{lab:dos}.\\
+Semanas 3--4: loops, movement, reduction, rangeify & Vistas, p.\pageref{ch:movement}; recorridos, p.\pageref{ch:rangeify}; reducción, p.\pageref{ch:reducciones}; kernels, p.\pageref{ch:schedule}. & Laboratorios 3--4, pp.\pageref{lab:tres} y \pageref{lab:cuatro}.\\
+Semanas 5--6: jerarquía, upcasting, GEMM, conv & Memoria, p.\pageref{ch:jerarquia}; SIMD, p.\pageref{ch:simd}; GEMM, p.\pageref{ch:gemm}; conv, p.\pageref{ch:convs}. & Laboratorios 5--6 y proyecto competitivo, p.\pageref{project:competitivo}.\\
+Semanas 7--8: call, GPU, aceleradores, tensor cores & GPU, p.\pageref{ch:gpu}; runtime, p.\pageref{ch:runtime}; memoria, p.\pageref{ch:gpu_memoria}; tensor cores, p.\pageref{ch:tensorcores}; AMD y Ascend. & Laboratorio 7, p.\pageref{lab:siete}; pasaporte, p.\pageref{project:pasaporte}; CUDA validada, HIP pendiente.\\
+Semanas 9--10: modelos y autodiff & Derivadas, p.\pageref{ch:derivada}; VJP, p.\pageref{ch:autodiff}; decoder, p.\pageref{ch:decoder-completo}; entrenamiento, p.\pageref{ch:train}. & Laboratorios 8--11; entrenamiento y checkpoint ejecutados.\\
+Escala LLM moderna & Atención eficiente, p.\pageref{ch:flash}; memoria, p.\pageref{ch:escalar}; precisión, p.\pageref{ch:precision-mixta}; distribuido, p.\pageref{ch:distribuido}; MoE y KV cache. & Proyecto LLM, p.\pageref{project:llm}; separar arquitectura estudiada de escala ejecutada.\\
+Semanas 11--final: proyectos & Atención, p.\pageref{project:atencion}; pasaporte, p.\pageref{project:pasaporte}; rendimiento, p.\pageref{project:competitivo}; agentes, p.\pageref{project:agente}; LLM mayor. & Hipótesis, implementación, pruebas, ablación, informe y defensa.\\
+Investigación y repositorios & tinygrad, p.\pageref{ch:atlas-tinygrad}; Tiny Corp, p.\pageref{ch:tinycorp-sistemas}; LLVM/MLIR, p.\pageref{ch:ssa-mlir}; lenguajes, p.\pageref{ch:atlas-lenguajes}; artículos, p.\pageref{ch:articulos-2026}. & Lectura por contratos y atribución de evidencia; bibliografía enlazada.\\
+\bottomrule\end{longtable}
+
+\section{Qué tiene que saber explicar el estudiante}
+Al terminar las semanas 1--2 debe construir un grafo, justificar una reescritura y localizar su efecto en el C. Al terminar las semanas 3--4 debe obtener índices y vidas de memoria de una composición de vistas y reducciones. En las semanas 5--6 debe medir una mejora y explicar el baseline. En las semanas 7--8 debe distinguir cálculo, lanzamiento y sincronización, y validar en hardware las rutas que vaya a afirmar como ejecutadas.
+
+En las semanas 9--10 debe comprobar una pérdida, generar gradientes y reanudar entrenamiento conservando el estado. El proyecto final añade una hipótesis propia y una contribución identificable. Un resultado negativo con explicación puede cumplir ese objetivo. Una afirmación de SOTA sin suite, fecha, contrato y comparación no lo cumple.
+
+\section{Frontera entre libro y proyecto de producción}
+El libro explica mecanismos más amplios que los implementados en el pequeño compilador de referencia. Los capítulos de precisión mixta, distribución, MoE y entrenamiento a gran escala enseñan lo que habría que diseñar y validar; no convierten esas capacidades en funciones ya presentes. A la inversa, el código de CPU, los gradientes y el entrenamiento pequeño no son meros planes: se han ejecutado y sus reportes se entregan.
+
+Conservar esta frontera permite utilizar la obra como curso completo y como punto de partida técnico sin confundir una herramienta pedagógica con una plataforma de producción ya certificada. La siguiente edición de un proyecto debe añadir pruebas y resultados concretos, no solo cambiar su descripción.

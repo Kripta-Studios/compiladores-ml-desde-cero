@@ -1,0 +1,114 @@
+{
+  "embedded_files": [
+    {
+      "file": "examples/bench_kernels.py",
+      "exact_match": true,
+      "sha256": "b17a7d2d315364a009c7269e754ed7f8a87ec3b9cf239313b3e9a0f2ed6f65ce"
+    },
+    {
+      "file": "examples/train_decoder.py",
+      "exact_match": true,
+      "sha256": "e51f9565d19a8312aca86e471bd8eb6d23c776f0bd7d2e53b770fe076abe0a07"
+    },
+    {
+      "file": "examples/validate_book.py",
+      "exact_match": true,
+      "sha256": "6f6926b0c226481f6767c3a3aa7d9b33042e292325ce363767ee66088701e415"
+    },
+    {
+      "file": "examples/verify_launch.py",
+      "exact_match": true,
+      "sha256": "393ca825a8b6688de7b7fc9cd347fc2a0df13acfd4447d8420d6a191f39c90af"
+    },
+    {
+      "file": "kernels/conv.c",
+      "exact_match": true,
+      "sha256": "ac59eead403a01c90085bd63a3bd52463dfe928a1322351c6a8ded0f86e219b9"
+    },
+    {
+      "file": "kernels/wmma_demo.cu",
+      "exact_match": true,
+      "sha256": "9012842cff26b16a57d4bd9fb4e5efe40909ffd7413740ff1abc250aeea6f536"
+    },
+    {
+      "file": "lumbre/__init__.py",
+      "exact_match": true,
+      "sha256": "b76dd04c234dcffb7caa797a2fff80bcd5ecb4117964442edb5cf769534623ab"
+    },
+    {
+      "file": "lumbre/compiler.py",
+      "exact_match": true,
+      "sha256": "96481cc86a745315f581d8bd6ad6bc0da81c14b1a4aecebafd2ddb2178772598"
+    },
+    {
+      "file": "lumbre/ir.py",
+      "exact_match": true,
+      "sha256": "cf06ddb75ca852a7d1584bb37984934a60d649bed66c1d2b1a3dd05a9b1766a8"
+    },
+    {
+      "file": "lumbre/layout.py",
+      "exact_match": true,
+      "sha256": "63fcec1972477d62e579d3f46852618f896159896edd0493e1a2f1edde8356fa"
+    },
+    {
+      "file": "lumbre/nn.py",
+      "exact_match": true,
+      "sha256": "bb687099e53067c681203495708db24cd17dd438f89cd7c419802b90ed344b97"
+    },
+    {
+      "file": "lumbre/nnops.py",
+      "exact_match": true,
+      "sha256": "8b96a7cc510fa69f7a225d7beac1bee610c5dd7fb6d6020453951869132cbe57"
+    },
+    {
+      "file": "lumbre/passport.py",
+      "exact_match": true,
+      "sha256": "648aab37fb8cdbc1b0301ec5141115d71b9de5fec07988933f7a67c412f07561"
+    },
+    {
+      "file": "lumbre/symbolic.py",
+      "exact_match": true,
+      "sha256": "4b2706ecb0c198514ea79ef45a0250c0b4ea5c1f0cb6b32ad231391474d12c7c"
+    },
+    {
+      "file": "lumbre/tokenizer.py",
+      "exact_match": true,
+      "sha256": "729028fb5960863e652422e70a7fbfab69ab649f0ef2b0a56836eb2306a84a07"
+    },
+    {
+      "file": "tests/conftest.py",
+      "exact_match": true,
+      "sha256": "1ab659714cdd9226c0dcdb6189f417f10799dfaded8f6bf4913f16568eabe379"
+    },
+    {
+      "file": "tests/test_conv.py",
+      "exact_match": true,
+      "sha256": "6a1a22157130da12fbfff8b79c245ee508081853d1b67c87220df94e8f0b1e1a"
+    },
+    {
+      "file": "tests/test_conv_ir.py",
+      "exact_match": true,
+      "sha256": "1cffbfb77f9541fcab68bf49c466c92d3862207d3a326f24af25c3e98b0b4ea0"
+    },
+    {
+      "file": "tests/test_lumbre.py",
+      "exact_match": true,
+      "sha256": "8df739464757b9e2abb667ec06f3bcf58acda2f3687daf0b92c56e241a99004a"
+    },
+    {
+      "file": "tests/test_passport.py",
+      "exact_match": true,
+      "sha256": "10bbe24a07492458721383e75279d787156c1363d41edc5480713100d7cdd9a6"
+    },
+    {
+      "file": "tests/test_tokenizer.py",
+      "exact_match": true,
+      "sha256": "5a8d8bd7923b3b29807608e353aae421188549fa6025374eeb6561267f029de9"
+    }
+  ],
+  "python_listings_compile": true,
+  "citation_keys": 62,
+  "bibliography_entries": 69,
+  "missing_citations": [],
+  "listing_blocks": 122
+}

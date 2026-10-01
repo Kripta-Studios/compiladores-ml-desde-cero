@@ -1,0 +1,17 @@
+Running wmma_compile
+wmma_compile exit 0 seconds 39.784565913985716
+Running wmma_run
+wmma_run exit 0 seconds 3.445809612981975
+Running book_examples_cuda
+book_examples_cuda exit 0 seconds 70.25157515102183
+Running kernels_cuda
+kernels_cuda exit 0 seconds 169.33497109499876
+Running decoder_cuda
+decoder_cuda exit 0 seconds 73.30743814999005
+Running resume_cuda_full
+resume_cuda_full exit 0 seconds 5.839577701990493
+Running resume_cuda_part
+resume_cuda_part exit 0 seconds 5.749379646993475
+Running resume_cuda_resumed
+resume_cuda_resumed exit 0 seconds 5.289059802016709
+cuda ALL EXAMPLES PASS
