@@ -1,0 +1,4 @@
+01_vectors.cu 7 cases PASS
+02_reduce.cu 7 cases PASS
+03_gemm.cu 10 cases PASS
+04_stream.cu 1 cases PASS

@@ -1,0 +1,10 @@
+m=1 n=1 k=1 tiled=0 median_us=14.980160 min_us=11.519039 max_us=27.921282 max_error=0 PASS
+m=1 n=1 k=1 tiled=1 median_us=13.452000 min_us=10.796481 max_us=22.863039 max_error=0 PASS
+m=17 n=19 k=23 tiled=0 median_us=12.557280 min_us=9.617920 max_us=21.535040 max_error=0 PASS
+m=17 n=19 k=23 tiled=1 median_us=11.317280 min_us=9.132480 max_us=22.560959 max_error=0 PASS
+m=31 n=47 k=65 tiled=0 median_us=11.487200 min_us=8.645760 max_us=18.792641 max_error=0 PASS
+m=31 n=47 k=65 tiled=1 median_us=10.076641 min_us=7.796160 max_us=17.467840 max_error=0 PASS
+m=128 n=128 k=128 tiled=0 median_us=10.408000 min_us=9.160959 max_us=11.997440 max_error=0 PASS
+m=128 n=128 k=128 tiled=1 median_us=11.221439 min_us=9.634240 max_us=25.702721 max_error=0 PASS
+m=256 n=256 k=256 tiled=0 median_us=29.200798 min_us=25.145601 max_us=40.933762 max_error=0 PASS
+m=256 n=256 k=256 tiled=1 median_us=26.356319 min_us=21.335682 max_us=33.560318 max_error=0 PASS

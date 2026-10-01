@@ -1,0 +1,2 @@
+numpy==2.3.5
+tinygrad @ git+https://github.com/tinygrad/tinygrad.git@c3aec477b99d9bb87c54d91897cf60acd3f17441

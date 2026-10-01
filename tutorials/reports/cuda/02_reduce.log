@@ -1,0 +1,7 @@
+n=0 sum=0 error=0 PASS
+n=1 sum=-1.125 error=0 PASS
+n=127 sum=-4.875 error=0 PASS
+n=128 sum=-4.375 error=0 PASS
+n=129 sum=-3.75 error=0 PASS
+n=257 sum=-5.625 error=0 PASS
+n=65537 sum=-4.875 error=0 PASS

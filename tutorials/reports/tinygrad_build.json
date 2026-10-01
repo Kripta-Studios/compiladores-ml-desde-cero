@@ -1,0 +1,27 @@
+{
+  "passes": [
+    {
+      "pass": 1,
+      "returncode": 0,
+      "seconds": 1.1397888470091857
+    },
+    {
+      "pass": 2,
+      "returncode": 0,
+      "seconds": 1.0704280429927167
+    },
+    {
+      "pass": 3,
+      "returncode": 0,
+      "seconds": 1.0535706879745703
+    }
+  ],
+  "source_sha256": "916235cb9c904446a09363b2c3e257bd891ec3ac505ffccfb60f49f880465a66",
+  "pdf_sha256": "3a23f23f105c6069e6130b9f61370e2acd4161aca6756dd4d17f19a5bd062b94",
+  "engine": "pdfTeX 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian)",
+  "references_converged": true,
+  "overfull_boxes": 0,
+  "underfull_boxes": 3,
+  "duplicate_page_destinations": 0,
+  "temporary_directory_removed": true
+}

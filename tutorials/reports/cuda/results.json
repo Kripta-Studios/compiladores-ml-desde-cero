@@ -1,0 +1,31 @@
+{
+  "arch": "sm_120",
+  "nvcc": "nvcc: NVIDIA (R) Cuda compiler driver\nCopyright (c) 2005-2025 NVIDIA Corporation\nBuilt on Tue_May_27_02:21:03_PDT_2025\nCuda compilation tools, release 12.9, V12.9.86\nBuild cuda_12.9.r12.9/compiler.36037853_0\n",
+  "programs": [
+    {
+      "file": "01_vectors.cu",
+      "sha256": "8d96508902fca611bff2eb4a48e934ac78b2d302722b16a28ae2c95ebc86ecf1",
+      "returncode": 0,
+      "passing_cases": 7
+    },
+    {
+      "file": "02_reduce.cu",
+      "sha256": "8860e413a53fafc3eb00a6baa177f7db8977cf7e320392e3cfc1c278e2e5af22",
+      "returncode": 0,
+      "passing_cases": 7
+    },
+    {
+      "file": "03_gemm.cu",
+      "sha256": "5912159348619003913320922334bedd221e9852da74d727e7643e596f7719f7",
+      "returncode": 0,
+      "passing_cases": 10
+    },
+    {
+      "file": "04_stream.cu",
+      "sha256": "b19b0a95a672fece981a106c590959f14a51e8a7d5b833cca4aa7557af0673fa",
+      "returncode": 0,
+      "passing_cases": 1
+    }
+  ],
+  "temporary_binaries_removed": true
+}

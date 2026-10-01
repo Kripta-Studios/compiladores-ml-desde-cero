@@ -1,0 +1,647 @@
+\documentclass[12pt,a4paper,oneside]{report}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish,es-nodecimaldot,es-noquoting]{babel}
+\usepackage{lmodern,microtype,amsmath,amssymb,mathtools}
+\usepackage[margin=2.2cm,headheight=16pt]{geometry}
+\usepackage{parskip,fancyhdr,booktabs,tabularx,longtable,array,enumitem}
+\usepackage{xcolor,tikz,listings,tcolorbox,titlesec,needspace}
+\tcbuselibrary{breakable,skins}
+\usetikzlibrary{arrows.meta,positioning,calc,fit,matrix,decorations.pathreplacing}
+\usepackage[hidelinks,unicode]{hyperref}
+\usepackage{bookmark}
+\makeatletter
+\renewcommand{\@pnumwidth}{2.3em}
+\renewcommand{\@tocrmarg}{3.3em}
+\renewcommand{\l@chapter}[2]{\addpenalty{-\@highpenalty}\vskip1em\@plus\p@\@dottedtocline{0}{0pt}{2.5em}{\bfseries #1}{\bfseries #2}}
+\renewcommand{\l@section}{\@dottedtocline{1}{1.5em}{3.3em}}
+\makeatother
+\pdfstringdefDisableCommands{\def\times{x}\def\ensuremath#1{#1}}
+\hypersetup{pdftitle={Tutorial de CUDA},pdfauthor={Material didáctico independiente},pdfsubject={Curso completo con compilador Lumbre, CPU, GPU, autodiferenciación y modelos de lenguaje}}
+\definecolor{azul}{RGB}{25,45,133}
+\definecolor{verde}{RGB}{16,108,53}
+\definecolor{naranja}{RGB}{174,90,9}
+\definecolor{violeta}{RGB}{94,35,125}
+\definecolor{rojo}{RGB}{166,30,35}
+\definecolor{petroleo}{RGB}{18,103,106}
+\newcommand{\cajadef}[2]{\newtcolorbox{#1}[1][]{enhanced,breakable,colback=#2!4!white,colframe=#2,fonttitle=\bfseries,title={##1},coltitle=white,colbacktitle=#2,boxrule=.8pt,arc=2mm,left=7pt,right=7pt,top=5pt,bottom=5pt,before skip=9pt,after skip=9pt}}
+\cajadef{idea}{azul}
+\cajadef{definicion}{azul}
+\cajadef{traduccion}{naranja}
+\cajadef{ejemplo}{verde}
+\cajadef{practica}{violeta}
+\cajadef{cuidado}{rojo}
+\cajadef{comprueba}{petroleo}
+\cajadef{nota}{gray}
+\pagestyle{fancy}\fancyhf{}
+\fancyhead[L]{\small\itshape Tutorial de CUDA}
+\fancyhead[R]{\small\itshape Edición 01-10-2026}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{.4pt}
+\fancypagestyle{plain}{\fancyhf{}\fancyfoot[C]{\thepage}\renewcommand{\headrulewidth}{0pt}}
+\titleformat{\chapter}[display]{\normalfont\huge\bfseries}{\color{azul}\large CAPÍTULO \thechapter}{8pt}{}
+\titlespacing*{\chapter}{0pt}{0pt}{16pt}
+\titleformat{\section}{\normalfont\Large\bfseries}{\thesection}{.7em}{}
+\setcounter{tocdepth}{1}\setcounter{secnumdepth}{2}
+\setlength{\emergencystretch}{3em}
+\setlength{\LTpre}{8pt}\setlength{\LTpost}{8pt}
+\renewcommand{\arraystretch}{1.16}
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+\newcolumntype{P}[1]{>{\raggedright\arraybackslash}p{#1}}
+\setlist{leftmargin=*,topsep=5pt,itemsep=4pt}
+\linespread{1.045}
+\lstset{basicstyle=\ttfamily\footnotesize,breaklines=true,breakatwhitespace=false,columns=fullflexible,keepspaces=true,showstringspaces=false,frame=single,rulecolor=\color{gray!40},backgroundcolor=\color{gray!4},tabsize=4,xleftmargin=3pt,xrightmargin=3pt,aboveskip=9pt,belowskip=9pt,upquote=true,postbreak=\mbox{\textcolor{gray}{$\hookrightarrow$}\space},literate={á}{{\'a}}1 {é}{{\'e}}1 {í}{{\'i}}1 {ó}{{\'o}}1 {ú}{{\'u}}1 {ñ}{{\~n}}1 {ü}{{\"u}}1 {Á}{{\'A}}1 {É}{{\'E}}1 {Í}{{\'I}}1 {Ó}{{\'O}}1 {Ú}{{\'U}}1 {Ñ}{{\~N}}1 {¿}{{?`}}1 {¡}{{!`}}1}
+\tikzset{>=Stealth,box/.style={draw=azul,fill=azul!4,rounded corners=2pt,align=center,text width=3.9cm,minimum height=1.05cm,font=\small},flow/.style={->,thick,draw=azul},dot/.style={circle,draw=azul,fill=azul!4,minimum size=9mm,font=\small}}
+\newcommand{\fuentes}[1]{\par\smallskip{\footnotesize\color{gray!75!black}\textbf{Fuentes y alcance.} #1\par}}
+\newcommand{\mat}[1]{\mathbf{#1}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\dd}{\mathrm{d}}
+\begin{document}
+\hypersetup{pageanchor=false}
+\begin{titlepage}\centering\vspace*{1.5cm}
+{\large CUADERNOS DE COMPILADORES PARA APRENDIZAJE AUTOMÁTICO\par}\vspace{1.4cm}
+{\Huge\bfseries Tutorial de CUDA\par}\vspace{.8cm}{\Large\color{azul}Del índice al kernel comprobado\par}\vspace{1cm}
+\begin{minipage}{.85\textwidth}Material para quien ha completado \emph{Compiladores de ML desde cero}. Explicaciones paso a paso, programas completos, ejercicios con solución y validación local en CPU o GPU según la práctica.\end{minipage}\vfill
+{\large Kripta Studios\par}\vspace{.4cm}Edición del 1 de octubre de 2026\par\vspace{.5cm}
+{\small Material didáctico independiente. Los programas originales y las evidencias acompañan al PDF en el repositorio. Las APIs externas se fijan a las versiones indicadas.\par}\end{titlepage}
+\pagenumbering{arabic}\hypersetup{pageanchor=true}
+\chapter{Del compilador al programa CUDA}
+\label{cuda:inicio}
+Ya has construido grafos, seguido índices y leído kernels en el libro de Lumbre. Ahora escribirás tú el programa que reserva memoria, copia datos, lanza un kernel y comprueba su salida. El objetivo es poder explicar cada acceso y cada espera antes de intentar acelerar una operación.
+
+No necesitas conocer C++ avanzado. Usaremos funciones, punteros, bucles y una pequeña clase que libera memoria al salir de su ámbito. Introduciremos la sintaxis nueva cuando aparezca. Las prácticas trabajan con entradas deterministas y caben en la GPU del equipo de validación.
+
+\section{El recorrido y sus entregas}
+{\small
+\begin{longtable}{@{}P{0.28\textwidth}P{0.32\textwidth}P{0.34\textwidth}@{}}
+\toprule
+\textbf{Práctica} & \textbf{Programa} & \textbf{Evidencia que producirás}\\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Práctica} & \textbf{Programa} & \textbf{Evidencia que producirás}\\
+\midrule
+\endhead
+Vectores & \texttt{01\_vectors.cu} & Índices válidos, incluidos tamaños irregulares.\\
+Reducción & \texttt{02\_reduce.cu} & Suma por bloques y combinación en CPU.\\
+GEMM & \texttt{03\_gemm.cu} & Dos kernels con la misma salida y medidas repetidas.\\
+Stream & \texttt{04\_stream.cu} & Copia, kernel y copia ordenados en una cola.\\
+\bottomrule
+\end{longtable}
+}
+Los archivos viven en \texttt{tutorials/cuda/}. El apéndice incorpora sus fuentes completos. Para trabajar, abre el archivo correspondiente, predice un resultado y ejecuta el programa. Conserva la versión correcta antes de modificarla.
+
+\begin{idea}[Conectar con Lumbre]
+En Lumbre, el renderer produce el kernel y el runtime gestiona la memoria y el lanzamiento. Aquí separarás esas dos responsabilidades en el mismo archivo. Si la salida es incorrecta, podrás preguntar primero si falla el cálculo de índices o si el host entregó un buffer equivocado.
+
+\end{idea}
+\section{Qué se ha ejecutado en esta edición}
+La validación usa Ubuntu 24.04 bajo WSL2 y una NVIDIA GeForce RTX 5070 Ti Laptop, capacidad de cómputo 12.0. El compilador es \texttt{nvcc} 12.9.86; los programas se construyen para \texttt{sm\_120}. El controlador observado es 591.86. El informe de cada programa conserva su hash y su código de salida.
+
+Una arquitectura de compilación identifica las instrucciones que puede contener el binario. La cantidad de memoria, la potencia disponible y el tamaño de las matrices siguen condicionando la ejecución. El tutorial no necesita una GPU de centro de datos ni descarga modelos.
+
+\begin{comprueba}[Antes de continuar]
+Localiza en el libro principal la diferencia entre forma y layout. Explica por qué una matriz de 17 por 19 no cabe en un único tile de 16 por 16. Si puedes dibujar los cuatro tiles y sus bordes, ya tienes la base para estas prácticas.
+
+\end{comprueba}
+\chapter{Preparar el taller y entender la compilación}
+\section{Tres piezas del entorno}
+El controlador permite que el proceso se comunique con el dispositivo. El toolkit proporciona \texttt{nvcc}, cabeceras y bibliotecas. El ejecutable resultante contiene código del host y código que se ejecutará en la GPU. Esas piezas tienen versiones distintas.
+
+Abre una terminal de Linux o WSL y comprueba:
+
+\begin{lstlisting}[language=bash]
+nvidia-smi
+nvcc --version
+\end{lstlisting}
+La versión CUDA que aparece en \texttt{nvidia-smi} describe la compatibilidad del controlador; no demuestra que \texttt{nvcc} esté instalado. Si la segunda orden falla, localiza el toolkit y añade su carpeta \texttt{bin} a \texttt{PATH}. En este equipo se utiliza una instalación aislada de CUDA 12.9.1; en otro equipo la ruta puede ser distinta.
+
+Desde la raíz del repositorio:
+
+\begin{lstlisting}[language=bash]
+nvcc -O2 -lineinfo -std=c++17 -arch=sm_120 \
+  tutorials/cuda/01_vectors.cu -o /tmp/cuda_vectors
+/tmp/cuda_vectors
+\end{lstlisting}
+\texttt{-O2} solicita optimización, \texttt{-lineinfo} conserva información de líneas para diagnóstico y \texttt{-std=c++17} fija el dialecto del host. Cambia \texttt{sm\_120} si tu GPU requiere otro destino que el toolkit admita. No elijas la arquitectura por el número comercial de la tarjeta.
+
+\section{Ejecutar la campaña completa}
+\begin{lstlisting}[language=bash]
+python3 tutorials/validate_cuda.py --arch sm_120 \
+  --output tutorials/reports/mi_cuda
+\end{lstlisting}
+El ejecutor usa la biblioteca estándar de Python. Compila los cuatro archivos en una carpeta temporal, guarda las salidas de los programas y elimina sus binarios al terminar. Si falla una compilación o una comparación, termina con error. Las carpetas de referencia de la edición no deben reutilizarse para tus experimentos.
+
+\section{C++ que aparece en los ejemplos}
+\texttt{std::vector<float>} posee un array en memoria del host. \texttt{data()} entrega un puntero a sus elementos y \texttt{size()} su longitud. Un \texttt{float*} contiene una dirección, pero su tipo por sí solo no dice en qué dispositivo vive.
+
+\texttt{DeviceBuffer<float>} es una clase del tutorial. Su constructor reserva memoria de dispositivo; su destructor la libera. El destructor se llama al salir del bloque delimitado por llaves. Se prohíbe copiar el objeto porque dos propietarios que liberasen el mismo puntero provocarían un error. Esta técnica se suele llamar RAII: ligar la duración de un recurso a la de un objeto.
+
+\texttt{auto launch \allowbreak{}= [\&]() \{ ..\allowbreak{}. \};} crea una función local que utiliza las variables del ámbito que la rodea. En la práctica de GEMM sirve para repetir exactamente el mismo lanzamiento al calentar y al medir. No compila un kernel nuevo en cada llamada.
+
+\chapter{Una operación elemento a elemento completa}
+\section{El contrato antes del kernel}
+Queremos calcular $z_i=2x_i-y_i$ para índices de cero a $n-1$. Los tres arrays tienen longitud $n$, sus elementos son FP32 y la salida tiene almacenamiento propio. El programa admite $n=0$ como caso vacío y no lanza ningún kernel en ese caso.
+
+El kernel recibe punteros que ya deben ser válidos en la GPU. \texttt{const float*} impide escribir a través del puntero de entrada dentro de esta función. La palabra \texttt{\_\_global\_\_} identifica una función que el host puede lanzar en el dispositivo.
+
+\begin{lstlisting}[language=C++]
+__global__ void axpby(const float* x, const float* y,
+                     float* z, int n) {
+  int i = blockIdx.x*blockDim.x + threadIdx.x;
+  if (i < n) z[i] = 2.0f*x[i] - y[i];
+}
+\end{lstlisting}
+La expresión del índice combina el número del bloque, el tamaño del bloque y la posición del hilo. Con 128 hilos por bloque y $n=257$, el host lanza tres bloques. Hay 384 hilos, pero solo 257 escriben resultados. El \texttt{if} protege también las dos lecturas. La guía de programación documenta la jerarquía de hilos. \cite{cuda-guide}
+
+\section{Seguir un elemento de principio a fin}
+En el host llenamos \texttt{x} e \texttt{y}, calculamos una referencia y reservamos tres buffers. Copiamos las entradas con \texttt{cudaMemcpyHo\allowbreak{}stToDevice}. Después lanzamos el kernel y copiamos \texttt{z} al host con \texttt{cudaMemcpyDe\allowbreak{}viceToHost}. La comparación ocurre cuando el trabajo de dispositivo ha terminado.
+
+\begin{center}
+\begin{tikzpicture}
+\node[box,text width=4.15cm] (n0) at (0.0,0) {Host: entradas y referencia};
+\node[box,text width=4.15cm] (n1) at (5.15,0) {GPU: buffers y kernel};
+\draw[flow] (n0) -- (n1);
+\node[box,text width=4.15cm] (n2) at (10.3,0) {Host: salida y comparación};
+\draw[flow] (n1) -- (n2);
+\end{tikzpicture}
+\end{center}
+Los argumentos entre \texttt{<<<} y \texttt{>>>} son la configuración de lanzamiento. Los argumentos entre paréntesis pertenecen al kernel. Intercambiar un puntero de entrada con uno de salida puede compilar y producir una respuesta incorrecta; el compilador no conoce nuestro contrato matemático.
+
+\section{Dos momentos distintos para comprobar errores}
+\texttt{cudaGetLastError()} después del lanzamiento detecta errores que CUDA puede identificar al enviar el trabajo. \texttt{cudaDeviceSy\allowbreak{}nchronize()} espera y puede comunicar un error ocurrido durante su ejecución. El helper \texttt{CUDA(...)} imprime la operación y la línea antes de terminar si el estado es incorrecto. \cite{cuda-runtime}
+
+No uses \texttt{printf} de miles de hilos como prueba principal. Una salida de depuración puede ayudar a seguir un caso pequeño, pero la comprobación numérica debe recorrer todo el resultado.
+
+\begin{practica}[Predicción con 129 elementos]
+Calcula cuántos bloques se lanzan y cuántos hilos quedan fuera del dominio. Busca el último hilo que escribe. Solución: dos bloques, 256 hilos, 127 inactivos; el índice 128 corresponde al hilo cero del segundo bloque.
+
+\end{practica}
+\chapter{Memoria, accesos y resultados numéricos}
+\section{Un puntero no representa una copia automática}
+La variable \texttt{dx.ptr} está en el host, pero su valor identifica almacenamiento de dispositivo. Leer \texttt{dx.ptr[0]} desde C++ del host no equivale a leer el primer dato mediante CUDA. En estos programas usamos reservas y transferencias explícitas para que la propiedad de cada array sea visible.
+
+No liberamos una entrada mientras un kernel pueda utilizarla. En la primera práctica la sincronización termina el trabajo antes de salir del ámbito. En la práctica de streams esperaremos a la cola correspondiente antes de leer o liberar la memoria fijada del host.
+
+\section{Accesos contiguos}
+Los hilos vecinos del kernel vectorial acceden a elementos vecinos. Ese patrón permite que el dispositivo agrupe accesos a memoria. Un stride grande puede obligar a transportar más segmentos para obtener la misma cantidad de datos útiles. Para estudiar este efecto necesitas un experimento con el mismo número de operaciones y una salida verificable.
+
+La contigüidad es una propiedad de las direcciones generadas, no del nombre de una dimensión. En una matriz almacenada por filas, el índice \texttt{row*k+q} recorre una fila cuando cambia \texttt{q}. En \texttt{q*n+col}, mantener \texttt{q} y variar \texttt{col} recorre posiciones contiguas de B.
+
+\section{Errores que una tolerancia no debe ocultar}
+El comparador verifica que la salida sea finita y aplica:
+
+\[
+|z_i-r_i|\leq \mathrm{atol}+\mathrm{rtol}|r_i|.
+\]
+La tolerancia absoluta importa cerca de cero; la relativa escala con el tamaño del resultado. Las entradas vectoriales son múltiplos de potencias de dos, elegidos para facilitar el seguimiento manual. Una campaña posterior debe incluir otros valores y escalas.
+
+Para una reducción larga, cambiar el orden de suma cambia el redondeo. Si acumulas una referencia en FP64 y el kernel en FP32, una discrepancia pequeña puede ser esperable. Antes de ampliar el margen, comprueba que no faltan elementos, que la salida no contiene NaN y que las diferencias crecen de una forma coherente con el problema.
+
+\begin{comprueba}[Diseñar un fallo observable]
+En una copia de trabajo, cambia el límite a \texttt{i < n-1}. El caso de un elemento debería fallar. Explica por qué un conjunto de pruebas formado solo por ceros podría no detectar esa escritura ausente. Restaura el límite antes de medir.
+
+\end{comprueba}
+\chapter{Cooperación dentro del bloque: reducir una suma}
+\section{Dividir el problema}
+Una reducción combina muchos valores en uno. El programa \texttt{02\_reduce.cu} asigna hasta 128 entradas a cada bloque. El bloque produce una suma parcial y el host combina esas sumas en FP64. Así evitamos introducir a la vez una segunda reducción GPU y la gestión de sus buffers.
+
+La memoria \texttt{\_\_shared\_\_} pertenece al bloque. Otro bloque tiene su propio array \texttt{tile}, aunque la declaración sea la misma. Cada hilo escribe una posición; los hilos que quedan fuera de la entrada escriben cero, el elemento neutro de la suma.
+
+\section{Por qué la barrera está fuera del condicional}
+Todos los hilos del bloque llegan a la primera barrera después de cargar. Luego la mitad suma pares, una cuarta parte suma pares de parciales, y así hasta obtener un valor. Tras cada nivel, una barrera garantiza que las lecturas del siguiente nivel vean las escrituras anteriores.
+
+\begin{lstlisting}[language=C++]
+tile[t] = i<n ? x[i] : 0.0f;
+__syncthreads();
+for (int stride=64; stride>0; stride/=2) {
+  if (t<stride) tile[t] += tile[t+stride];
+  __syncthreads();
+}
+\end{lstlisting}
+El contrato de este kernel exige exactamente 128 hilos. La longitud del array y la secuencia de strides dependen de ese número. Cambiar el lanzamiento a 256 hilos sin cambiar el kernel escribiría fuera de \texttt{tile}.
+
+Un retorno temprano de los hilos que no tienen entrada rompería la estructura de participación en las barreras. En una operación con cooperación, estar fuera del dominio de salida no significa que un hilo pueda abandonar el algoritmo.
+
+\section{Completar la reducción en el dispositivo}
+Para una segunda práctica, reserva un buffer para los parciales y vuelve a aplicar el mismo kernel hasta que quede un valor. En cada etapa, la longitud nueva es el número de bloques de la etapa anterior. Conserva ambas reservas hasta que termine la etapa que las usa y evita leer y escribir sobre regiones que se solapan.
+
+El tamaño cero necesita una decisión del host: la suma vacía vale cero y no necesita una grid vacía. Un tamaño de un elemento sigue el mismo contrato que los demás.
+
+\begin{practica}[Dibujar el árbol]
+Haz el dibujo para ocho entradas 1, 2, 3, 4, 5, 6, 7 y 8. Tras combinar posiciones separadas por cuatro obtienes 6, 8, 10 y 12; después 16 y 20; finalmente 36. Indica en qué puntos dos hilos podrían competir si quitaras una barrera.
+
+\end{practica}
+\chapter{GEMM: de la fórmula al tile}
+\section{La versión directa}
+Para A de forma [M,K] y B de forma [K,N], queremos C de forma [M,N]. Cada hilo calcula una posición de C. El eje x recorre columnas y el eje y filas. El bloque es de 16 por 16, por lo que contiene 256 hilos.
+
+\[
+C_{r,c}=\sum_{q=0}^{K-1} A_{r,q}B_{q,c}.
+\]
+La versión directa repite lecturas: los hilos que producen una misma fila de C necesitan elementos comunes de A. Los que producen una misma columna necesitan elementos comunes de B. Esa reutilización motiva el tile.
+
+\section{Cargar una pieza de cada entrada}
+El kernel compartido reserva dos arrays de 16 por 16. Cada hilo carga un elemento de A y uno de B, espera, y utiliza la fila de un tile y la columna del otro. Los 256 hilos cooperan para producir hasta 256 resultados.
+
+Para el tile que comienza en \texttt{base}, el hilo \texttt{(tx,ty)} carga A en \texttt{(row,base+tx)} y B en \texttt{(base+ty,col)}. Si una coordenada cae fuera, escribe cero. La primera barrera publica ambas cargas. La segunda impide sobrescribir el tile mientras otro hilo lo sigue consumiendo.
+
+El acumulador \texttt{sum} vive en cada hilo y persiste durante todas las piezas de K. La escritura final necesita máscara porque un bloque de borde también contiene hilos sin salida válida.
+
+\section{Los bordes son parte del algoritmo}
+En la forma [17,19,23], el programa necesita dos bloques en M, dos en N y dos piezas de K. La última pieza solo contiene siete valores de reducción útiles. Las posiciones restantes de la memoria compartida deben contener cero en esa iteración, no los valores de la anterior.
+
+El tutorial prueba [1,1,1], [17,19,23], [31,47,65], [128,128,128] y [256,256,256]. Cada forma se ejecuta con los dos kernels y se compara con una referencia que acumula en doble precisión.
+
+\section{Qué se puede concluir de la comparación}
+Ambos programas calculan la misma GEMM, pero gestionan la memoria de manera distinta. El tile introduce cargas compartidas y dos barreras por iteración. En matrices pequeñas, ese trabajo puede superar el ahorro. Para matrices mayores, influyen el tráfico, las instrucciones y la ocupación.
+
+Una GEMM FP32 escrita con estos bucles no se convierte en una operación Tensor Core por tener una GPU reciente. La demostración WMMA del libro principal tiene un contrato diferente de tipos, layout y participación por warp. Integrar esa ruta exige otra prueba de corrección.
+
+\begin{practica}[Cambiar una sola decisión]
+Compara la forma irregular [31,47,65] con [32,48,64]. Explica qué máscaras siguen siendo necesarias y cuántos tiles de K ejecuta cada una. La segunda usa cuatro piezas completas; la primera necesita cinco. Mide ambas antes de atribuir toda diferencia a la irregularidad.
+
+\end{practica}
+\chapter{Medir trabajo terminado}
+\section{Definir el intervalo}
+El programa de GEMM reserva y copia antes de medir. Ejecuta tres calentamientos y después recoge treinta muestras. Cada muestra encierra cien lanzamientos entre dos eventos CUDA en la misma cola. Divide el intervalo entre cien y expresa el resultado en microsegundos por lanzamiento.
+
+La muestra puede incluir huecos de envío entre kernels. Describe el tiempo de esa secuencia residente, no una latencia de instrucción ni el coste completo del proceso. La referencia CPU, las reservas y las transferencias iniciales quedan fuera.
+
+\begin{lstlisting}[language=C++]
+CUDA(cudaEventRecord(start));
+for (int repeat=0; repeat<100; ++repeat) launch();
+CUDA(cudaEventRecord(stop));
+CUDA(cudaEventSynchronize(stop));
+CUDA(cudaEventElapsedTime(&ms,start,stop));
+\end{lstlisting}
+Esperar al evento de fin hace que el intervalo esté disponible. Ordenamos las treinta muestras y promediamos las dos centrales para obtener la mediana. El registro conserva también mínimo y máximo. Si la dispersión cambia mucho entre ejecuciones, investiga temperatura, potencia y otros procesos antes de defender una mejora.
+
+\section{No mezclar los relojes de los dos libros}
+Lumbre mide desde Python y sincroniza el runtime. Este tutorial usa eventos y agrupa cien lanzamientos. Sus tablas responden a preguntas diferentes. Aunque ambos programas calculen GEMM, dividir una latencia de un libro por otra del otro no produce una comparación controlada de compiladores.
+
+Para medir extremo a extremo, inicia un reloj del host antes de la reserva o del trabajo que decidas incluir y detenlo después de una sincronización final. Escribe esa frontera en el informe. Conserva los resultados numéricos: un programa más rápido que omite parte de C no es una mejora.
+
+\begin{comprueba}[Interpretar unidades]
+Si cien lanzamientos tardan 0,8 milisegundos, cada uno tarda 8 microsegundos en promedio dentro de ese lote. Para una GEMM [M,N,K], el recuento habitual es aproximadamente $2MNK$ operaciones. No presentes ese cociente como utilización del pico sin fijar también la precisión y la ruta de instrucciones.
+
+\end{comprueba}
+\chapter{Streams y vida de los buffers}
+\section{Una cola con dependencias claras}
+En \texttt{04\_stream.cu}, el host crea un stream, encola una transferencia de entrada, el kernel y la transferencia de salida. Las operaciones del mismo stream respetan ese orden. Antes de leer la salida, el host espera a ese stream.
+
+Los arrays del host se reservan con \texttt{cudaMallocHost}: CUDA mantiene esas páginas fijadas para las transferencias. Se liberan con \texttt{cudaFreeHost}, después de la espera. No se debe reutilizar el array de entrada mientras la copia pendiente aún lo consume.
+
+\begin{center}
+\begin{tikzpicture}
+\node[box,text width=4.15cm] (n0) at (0.0,0) {Copia host a GPU};
+\node[box,text width=4.15cm] (n1) at (5.15,0) {Kernel en el stream};
+\draw[flow] (n0) -- (n1);
+\node[box,text width=4.15cm] (n2) at (10.3,0) {Copia GPU a host};
+\draw[flow] (n1) -- (n2);
+\end{tikzpicture}
+\end{center}
+El cuarto argumento de lanzamiento especifica el stream. El tercero es la cantidad de memoria compartida dinámica y aquí vale cero. Las prácticas anteriores usan memoria compartida de tamaño conocido en compilación.
+
+\section{Asincronía y solapamiento}
+Una llamada asíncrona permite al host continuar antes de que termine el trabajo. El solapamiento exige además operaciones independientes y recursos disponibles. Este ejemplo utiliza una cola para enseñar dependencia y vida de buffers; no demuestra una aceleración mediante concurrencia.
+
+Para extenderlo a dos trozos independientes, cada trozo necesitaría regiones separadas de entrada, salida y dispositivo. Una dependencia entre streams requiere una espera explícita, por ejemplo mediante un evento. La división de los datos no garantiza que la suma de los tiempos disminuya.
+
+\begin{practica}[Encontrar la carrera del host]
+Describe qué puede pasar si lees \texttt{output[0]} antes de \texttt{cudaStreamSy\allowbreak{}nchronize}. El host puede observar un valor anterior o todavía no escrito. Una ejecución que casualmente devuelve lo esperado no demuestra que el programa esté ordenado.
+
+\end{practica}
+\chapter{Depurar, ampliar y volver al compilador}
+\section{Un orden de investigación}
+Ante una salida incorrecta, reduce la forma, calcula una referencia y conserva el primer índice que difiere. Comprueba tamaños en bytes, orden de argumentos y máscaras. Después revisa barreras y duración de los buffers. Para una forma que solo falla en tiles incompletos, inspecciona primero las cargas enmascaradas.
+
+Si dispones de Compute Sanitizer, puedes ejecutar una copia del binario con \texttt{compute-sani\allowbreak{}tizer --tool\allowbreak{} memcheck}. Las comprobaciones \texttt{racecheck} y \texttt{synccheck} estudian otros tipos de fallo. Esta edición no presenta esos análisis como ejecutados: la campaña incorporada compila, ejecuta y compara resultados.
+
+Una prueba numérica y un analizador de memoria aportan evidencias distintas. Ni uno ni otro sustituye el razonamiento sobre el contrato y el dominio de índices.
+
+\section{Proyecto de cierre}
+Añade un bias por columna a GEMM y aplica ReLU antes de escribir C. Construye una referencia CPU que haga exactamente esa operación, incluyendo valores negativos. Conserva las cinco formas de prueba y mide la variante fusionada con la misma frontera que la original.
+
+En una segunda versión, ejecuta GEMM y un kernel de bias/ReLU por separado. Compara resultados antes de comparar tiempos. Cuenta las escrituras y lecturas adicionales del intermedio. Este experimento conecta con la fusión del compilador sin requerir que cambies su IR.
+
+\section{Solución de diseño}
+En la variante fusionada, cada hilo calcula su acumulador, añade \texttt{bias[col]} y escribe el máximo con cero solo cuando su salida es válida. El bias tiene longitud N y debe copiarse al dispositivo. La versión separada recibe M por N elementos y obtiene la columna con el resto de dividir el índice lineal entre N.
+
+La corrección incluye los bordes, la comparación con referencia y el rechazo de valores no finitos. El informe debe indicar si la medida incluye solo los kernels o también las transferencias. Conserva el código original para poder repetir la comparación.
+
+\begin{comprueba}[Criterio de finalización]
+Has completado el tutorial cuando puedes compilar los cuatro programas, explicar los dos controles de error tras un lanzamiento, justificar ambas barreras de GEMM y distinguir una cola asíncrona de un experimento que demuestra solapamiento. Entrega también una modificación con referencia y resultados, no solo una captura del tiempo.
+
+\end{comprueba}
+\chapter{Resultados de esta edición}
+\section{Corrección observada}
+Los cuatro programas compilaron y terminaron con código cero: siete casos de vectores, siete de reducción, diez de GEMM y una cadena de stream. Los 25 casos pasaron sus comparaciones. La campaña secuencial y las versiones se conservan en \texttt{tutorials/re\allowbreak{}ports/campai\allowbreak{}gn.json}; los registros individuales están en \texttt{tutorials/re\allowbreak{}ports/cuda/}.
+
+\section{Intervalos de GEMM}
+Cada fila resume treinta muestras de cien lanzamientos residentes, con eventos CUDA. Los tiempos excluyen reservas, copias iniciales y referencia CPU. Son observaciones de este portátil bajo WSL; no se fijaron frecuencias ni se aisló la carga del escritorio.
+
+{\small
+\begin{longtable}{@{}P{0.17\textwidth}P{0.18\textwidth}P{0.18\textwidth}P{0.18\textwidth}P{0.17\textwidth}@{}}
+\toprule
+\textbf{M,N,K} & \textbf{Variante} & \textbf{Mediana (us)} & \textbf{Mínimo (us)} & \textbf{Máximo (us)}\\
+\midrule
+\endfirsthead
+\toprule
+\textbf{M,N,K} & \textbf{Variante} & \textbf{Mediana (us)} & \textbf{Mínimo (us)} & \textbf{Máximo (us)}\\
+\midrule
+\endhead
+1,1,1 & directa & 14.980 & 11.519 & 27.921\\
+1,1,1 & tile & 13.452 & 10.796 & 22.863\\
+17,19,23 & directa & 12.557 & 9.618 & 21.535\\
+17,19,23 & tile & 11.317 & 9.132 & 22.561\\
+31,47,65 & directa & 11.487 & 8.646 & 18.793\\
+31,47,65 & tile & 10.077 & 7.796 & 17.468\\
+128,128,128 & directa & 10.408 & 9.161 & 11.997\\
+128,128,128 & tile & 11.221 & 9.634 & 25.703\\
+256,256,256 & directa & 29.201 & 25.146 & 40.934\\
+256,256,256 & tile & 26.356 & 21.336 & 33.560\\
+\bottomrule
+\end{longtable}
+}
+La dispersión forma parte del resultado. Una diferencia pequeña entre medianas frente a ese intervalo no sostiene una afirmación general sobre qué kernel gana. Para investigar rendimiento, repite la campaña con carga controlada y conserva el mismo contrato de medición.
+
+\section{Límites y repetición}
+Las entradas elegidas facilitan verificar índices y sumas; no cubren todos los valores FP32. No se ejecutó Compute Sanitizer ni se midió solapamiento entre streams. Los tests acreditan estos programas y estos casos. Usa la orden del capítulo de instalación para crear tus propios registros.
+
+\clearpage\appendix\chapter{Código completo de las prácticas}
+\section{tutorials/cuda/common.cuh}
+% EMBEDDED: tutorials/cuda/common.cuh
+\begin{lstlisting}[language=C++]
+#pragma once
+#include <cuda_runtime.h>
+#include <algorithm>
+#include <cmath>
+#include <cstdio>
+#include <cstdlib>
+#include <vector>
+
+inline void checked(cudaError_t status, const char* expr, int line) {
+  if (status != cudaSuccess) {
+    std::fprintf(stderr, "line %d: %s: %s\n", line, expr,
+                 cudaGetErrorString(status));
+    std::exit(1);
+  }
+}
+#define CUDA(expr) checked((expr), #expr, __LINE__)
+
+// Owning storage: copying an owner would cause a double free.
+template<class T> struct DeviceBuffer {
+  T* ptr = nullptr;
+  explicit DeviceBuffer(size_t count) {
+    if (count) CUDA(cudaMalloc(reinterpret_cast<void**>(&ptr), count*sizeof(T)));
+  }
+  DeviceBuffer(const DeviceBuffer&) = delete;
+  DeviceBuffer& operator=(const DeviceBuffer&) = delete;
+  ~DeviceBuffer() { if (ptr) CUDA(cudaFree(ptr)); }
+};
+
+inline double compare(const std::vector<float>& got,
+                      const std::vector<float>& expected,
+                      double atol=1e-5, double rtol=1e-5) {
+  if (got.size() != expected.size()) std::exit(2);
+  double worst = 0;
+  for (size_t i=0; i<got.size(); ++i) {
+    double error = std::abs(double(got[i])-expected[i]);
+    if (!std::isfinite(got[i]) || error > atol+rtol*std::abs(expected[i])) {
+      std::fprintf(stderr, "mismatch at %zu: %.9g vs %.9g\n",
+                   i, got[i], expected[i]);
+      std::exit(2);
+    }
+    worst = std::max(worst, error);
+  }
+  return worst;
+}
+
+\end{lstlisting}
+\section{tutorials/cuda/01\_vectors.cu}
+% EMBEDDED: tutorials/cuda/01_vectors.cu
+\begin{lstlisting}[language=C++]
+#include "common.cuh"
+
+__global__ void axpby(const float* x, const float* y, float* z, int n) {
+  int i = blockIdx.x*blockDim.x + threadIdx.x;
+  if (i < n) z[i] = 2.0f*x[i] - y[i];
+}
+
+int main() {
+  cudaDeviceProp prop{};
+  CUDA(cudaGetDeviceProperties(&prop, 0));
+  std::printf("device=%s cc=%d.%d\n", prop.name, prop.major, prop.minor);
+  for (int n : {0, 1, 127, 128, 129, 257, 65537}) {
+    std::vector<float> x(n), y(n), z(n), ref(n);
+    for (int i=0; i<n; ++i) {
+      x[i] = float(i%31-15)/16; y[i] = float(i%17-8)/8;
+      ref[i] = 2*x[i]-y[i];
+    }
+    DeviceBuffer<float> dx(n), dy(n), dz(n);
+    if (n) {
+      CUDA(cudaMemcpy(dx.ptr, x.data(), n*sizeof(float), cudaMemcpyHostToDevice));
+      CUDA(cudaMemcpy(dy.ptr, y.data(), n*sizeof(float), cudaMemcpyHostToDevice));
+      axpby<<<(n+127)/128, 128>>>(dx.ptr, dy.ptr, dz.ptr, n);
+      CUDA(cudaGetLastError());
+      CUDA(cudaDeviceSynchronize());
+      CUDA(cudaMemcpy(z.data(), dz.ptr, n*sizeof(float), cudaMemcpyDeviceToHost));
+    }
+    std::printf("n=%d max_error=%.9g PASS\n", n, compare(z, ref));
+  }
+}
+
+\end{lstlisting}
+\section{tutorials/cuda/02\_reduce.cu}
+% EMBEDDED: tutorials/cuda/02_reduce.cu
+\begin{lstlisting}[language=C++]
+#include "common.cuh"
+
+// Contract: launch with exactly 128 threads per block.
+__global__ void partial_sum(const float* x, float* partial, int n) {
+  __shared__ float tile[128];
+  int t = threadIdx.x, i = blockIdx.x*blockDim.x+t;
+  tile[t] = i<n ? x[i] : 0.0f;
+  __syncthreads();
+  for (int stride=64; stride>0; stride/=2) {
+    if (t<stride) tile[t] += tile[t+stride];
+    __syncthreads();
+  }
+  if (t==0) partial[blockIdx.x] = tile[0];
+}
+
+int main() {
+  for (int n : {0, 1, 127, 128, 129, 257, 65537}) {
+    int blocks=(n+127)/128;
+    std::vector<float> x(n), partial(blocks);
+    double ref=0, result=0;
+    for (int i=0; i<n; ++i) { x[i]=float(i%19-9)/8; ref+=x[i]; }
+    DeviceBuffer<float> dx(n), dp(blocks);
+    if (n) {
+      CUDA(cudaMemcpy(dx.ptr,x.data(),n*sizeof(float),cudaMemcpyHostToDevice));
+      partial_sum<<<blocks,128>>>(dx.ptr,dp.ptr,n);
+      CUDA(cudaGetLastError());
+      CUDA(cudaDeviceSynchronize());
+      CUDA(cudaMemcpy(partial.data(),dp.ptr,blocks*sizeof(float),cudaMemcpyDeviceToHost));
+    }
+    for (float value : partial) result+=value;
+    if (!std::isfinite(result) || std::abs(result-ref)>1e-5) return 2;
+    std::printf("n=%d sum=%.9g error=%.9g PASS\n",n,result,std::abs(result-ref));
+  }
+}
+
+\end{lstlisting}
+\section{tutorials/cuda/03\_gemm.cu}
+% EMBEDDED: tutorials/cuda/03_gemm.cu
+\begin{lstlisting}[language=C++]
+#include "common.cuh"
+
+__global__ void gemm_plain(const float* a,const float* b,float* c,int m,int n,int k) {
+  int row=blockIdx.y*16+threadIdx.y, col=blockIdx.x*16+threadIdx.x;
+  if (row<m && col<n) {
+    float sum=0;
+    for (int q=0;q<k;++q) sum+=a[row*k+q]*b[q*n+col];
+    c[row*n+col]=sum;
+  }
+}
+
+__global__ void gemm_tiled(const float* a,const float* b,float* c,int m,int n,int k) {
+  __shared__ float as[16][16], bs[16][16];
+  int tx=threadIdx.x, ty=threadIdx.y;
+  int row=blockIdx.y*16+ty, col=blockIdx.x*16+tx;
+  float sum=0;
+  for (int base=0;base<k;base+=16) {
+    as[ty][tx]=(row<m && base+tx<k) ? a[row*k+base+tx] : 0;
+    bs[ty][tx]=(base+ty<k && col<n) ? b[(base+ty)*n+col] : 0;
+    __syncthreads();
+    for (int q=0;q<16;++q) sum+=as[ty][q]*bs[q][tx];
+    __syncthreads();
+  }
+  if (row<m && col<n) c[row*n+col]=sum;
+}
+
+int main() {
+  const int shapes[][3]={{1,1,1},{17,19,23},{31,47,65},{128,128,128},{256,256,256}};
+  for (auto& shape:shapes) {
+    int m=shape[0],n=shape[1],k=shape[2];
+    std::vector<float> a(m*k),b(k*n),c(m*n),ref(m*n);
+    for (int i=0;i<m*k;++i) a[i]=float(i%23-11)/16;
+    for (int i=0;i<k*n;++i) b[i]=float(i%17-8)/8;
+    for (int r=0;r<m;++r) for (int col=0;col<n;++col) {
+      double sum=0;
+      for (int q=0;q<k;++q) sum+=double(a[r*k+q])*b[q*n+col];
+      ref[r*n+col]=float(sum);
+    }
+    DeviceBuffer<float> da(a.size()),db(b.size()),dc(c.size());
+    CUDA(cudaMemcpy(da.ptr,a.data(),a.size()*4,cudaMemcpyHostToDevice));
+    CUDA(cudaMemcpy(db.ptr,b.data(),b.size()*4,cudaMemcpyHostToDevice));
+    dim3 grid((n+15)/16,(m+15)/16),block(16,16);
+    cudaEvent_t start,stop;
+    CUDA(cudaEventCreate(&start)); CUDA(cudaEventCreate(&stop));
+    for (int tiled=0;tiled<2;++tiled) {
+      auto launch=[&]() {
+        if (tiled) gemm_tiled<<<grid,block>>>(da.ptr,db.ptr,dc.ptr,m,n,k);
+        else gemm_plain<<<grid,block>>>(da.ptr,db.ptr,dc.ptr,m,n,k);
+        CUDA(cudaGetLastError());
+      };
+      for (int i=0;i<3;++i) launch();
+      CUDA(cudaDeviceSynchronize());
+      std::vector<float> samples;
+      for (int trial=0;trial<30;++trial) {
+        CUDA(cudaEventRecord(start));
+        for (int repeat=0;repeat<100;++repeat) launch();
+        CUDA(cudaEventRecord(stop)); CUDA(cudaEventSynchronize(stop));
+        float ms; CUDA(cudaEventElapsedTime(&ms,start,stop));
+        samples.push_back(ms*1000/100);
+      }
+      CUDA(cudaMemcpy(c.data(),dc.ptr,c.size()*4,cudaMemcpyDeviceToHost));
+      double error=compare(c,ref);
+      std::sort(samples.begin(),samples.end());
+      float median=(samples[14]+samples[15])/2;
+      std::printf("m=%d n=%d k=%d tiled=%d median_us=%.6f min_us=%.6f max_us=%.6f max_error=%.9g PASS\n",
+                  m,n,k,tiled,median,samples.front(),samples.back(),error);
+    }
+    CUDA(cudaEventDestroy(start)); CUDA(cudaEventDestroy(stop));
+  }
+}
+
+\end{lstlisting}
+\section{tutorials/cuda/04\_stream.cu}
+% EMBEDDED: tutorials/cuda/04_stream.cu
+\begin{lstlisting}[language=C++]
+#include "common.cuh"
+
+__global__ void square(const float* x,float* y,int n) {
+  int i=blockIdx.x*blockDim.x+threadIdx.x;
+  if (i<n) y[i]=x[i]*x[i];
+}
+
+int main() {
+  constexpr int n=65537;
+  float *input=nullptr,*output=nullptr;
+  CUDA(cudaMallocHost(reinterpret_cast<void**>(&input),n*sizeof(float)));
+  CUDA(cudaMallocHost(reinterpret_cast<void**>(&output),n*sizeof(float)));
+  std::vector<float> ref(n);
+  for (int i=0;i<n;++i) { input[i]=float(i%31-15)/16; ref[i]=input[i]*input[i]; }
+  DeviceBuffer<float> dx(n),dy(n);
+  cudaStream_t stream; CUDA(cudaStreamCreateWithFlags(&stream,cudaStreamNonBlocking));
+  CUDA(cudaMemcpyAsync(dx.ptr,input,n*sizeof(float),cudaMemcpyHostToDevice,stream));
+  square<<<(n+127)/128,128,0,stream>>>(dx.ptr,dy.ptr,n);
+  CUDA(cudaGetLastError());
+  CUDA(cudaMemcpyAsync(output,dy.ptr,n*sizeof(float),cudaMemcpyDeviceToHost,stream));
+  CUDA(cudaStreamSynchronize(stream));
+  std::vector<float> got(output,output+n);
+  std::printf("n=%d stream_chain max_error=%.9g PASS\n",n,compare(got,ref));
+  CUDA(cudaStreamDestroy(stream));
+  CUDA(cudaFreeHost(input)); CUDA(cudaFreeHost(output));
+}
+
+\end{lstlisting}
+\section{tutorials/validate\_cuda.py}
+% EMBEDDED: tutorials/validate_cuda.py
+\begin{lstlisting}[language=Python]
+"""Compile and run all original CUDA tutorial programs in temporary storage."""
+import argparse
+import hashlib
+import json
+from pathlib import Path
+import shutil
+import subprocess
+import tempfile
+
+root=Path(__file__).resolve().parent
+parser=argparse.ArgumentParser()
+parser.add_argument('--arch',default='sm_120')
+parser.add_argument('--output',type=Path,default=root/'reports/cuda')
+args=parser.parse_args()
+nvcc=shutil.which('nvcc')
+if not nvcc: raise SystemExit('nvcc must be on PATH')
+args.output.mkdir(parents=True,exist_ok=True)
+report={'arch':args.arch,'nvcc':subprocess.check_output([nvcc,'--version'],text=True),'programs':[]}
+with tempfile.TemporaryDirectory(prefix='cuda-lessons-') as directory:
+    for source in sorted((root/'cuda').glob('*.cu')):
+        exe=Path(directory)/source.stem
+        command=[nvcc,'-O2','-lineinfo','-std=c++17',f'-arch={args.arch}',str(source),'-o',str(exe)]
+        subprocess.run(command,check=True)
+        run=subprocess.run([str(exe)],text=True,stdout=subprocess.PIPE,stderr=subprocess.STDOUT)
+        (args.output/(source.stem+'.log')).write_text(run.stdout,encoding='utf-8')
+        if run.returncode: raise RuntimeError(run.stdout)
+        report['programs'].append({'file':source.name,'sha256':hashlib.sha256(source.read_bytes()).hexdigest(),
+                                   'returncode':run.returncode,'passing_cases':run.stdout.count('PASS')})
+        print(source.name,run.stdout.count('PASS'),'cases PASS',flush=True)
+report['temporary_binaries_removed']=not Path(directory).exists()
+(args.output/'results.json').write_text(json.dumps(report,indent=2)+'\n',encoding='utf-8')
+
+\end{lstlisting}
+\chapter{Fuentes y alcance}
+Los programas y explicaciones de este cuaderno son originales. El código del apéndice coincide con los archivos ejecutables del repositorio. Las referencias siguientes permiten consultar el contrato de las APIs y ampliar las prácticas; los tiempos locales proceden de nuestros informes.
+
+\begin{thebibliography}{9}
+\bibitem{cuda-guide} NVIDIA. \emph{CUDA C++ Programming Guide}, versión 12.9.1. Modelo de ejecución, jerarquía de hilos, memoria compartida y streams. \url{https://docs.nvidia.com/cuda/archive/12.9.1/cuda-c-programming-guide/index.html}.
+\bibitem{cuda-runtime} NVIDIA. \emph{CUDA Runtime API}, versión 12.9.1. Gestión de memoria, eventos, streams y errores. \url{https://docs.nvidia.com/cuda/archive/12.9.1/cuda-runtime-api/index.html}.
+\bibitem{cuda-best} NVIDIA. \emph{CUDA C++ Best Practices Guide}, versión 12.9.1. Medición, acceso a memoria y validación numérica. \url{https://docs.nvidia.com/cuda/archive/12.9.1/cuda-c-best-practices-guide/index.html}.
+\bibitem{cuda-sanitizer} NVIDIA. \emph{Compute Sanitizer Documentation}. Consulta adicional; el informe de esta edición no acredita ejecución de Sanitizer. \url{https://docs.nvidia.com/compute-sanitizer/ComputeSanitizer/index.html}.
+\end{thebibliography}
+\clearpage\renewcommand{\contentsname}{Índice detallado}\tableofcontents\end{document}

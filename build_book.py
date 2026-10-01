@@ -112,12 +112,12 @@ def build():
     tex+='\n\\clearpage\n\\renewcommand{\\contentsname}{Índice detallado}\n\\tableofcontents\n\\end{document}\n'
     (ROOT/'Compiladores_ML_Desde_Cero_2026.tex').write_text(tex,encoding='utf-8',newline='\n')
     print(len(tex), 'characters;',len(files),'embedded source files')
-def compile_pdf(engine='pdflatex', report=None):
+def compile_pdf(engine='pdflatex', report=None, source=None):
     """Compile a self-contained snapshot and remove its temporary auxiliaries."""
     executable = shutil.which(engine)
     if not executable:
         raise RuntimeError(f'LaTeX engine not found: {engine}')
-    source = ROOT/'Compiladores_ML_Desde_Cero_2026.tex'
+    source = Path(source) if source is not None else ROOT/'Compiladores_ML_Desde_Cero_2026.tex'
     source_bytes = source.read_bytes()
     passes = []
     with tempfile.TemporaryDirectory(prefix='lumbre-book-') as directory:
@@ -136,11 +136,13 @@ def compile_pdf(engine='pdflatex', report=None):
                 raise RuntimeError(result.stdout[-12000:])
         log = (work/source.with_suffix('.log').name).read_text(encoding='utf-8', errors='replace')
         unresolved = ('There were undefined references', 'There were undefined citations',
-                      'Label(s) may have changed', 'Rerun to get cross-references right')
+                      'Label(s) may have changed', 'Rerun to get cross-references right',
+                      'There were multiply-defined labels')
         if any(message in log for message in unresolved):
             raise RuntimeError('LaTeX references did not converge after three passes')
         if 'Overfull' in log:
-            raise RuntimeError('LaTeX reported overflowing boxes; revise the layout before publishing')
+            details = '\n'.join(re.findall(r'Overfull[^\n]*(?:\n[^\n]*){0,3}', log))
+            raise RuntimeError('LaTeX reported overflowing boxes; revise the layout before publishing\n'+details)
         pdf = work/source.with_suffix('.pdf').name
         target = source.with_suffix('.pdf')
         shutil.copyfile(pdf, target)

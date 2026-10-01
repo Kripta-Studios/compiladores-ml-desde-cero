@@ -1,0 +1,36 @@
+{
+  "commit": "c3aec477b99d9bb87c54d91897cf60acd3f17441",
+  "package": "/home/alvaro/.venvs/tutorials-20261001/lib/python3.12/site-packages/tinygrad",
+  "checked_files": [
+    {
+      "file": "tensor.py",
+      "sha256": "8ec567d1a9a85ea5e8e55e8ced88c2a30cc1deb5b410216dcb8249027f499f48",
+      "exact_match": true
+    },
+    {
+      "file": "helpers.py",
+      "sha256": "a76df9089027097f8ed8310c513117863034744c305204b31f8c8e6365ac7ac3",
+      "exact_match": true
+    },
+    {
+      "file": "nn/optim.py",
+      "sha256": "64470d671e6d6aaef2f100c4119f02d884560130e6809bd56e3d869e34e215e0",
+      "exact_match": true
+    },
+    {
+      "file": "engine/jit.py",
+      "sha256": "cbeacf294f9547d7aa97166db74c8e151cb9b3048cbd66ed824271835995b2b8",
+      "exact_match": true
+    },
+    {
+      "file": "runtime/ops_cpu.py",
+      "sha256": "afe9856b06d78e2186694020d8a7d51ddb18b26c271dcbe61a382dfe5a576c9f",
+      "exact_match": true
+    },
+    {
+      "file": "runtime/ops_cuda.py",
+      "sha256": "40dff2c272833cfef256c8537f59c0697744317440a9a6a7b0c5728d16706350",
+      "exact_match": true
+    }
+  ]
+}

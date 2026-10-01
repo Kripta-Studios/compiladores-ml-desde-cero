@@ -1,0 +1,63 @@
+{
+  "main": {
+    "embedded_files": [
+      "code/examples/bench_kernels.py",
+      "code/examples/train_decoder.py",
+      "code/examples/validate_book.py",
+      "code/examples/verify_launch.py",
+      "code/kernels/conv.c",
+      "code/kernels/wmma_demo.cu",
+      "code/lumbre/__init__.py",
+      "code/lumbre/compiler.py",
+      "code/lumbre/ir.py",
+      "code/lumbre/layout.py",
+      "code/lumbre/nn.py",
+      "code/lumbre/nnops.py",
+      "code/lumbre/passport.py",
+      "code/lumbre/symbolic.py",
+      "code/lumbre/tokenizer.py",
+      "code/tests/conftest.py",
+      "code/tests/test_conv.py",
+      "code/tests/test_conv_ir.py",
+      "code/tests/test_lumbre.py",
+      "code/tests/test_passport.py",
+      "code/tests/test_tokenizer.py"
+    ],
+    "exact_match": true,
+    "python_sources_compile": true,
+    "citation_keys": 65,
+    "bibliography_entries": 72,
+    "listing_blocks": 129,
+    "source_sha256": "e62788a53415026d4efddbdb99d04723dd41f9187e8a09f5d883db4c4c6c191a",
+    "pdf_sha256": "cb231fd6abd01a7cf91f0beb98c3916ba2eee4bfcc6971ecc33483031ce91370"
+  },
+  "cuda": {
+    "embedded_files": [
+      "tutorials/cuda/common.cuh",
+      "tutorials/cuda/01_vectors.cu",
+      "tutorials/cuda/02_reduce.cu",
+      "tutorials/cuda/03_gemm.cu",
+      "tutorials/cuda/04_stream.cu",
+      "tutorials/validate_cuda.py"
+    ],
+    "exact_match": true,
+    "python_sources_compile": true,
+    "citation_keys": 2,
+    "bibliography_entries": 4,
+    "listing_blocks": 12,
+    "source_sha256": "52b0d439b13778f139868dca61e965b81f9fe3e358757f180c7b4c79fbcc58dd",
+    "pdf_sha256": "e0d15593b5e38d8e4cce6457c3c60ddbd15a2874ab80cd05a929d920e22279e0"
+  },
+  "tinygrad": {
+    "embedded_files": [
+      "tutorials/tinygrad/labs.py"
+    ],
+    "exact_match": true,
+    "python_sources_compile": true,
+    "citation_keys": 4,
+    "bibliography_entries": 6,
+    "listing_blocks": 8,
+    "source_sha256": "916235cb9c904446a09363b2c3e257bd891ec3ac505ffccfb60f49f880465a66",
+    "pdf_sha256": "3a23f23f105c6069e6130b9f61370e2acd4161aca6756dd4d17f19a5bd062b94"
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "scope": "Independent dense-KV arithmetic and causal moving-average toy; not CSA2, FP4 packing or DeepSeek execution.",
+  "cache_cases": [
+    {
+      "kv_heads": 16,
+      "bits": 16,
+      "bytes": 3221225472
+    },
+    {
+      "kv_heads": 4,
+      "bits": 16,
+      "bytes": 805306368
+    },
+    {
+      "kv_heads": 4,
+      "bits": 4,
+      "bytes": 201326592
+    }
+  ],
+  "replay": {
+    "layers": 3,
+    "window": 4,
+    "exact_suffix_tokens": 10,
+    "full_last": 384.0,
+    "exact_suffix_last": 384.0,
+    "bounded_suffix_last": 457.34722222222223,
+    "bounded_absolute_error": 73.34722222222223
+  }
+}

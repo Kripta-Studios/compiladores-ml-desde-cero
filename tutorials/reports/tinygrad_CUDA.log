@@ -1,0 +1,5 @@
+CUDA arrays: PASS
+CUDA gradients: PASS
+CUDA regression: PASS
+CUDA attention: PASS
+CUDA jit: PASS

@@ -4,9 +4,20 @@ Libro y código para construir un compilador de aprendizaje automático desde ce
 
 Empieza con programas, arrays y tensores. Aprende a construir una representación intermedia, generar código C y CUDA, planificar memoria, calcular gradientes y entrenar un modelo pequeño con tu propio compilador.
 
-**Edición del 1 de octubre de 2026 · 312 páginas · 69 capítulos · 12 laboratorios · 5 proyectos finales.**
+**Edición del 1 de octubre de 2026 · 316 páginas · 70 capítulos · 12 laboratorios · 5 proyectos finales.**
 
 [Leer el libro en PDF](Compiladores_ML_Desde_Cero_2026.pdf) · [Guía del código](code/README.md) · [Resultados de validación](code/reports/validation_20261001/validation.json)
+
+Dos tutoriales complementarios parten de lo aprendido en el libro, explican las APIs nuevas e incluyen ejercicios resueltos, código completo y resultados locales:
+
+| Tutorial | Documentos | Prácticas comprobadas |
+| --- | --- | --- |
+| CUDA, del índice al kernel | [PDF](Tutorial_CUDA_Desde_Cero_2026.pdf) · [LaTeX](Tutorial_CUDA_Desde_Cero_2026.tex) | Vectores, reducción, GEMM y streams: 25 casos en la RTX. |
+| tinygrad, del tensor al programa | [PDF](Tutorial_Tinygrad_Desde_Cero_2026.pdf) · [LaTeX](Tutorial_Tinygrad_Desde_Cero_2026.tex) | Cinco grupos de prácticas en CPU y CUDA: tensores, gradientes, regresión, atención y JIT. |
+
+Consulta [la guía de los tutoriales](tutorials/README.md) y [su campaña de validación](tutorials/reports/campaign.json). tinygrad queda fijado al commit `c3aec477b99d9bb87c54d91897cf60acd3f17441`.
+
+El nuevo capítulo 70 estudia [DeepGEMM-Ascend](https://github.com/deepseek-ai/DeepGEMM-Ascend/tree/8491bbb4b8c02a094a2318965f50c70438a3e73c) y la memoria KV del [informe DeepSeek-V4.1-Flash](https://arxiv.org/abs/2609.19969v1). Incluye un experimento propio de reconstrucción exacta y aproximada; los kernels Ascend y el modelo DeepSeek quedan como lecturas, sin atribuirles validación local.
 
 ## Qué encontrarás
 
@@ -21,7 +32,7 @@ Empieza con programas, arrays y tensores. Aprende a construir una representació
 
 Lumbre es un compilador didáctico original. Python construye y diferencia grafos; el código nativo generado ejecuta los cálculos tensoriales. NumPy proporciona almacenamiento, datos y referencias numéricas. Puedes estudiar y ejecutar el proyecto sin depender de PyTorch ni de tinygrad.
 
-El libro incluye 15 diagramas vectoriales, 128 bloques de código, los 21 archivos completos del proyecto ejecutable y 69 referencias bibliográficas con enlaces. Empieza por **«Empieza aquí»** y el capítulo 1. Encontrarás el índice detallado al final y 672 marcadores navegables en el PDF.
+El libro incluye 16 diagramas vectoriales, 129 bloques de código, los 21 archivos completos del proyecto ejecutable y 72 referencias bibliográficas con enlaces. Empieza por **«Empieza aquí»** y el capítulo 1. Encontrarás el índice detallado al final y 679 marcadores navegables en el PDF.
 
 ## Ejecutar en CPU
 
@@ -87,7 +98,7 @@ La revisión local utiliza Ubuntu 24.04 bajo WSL2, Python 3.12.3, GCC 13.3.0, Nu
 | Reanudación | Checkpoints idénticos para 10 pasos frente a 6 + 4, dentro de cada backend. | [CPU](code/reports/validation_20261001/resume_cpu.json), [CUDA](code/reports/validation_20261001/resume_cuda.json) |
 | Decoder principal en CUDA | 600 pasos; pérdida final 0,2508018 y evaluación 0,3293002. | [Informe y checkpoint](code/reports/validation_20261001/decoder_cuda_75584/) |
 | Campaña secuencial CPU/CUDA | 30 muestras por caso y 600 pasos de entrenamiento por backend en el mismo host WSL. | [Orden de ejecución](code/reports/book_gpu_extension/campaign.json), [tablas del libro](code/reports/book_gpu_extension/table_provenance.json) |
-| Libro | Tres pasadas LaTeX, referencias resueltas y 312 páginas renderizadas; 21 archivos incrustados coinciden con el código. | [Compilación](code/reports/book_gpu_extension/book_build.json), [revisión PDF](pdf_qa.json) |
+| Libro y tutoriales | Tres pasadas por PDF, referencias resueltas y fuentes incrustados comprobados. | [Libro](tutorials/reports/main_build.json), [CUDA](tutorials/reports/cuda_build.json), [tinygrad](tutorials/reports/tinygrad_build.json), [fuentes](tutorials/reports/source_audit.json) |
 
 Al seleccionar CUDA, los programas tensoriales de las pruebas se ejecutan en la GPU. Las pruebas de tokenización, estructuras del host y convolución C independiente mantienen su ejecución en CPU. El verificador de mapas enumera índices en CPU y comprueba un contrato lógico.
 
@@ -104,7 +115,8 @@ python build_book.py
 Compila con una distribución TeX que incluya los paquetes del preámbulo: babel con español, Latin Modern, TikZ, tcolorbox, listings y titlesec, entre otros. Esta orden ejecuta tres pasadas en una carpeta temporal y elimina los auxiliares al terminar:
 
 ```bash
-python build_book.py --pdf --report code/reports/book_gpu_extension/book_build.json
+python build_book.py --pdf --report tutorials/reports/main_build.json
+python build_tutorials.py --pdf
 ```
 
 También puedes usar `latexmk -pdf Compiladores_ML_Desde_Cero_2026.tex`. El constructor usa la biblioteca estándar de Python y produce el mismo fuente UTF-8 en Windows y Linux. El `.tex` principal es autocontenido: incorpora texto, diagramas, bibliografía y listados. No necesita BibTeX, imágenes externas ni `--shell-escape`.

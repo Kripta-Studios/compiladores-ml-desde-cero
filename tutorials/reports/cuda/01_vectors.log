@@ -1,0 +1,8 @@
+device=NVIDIA GeForce RTX 5070 Ti Laptop GPU cc=12.0
+n=0 max_error=0 PASS
+n=1 max_error=0 PASS
+n=127 max_error=0 PASS
+n=128 max_error=0 PASS
+n=129 max_error=0 PASS
+n=257 max_error=0 PASS
+n=65537 max_error=0 PASS
