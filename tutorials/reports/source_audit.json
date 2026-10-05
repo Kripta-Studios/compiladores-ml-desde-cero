@@ -27,9 +27,9 @@
     "python_sources_compile": true,
     "citation_keys": 65,
     "bibliography_entries": 72,
-    "listing_blocks": 129,
-    "source_sha256": "e62788a53415026d4efddbdb99d04723dd41f9187e8a09f5d883db4c4c6c191a",
-    "pdf_sha256": "cb231fd6abd01a7cf91f0beb98c3916ba2eee4bfcc6971ecc33483031ce91370"
+    "listing_blocks": 133,
+    "source_sha256": "da0226e0968ba05b1ce4ba64ddbf4ca6cb9cbec92770dda098c420041c7c0ad9",
+    "pdf_sha256": "e940aa61399c561ea3af171bb69b142a201583446936e068524a8c7ce64b948a"
   },
   "cuda": {
     "embedded_files": [
@@ -45,8 +45,8 @@
     "citation_keys": 2,
     "bibliography_entries": 4,
     "listing_blocks": 12,
-    "source_sha256": "52b0d439b13778f139868dca61e965b81f9fe3e358757f180c7b4c79fbcc58dd",
-    "pdf_sha256": "e0d15593b5e38d8e4cce6457c3c60ddbd15a2874ab80cd05a929d920e22279e0"
+    "source_sha256": "8c2e03a21abf71f03e35c34425206a7bfcb0336e1de440300b79a2f2f520d418",
+    "pdf_sha256": "2450a8978ac685b1bb83fd848f3e800b65e6ced0d632249c8dde14b73224b50a"
   },
   "tinygrad": {
     "embedded_files": [
@@ -57,7 +57,7 @@
     "citation_keys": 4,
     "bibliography_entries": 6,
     "listing_blocks": 8,
-    "source_sha256": "916235cb9c904446a09363b2c3e257bd891ec3ac505ffccfb60f49f880465a66",
-    "pdf_sha256": "3a23f23f105c6069e6130b9f61370e2acd4161aca6756dd4d17f19a5bd062b94"
+    "source_sha256": "056a27b6c76a8737353971297014915442ffe8ca3221024f955a6300e38ab469",
+    "pdf_sha256": "f159311f2153a6517f9011a13a38f9200e3f4d577ebfc6e9f27e79c748e7b72a"
   }
 }

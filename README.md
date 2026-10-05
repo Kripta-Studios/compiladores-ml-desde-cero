@@ -4,9 +4,13 @@ Libro y código para construir un compilador de aprendizaje automático desde ce
 
 Empieza con programas, arrays y tensores. Aprende a construir una representación intermedia, generar código C y CUDA, planificar memoria, calcular gradientes y entrenar un modelo pequeño con tu propio compilador.
 
-**Edición del 1 de octubre de 2026 · 316 páginas · 70 capítulos · 12 laboratorios · 5 proyectos finales.**
+**Edición ampliada del 5 de octubre de 2026 · 334 páginas · 72 capítulos · 12 laboratorios · 5 proyectos finales.**
 
 [Leer el libro en PDF](Compiladores_ML_Desde_Cero_2026.pdf) · [Guía del código](code/README.md) · [Resultados de validación](code/reports/validation_20261001/validation.json)
+
+La ampliación incorpora el syllabus completo de **Compilers for Machine Learning**: proyecto individual o en parejas, lenguaje libre, construcción sin código inicial y entregas semanales los miércoles antes de las 10:00. El [programa del semestre](chapters/00_programa.md) organiza las semanas 1–10 y los proyectos desde la 11; el [desarrollo técnico](chapters/24_contrato_uops.md) amplía el contrato de UOps, el intercambio `uop v1`, efectos de memoria, rangeify, fisión y fusión, autodiff, MNIST, rangos CPU y entrenamiento.
+
+El hito MNIST corresponde a la semana 5; las formas simbólicas y los LLM se integran en las semanas 9–10. Las metas de rendimiento SOTA en CPU y competitividad con PyTorch en GPU se presentan como objetivos que requieren medidas propias. Lumbre y los tutoriales son referencias de estudio: el código existente no implementa literalmente toda la especificación del syllabus ni acredita nuevos resultados MNIST o SOTA.
 
 Dos tutoriales complementarios parten de lo aprendido en el libro, explican las APIs nuevas e incluyen ejercicios resueltos, código completo y resultados locales:
 
@@ -17,7 +21,7 @@ Dos tutoriales complementarios parten de lo aprendido en el libro, explican las 
 
 Consulta [la guía de los tutoriales](tutorials/README.md) y [su campaña de validación](tutorials/reports/campaign.json). tinygrad queda fijado al commit `c3aec477b99d9bb87c54d91897cf60acd3f17441`.
 
-El nuevo capítulo 70 estudia [DeepGEMM-Ascend](https://github.com/deepseek-ai/DeepGEMM-Ascend/tree/8491bbb4b8c02a094a2318965f50c70438a3e73c) y la memoria KV del [informe DeepSeek-V4.1-Flash](https://arxiv.org/abs/2609.19969v1). Incluye un experimento propio de reconstrucción exacta y aproximada; los kernels Ascend y el modelo DeepSeek quedan como lecturas, sin atribuirles validación local.
+El capítulo 70 estudia [DeepGEMM-Ascend](https://github.com/deepseek-ai/DeepGEMM-Ascend/tree/8491bbb4b8c02a094a2318965f50c70438a3e73c) y la memoria KV del [informe DeepSeek-V4.1-Flash](https://arxiv.org/abs/2609.19969v1). Incluye un experimento propio de reconstrucción exacta y aproximada; los kernels Ascend y el modelo DeepSeek quedan como lecturas, sin atribuirles validación local.
 
 ## Qué encontrarás
 
@@ -32,7 +36,7 @@ El nuevo capítulo 70 estudia [DeepGEMM-Ascend](https://github.com/deepseek-ai/D
 
 Lumbre es un compilador didáctico original. Python construye y diferencia grafos; el código nativo generado ejecuta los cálculos tensoriales. NumPy proporciona almacenamiento, datos y referencias numéricas. Puedes estudiar y ejecutar el proyecto sin depender de PyTorch ni de tinygrad.
 
-El libro incluye 16 diagramas vectoriales, 129 bloques de código, los 21 archivos completos del proyecto ejecutable y 72 referencias bibliográficas con enlaces. Empieza por **«Empieza aquí»** y el capítulo 1. Encontrarás el índice detallado al final y 679 marcadores navegables en el PDF.
+El libro incluye 16 diagramas vectoriales, los 21 archivos completos del proyecto ejecutable y 72 referencias bibliográficas con enlaces. Empieza por **«Empieza aquí»**, el **programa del semestre** y el capítulo 1. Encontrarás el índice detallado al final y marcadores navegables en el PDF. Los capítulos 71 y 72 desarrollan la especificación y sus ejercicios; los informes de revisión registran el número actualizado de páginas, listados y marcadores.
 
 ## Ejecutar en CPU
 
@@ -120,6 +124,8 @@ python build_tutorials.py --pdf
 ```
 
 También puedes usar `latexmk -pdf Compiladores_ML_Desde_Cero_2026.tex`. El constructor usa la biblioteca estándar de Python y produce el mismo fuente UTF-8 en Windows y Linux. El `.tex` principal es autocontenido: incorpora texto, diagramas, bibliografía y listados. No necesita BibTeX, imágenes externas ni `--shell-escape`.
+
+La revisión documental se reproduce con `python tutorials/audit_documents.py --render` en un entorno con PyMuPDF. Verifica hashes, listados incrustados, citas, etiquetas y límites de página, y renderiza los tres PDF en `tmp/pdfs/`. La inspección visual posterior se registra por separado en los informes. Esta auditoría no vuelve a ejecutar los entrenamientos de la campaña original.
 
 El capítulo **CPU y CUDA en la misma máquina** añade una campaña secuencial con treinta muestras por caso y entrenamiento de 600 pasos en ambos backends. Consulta sus [resultados y checkpoints](code/reports/book_gpu_extension/). La opción `--pdf` conserva el PDF y un resumen JSON; limpia los archivos temporales de LaTeX sin borrar los registros de ejecución de CPU/CUDA.
 

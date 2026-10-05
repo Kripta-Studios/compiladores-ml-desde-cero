@@ -7,6 +7,8 @@ Continuación de *Compiladores de ML desde cero*. Los dos cuadernos explican las
 - [Fuentes CUDA](cuda/) y [fuentes tinygrad](tinygrad/).
 - [Evidencias locales](reports/).
 
+La edición ampliada del **5 de octubre de 2026** incorpora el syllabus completo de *Compilers for Machine Learning*. CUDA añade dos capítulos sobre rangos, dependencias, kernels y medición dentro del modelo. tinygrad añade dos capítulos de contraste con el compilador propio, desde UOps hasta MNIST, formas simbólicas y reanudación. Los nuevos ejercicios distinguen trabajo propuesto de las prácticas ya ejecutadas.
+
 ## CUDA
 
 Desde la raíz del repositorio, con `nvcc` en PATH y un controlador NVIDIA operativo:
@@ -43,7 +45,7 @@ Este programa comprueba cuentas de almacenamiento KV y reconstrucción de una ca
 
 ## Reconstrucción
 
-Edita `cuda/tutorial.md` o `tinygrad/tutorial.md`; sus capítulos de resultados proceden de los informes. El constructor comparte estilos y parser con el libro y genera fuentes LaTeX autocontenidos:
+Edita `cuda/tutorial.md`, `tinygrad/tutorial.md` o los respectivos `syllabus.md`; los capítulos de resultados proceden de los informes. El constructor comparte estilos y parser con el libro y genera fuentes LaTeX autocontenidos:
 
 ```bash
 python build_tutorials.py --pdf
@@ -53,3 +55,5 @@ python build_book.py --pdf --report tutorials/reports/main_build.json
 Para actualizar las tablas desde la campaña de referencia, ejecuta antes `python tutorials/update_results.py`. El script comprueba los hashes de las prácticas antes de generar los capítulos de resultados.
 
 Ambos constructores compilan en carpetas temporales y eliminan auxiliares al terminar. Las prácticas originales de esta carpeta se distribuyen bajo [MIT](LICENSE). Las referencias externas conservan sus licencias; el texto de los libros no se relicencia mediante ese archivo.
+
+Para auditar los tres PDF y comprobar que sus listados coinciden con el código, instala PyMuPDF en el entorno de revisión y ejecuta `python tutorials/audit_documents.py --render`. Guarda los renders en `tmp/pdfs/` y actualiza los informes estructurados; la inspección visual se realiza después y se registra por separado.

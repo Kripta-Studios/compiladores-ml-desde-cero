@@ -1,0 +1,80 @@
+{
+  "scope": "Independent arithmetic checks of new syllabus examples; no compiler execution, GPU benchmark or MNIST training",
+  "checks": {
+    "rectangular_gemm": [
+      [
+        58,
+        64
+      ],
+      [
+        139,
+        154
+      ]
+    ],
+    "floor_division": [
+      [
+        7,
+        3,
+        2,
+        1
+      ],
+      [
+        -7,
+        3,
+        -3,
+        2
+      ],
+      [
+        7,
+        -3,
+        -3,
+        -2
+      ],
+      [
+        -7,
+        -3,
+        2,
+        -1
+      ]
+    ],
+    "cross_correlation": [
+      0,
+      1,
+      2
+    ],
+    "broadcast_gradient": {
+      "analytic": [
+        10,
+        14,
+        18
+      ],
+      "finite_difference": [
+        9.999999999976694,
+        14.000000000038426,
+        18.000000000029104
+      ],
+      "loss": 91
+    },
+    "index_coverage": {
+      "sizes": [
+        0,
+        1,
+        127,
+        128,
+        129,
+        257,
+        513
+      ],
+      "elements_per_thread": [
+        1,
+        4
+      ],
+      "exact_once": true
+    },
+    "gemm_256": {
+      "logical_product_mib": 64,
+      "flops_convention": 33554432
+    },
+    "amdahl_step_speedup": 1.1111111111111112
+  }
+}

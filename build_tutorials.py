@@ -18,10 +18,10 @@ def build(name):
     tex+=r'{\large CUADERNOS DE COMPILADORES PARA APRENDIZAJE AUTOMÁTICO\par}\vspace{1.4cm}'+'\n'
     tex+=r'{\Huge\bfseries '+title+r'\par}\vspace{.8cm}{\Large\color{azul}'+subtitle+r'\par}\vspace{1cm}'+'\n'
     tex+=r'\begin{minipage}{.85\textwidth}Material para quien ha completado \emph{Compiladores de ML desde cero}. Explicaciones paso a paso, programas completos, ejercicios con solución y validación local en CPU o GPU según la práctica.\end{minipage}\vfill'+'\n'
-    tex+=r'{\large Kripta Studios\par}\vspace{.4cm}Edición del 1 de octubre de 2026\par\vspace{.5cm}'+'\n'
+    tex+=r'{\large Kripta Studios\par}\vspace{.4cm}Edición del 5 de octubre de 2026\par\vspace{.5cm}'+'\n'
     tex+=r'{\small Material didáctico independiente. Los programas originales y las evidencias acompañan al PDF en el repositorio. Las APIs externas se fijan a las versiones indicadas.\par}\end{titlepage}'+'\n'
     tex+=r'\pagenumbering{arabic}\hypersetup{pageanchor=true}'+'\n'
-    for part in ['tutorial.md','results.md']:
+    for part in ['tutorial.md','syllabus.md','results.md']:
         tex+=build_book.parse((ROOT/'tutorials'/name/part).read_text(encoding='utf-8'))
     tex+=r'\clearpage\appendix\chapter{Código completo de las prácticas}'+'\n'
     files=sorted((ROOT/'tutorials'/name).glob('*.cu'))+sorted((ROOT/'tutorials'/name).glob('*.cuh')) if name=='cuda' else [ROOT/'tutorials/tinygrad/labs.py']

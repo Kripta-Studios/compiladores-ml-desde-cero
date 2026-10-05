@@ -35,7 +35,7 @@
 \cajadef{nota}{gray}
 \pagestyle{fancy}\fancyhf{}
 \fancyhead[L]{\small\itshape Compiladores de ML: desde cero}
-\fancyhead[R]{\small\itshape Edición 01-10-2026}
+\fancyhead[R]{\small\itshape Edición 05-10-2026}
 \fancyfoot[C]{\thepage}
 \renewcommand{\headrulewidth}{.4pt}
 \fancypagestyle{plain}{\fancyhf{}\fancyfoot[C]{\thepage}\renewcommand{\headrulewidth}{0pt}}
@@ -77,7 +77,8 @@ Con el compilador \textbf{Lumbre}, laboratorios resueltos, proyectos de investig
 \vspace{.65cm}\rule{.88\textwidth}{.8pt}
 \vfill
 {\large Curso de un semestre · Itinerario preparatorio incluido\par}
-\vspace{.3cm}{\small Corte de investigación: 1 de octubre de 2026\par}
+\vspace{.3cm}{\small Edición ampliada con el syllabus: 5 de octubre de 2026\par}
+\vspace{.15cm}{\small Corte de investigación original: 1 de octubre de 2026\par}
 \vspace{.35cm}
 \begin{minipage}{.87\textwidth}\footnotesize
 Material didáctico independiente. Los ejemplos, diagramas y el compilador Lumbre son elaboración original. Incluye validación en CPU y CUDA sobre una RTX 5070 Ti Laptop, comparaciones reproducibles y entrenamiento de un decoder pequeño. Los resultados externos se atribuyen a sus fuentes. HIP queda pendiente de validación en hardware compatible.
@@ -131,11 +132,11 @@ Durante el semestre, una organización posible combina explicación, lectura de 
 \endhead
 Preparación & ¿Puedo ejecutar y comprobar un bucle? & Programa C y prueba manual\\
 Semanas 1--2 & ¿Puedo transformar un grafo sin alterar su contrato? & UOps, simplificador, generador C\\
-Semanas 3--4 & ¿Puedo convertir tensores en recorridos? & Índices, reducciones, plan de kernels\\
-Semanas 5--6 & ¿Puedo justificar una mejora CPU? & GEMM, convolución y benchmark\\
+Semanas 3--4 & ¿Puedo convertir tensores en recorridos? & Bucles, movimientos, reducciones y rangeify\\
+Semanas 5--6 & ¿Puedo diferenciar, entrenar y mejorar CPU? & Fisión, fusión, autodiff, MNIST y kernels rápidos\\
 Semanas 7--8 & ¿Puedo ejecutar sin carreras en una GPU? & Runtime, mapeo de ejes y kernels\\
-Semanas 9--10 & ¿Puedo construir y entrenar un decoder? & Autodiff, optimizador, checkpoint\\
-Semanas 11--14 & ¿Puedo defender una extensión original? & Proyecto, informe y reproducción\\
+Semanas 9--10 & ¿Puedo construir y entrenar un decoder? & Formas simbólicas, modelo, optimizador y checkpoint\\
+Semanas 11 en adelante & ¿Puedo defender una extensión original? & Proyecto, informe y reproducción\\
 \bottomrule
 \end{longtable}
 }
@@ -150,6 +151,103 @@ El corte es el \textbf{1 de octubre de 2026}. Las páginas de proyectos pueden c
 Los artículos de arXiv se leen como trabajos con autores, métodos y un ámbito de evaluación; que estén en arXiv no demuestra revisión por pares. Una tabla de un proveedor es evidencia de lo que declara el proveedor. Una ejecución local es evidencia de una configuración concreta. Un razonamiento matemático tiene hipótesis que deben mantenerse al traducirlo a coma flotante.
 
 La estética y el orden didáctico toman como referencia los apuntes de Teoría de Autómatas facilitados por el estudiante. Su contenido no se utiliza como fuente sobre GPU o aprendizaje automático. El temario de compiladores es el proporcionado en la solicitud; el desarrollo, los ejercicios y los proyectos son propios.
+
+
+% SOURCE: 00_programa.md
+\chapter*{Programa del semestre: Compilers for Machine Learning}
+\addcontentsline{toc}{chapter}{Programa del semestre: Compilers for Machine Learning}
+\label{curso:programa}
+\section{El encargo y la forma de trabajar}
+Esta ampliación, incorporada el \textbf{5 de octubre de 2026}, desarrolla el syllabus completo facilitado por el lector: un semestre práctico en el que cada estudiante construye su compilador desde programas elemento a elemento hasta el entrenamiento de modelos de lenguaje en GPU. La relación entre representación intermedia, hardware y estructura del modelo guía las decisiones. Se estudian reescritura de términos, generación de código, movimientos, fusión de kernels, jerarquías de memoria, arquitectura GPU, autodiferenciación y FlashAttention.
+
+El proyecto se realiza individualmente o en equipos de dos. El lenguaje de implementación es libre. El syllabus establece la especificación y propone un formato sencillo de intercambio de UOps; no entrega código inicial ni impone cómo implementar el compilador. Lumbre y los tutoriales de este repositorio son material de consulta y contraste. Para seguir la modalidad de construcción desde cero, crea tu propio proyecto y resuelve cada entrega antes de consultar su solución en Lumbre.
+
+Aunque no hay prerrequisitos formales, el curso original presupone dominio de sistemas equivalente a 15-213, soltura en C, cierta experiencia GPU, dominio del lenguaje elegido y capacidad para mantener un proyecto durante meses. El itinerario preparatorio del libro sirve para detectar y cubrir lagunas; no sustituye automáticamente esa experiencia. La modalidad presencial del syllabus incluye cuestionarios frecuentes y clases que no se publican en línea. Estas condiciones describen el curso de referencia; el repositorio no anuncia sesiones presenciales propias.
+
+La entrega semanal se realiza \textbf{el miércoles antes de las 10:00, antes de clase}. El orden de las sesiones es miércoles, viernes y lunes. No se proporciona zona horaria ni fechas del calendario académico: deben fijarse al organizar una edición concreta. Cada entrega conserva las capacidades de las anteriores. Una regla de simplificación incorrecta en la primera semana puede invalidar gradientes y modelos meses después.
+
+\begin{idea}[Gestionar el trabajo que todavía no se entiende]
+La advertencia del syllabus sobre el «slop» se convierte aquí en una práctica observable: toda transformación debe tener un contrato, un contraejemplo que podría hacerla fallar y una prueba de regresión. Poder generar mucho código no sustituye poder explicar qué hace. Un integrante debe poder defender cambios escritos por el otro y cualquier fragmento producido con ayuda automática.
+
+\end{idea}
+\needspace{12\baselineskip}
+\section{El semestre de un vistazo}
+{\small
+\begin{longtable}{@{}P{0.28\textwidth}P{0.32\textwidth}P{0.34\textwidth}@{}}
+\toprule
+\textbf{Semanas} & \textbf{Trabajo acumulado} & \textbf{Hito del syllabus}\\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Semanas} & \textbf{Trabajo acumulado} & \textbf{Hito del syllabus}\\
+\midrule
+\endhead
+1--2 & UOps, operaciones elementales, simbólico, reescrituras, renderer y runtime & Compilar y simplificar programas elemento a elemento a C\\
+3--4 & Bucles, movimientos, broadcasting, reducción y rangeify & Compilar grafos de modelos expresables a C correcto, inicialmente lento\\
+5--6 & Fisión, fusión, autodiff, memoria, hilos, upcasting, GEMM y convolución & Entrenar MNIST y aspirar a código CPU competitivo con el estado del arte\\
+7--8 & Kernels, GPU, mapeo de ejes, aceleradores y tensor cores & Aspirar a código CUDA/HIP competitivo con PyTorch\\
+9--10 & Modelos reales, formas simbólicas y entrenamiento & Implementar y entrenar un LLM\\
+11 en adelante & Proyecto propio sobre el compilador & Implementar un artículo, portar a otro hardware o desarrollar una extensión\\
+\bottomrule
+\end{longtable}
+}
+La tabla final del syllabus agrupa autodiff con modelos reales; el desarrollo semanal lo introduce en la \textbf{semana 5}. Lo aprenderemos entonces y lo utilizaremos de nuevo en las semanas 9--10. Igualmente, \texttt{CALL} aparece en la semana 1 aunque las llamadas a kernels de dispositivo se estudien después. Las jerarquías de memoria y la aceleración CPU culminan en la semana 6; no se pospone autodiff para acomodarlo al resumen.
+
+\section{Semana 1. UOps y reescrituras}
+Construye nodos inmutables con interfaz conceptual \texttt{UOp(op, src:\allowbreak{}tuple[UOp, .\allowbreak{}..], arg)} y hash-consing. Introduce la propiedad recursiva \texttt{dtype} con valores \texttt{bool}, \texttt{i32} y \texttt{f32}. El conjunto inicial es \texttt{PARAM}, \texttt{CALL}, \texttt{CONST}, \texttt{CAST}, \texttt{NEG}, \texttt{RECIP}, \texttt{EXP2}, \texttt{LOG2}, \texttt{ADD}, \texttt{MUL}, \texttt{CMPLT}, \texttt{CMPNE}, \texttt{MAX}, \texttt{FLOORDIV}, \texttt{FLOORMOD} y \texttt{WHERE}. Para booleanos, \texttt{MUL}, \texttt{MAX} y \texttt{CMPNE} significan AND, OR y XOR.
+
+El miércoles se presentan curso, completitud de Turing, UOp, formato y primera tarea. El viernes se trabajan ALU, reescritura voraz de abajo arriba y plegado de constantes. El lunes se estudian llamadas, parámetros, simplificación simbólica y sistemas de álgebra computacional. El plegador debe poder evaluar programas constantes del subconjunto soportado; mencionar completitud de Turing en clase no convierte por sí solo ese subconjunto en un lenguaje universal.
+
+Entrega un constructor, impresor y lector del subconjunto acordado, un verificador, un evaluador de referencia y un motor de reescrituras. Demuestra que una subexpresión pura repetida se comparte, que los parámetros mantienen su ámbito y que cada regla termina. Lectura: «UOps: construir un grafo de intenciones», simplificación simbólica y laboratorios 1--2. El contrato ampliado al final del libro concreta casos límite.
+
+\section{Semana 2. Renderer, runtime y memoria}
+Añade \texttt{void}, la propiedad \texttt{shape:tuple[\allowbreak{}int, ...]} y \texttt{addrspace} con \texttt{MEM} y \texttt{ALU}. Introduce \texttt{BUFFER}, \texttt{ALLOC}, \texttt{STACK}, \texttt{INDEX}, \texttt{LOAD}, \texttt{STORE}, \texttt{AFTER} y \texttt{LINEAR}. \texttt{BUFFER} representa memoria persistente global y no se define dentro de una llamada; \texttt{ALLOC} reserva almacenamiento local a la llamada. Un buffer externo puede pasarse como argumento de la función sin volver a declararlo como global dentro de su cuerpo.
+
+El miércoles se estudian orden topológico, renderer y repaso de C. El viernes, runtime y gestión de memoria. El lunes, sistemas de tipos para forma, dtype y espacio de direcciones. La entrega genera, compila y ejecuta funciones C \textbf{sin bucles} que combinan inmediatos y memoria. No es necesario anticipar \texttt{RANGE} para demostrar una carga, una suma y una escritura.
+
+La prueba decisiva llama dos veces a la función con datos distintos y comprueba memoria y valores. Incluye una dependencia de lectura después de escritura y rechazo de índices inválidos. Lectura: «Del grafo al C», planificación de memoria y laboratorio 3. No basta con imprimir C: la firma, los tamaños y la vida de los buffers forman parte de la entrega.
+
+\section{Semana 3. Bucles, GEMM y convolución}
+\texttt{RANGE} recibe como fuente el límite superior y como argumento el nombre del rango. Un límite de tres recorre 0, 1 y 2. \texttt{END} recibe \texttt{(passthrough, range)} y cierra el rango correspondiente. El renderer debe preservar anidamiento, acumuladores y valores disponibles al salir.
+
+Escribe una reducción, una multiplicación de matrices rectangular y una convolución pequeña usando índices explícitos. Prueba rangos de longitud cero y uno donde el contrato los permita. Una suma vacía conserva su identidad; una reducción sin identidad definida requiere un diagnóstico. Lectura: bucles, reducción, GEMM y laboratorio de convolución. La semántica de bucles aparece aquí; la transformación automática de formas a bucles llegará en la semana siguiente.
+
+\section{Semana 4. Movimientos y rangeify}
+Incorpora \texttt{RESHAPE}, \texttt{EXPAND}, \texttt{PERMUTE}, \texttt{FLIP}, \texttt{PAD}, \texttt{SHRINK} y \texttt{REDUCE}, parametrizada por número de ejes y operación. Obtén GEMM y convolución componiendo movimientos y reducciones. El alumno debe poder seguir una coordenada desde la salida hasta cada entrada sin materializar todas las vistas.
+
+Rangeify elimina las formas de las operaciones del grafo de cálculo bajado: el trabajo queda expresado con rangos, índices y operaciones escalares. El runtime sigue necesitando tamaños y metadatos de almacenamiento. La entrega conserva el grafo de alto nivel para contrastar valores y comprueba que el backend recibe su representación escalar esperada. Lectura: movimientos, broadcasting, layouts y laboratorio 3.
+
+\section{Semana 5. Fisión, fusión y autodiferenciación}
+\texttt{STAGE} representa un buffer temporal indexable. Úsalo para decidir cuándo materializar un valor compartido y cuándo fusionar su cálculo en el consumidor. Contar kernels sin contar cómputo repetido puede premiar el plan equivocado.
+
+Autodiff actúa sobre \textbf{grafos puros con formas}, antes de introducir efectos. No se aplica a \texttt{STORE}, \texttt{CALL}, \texttt{AFTER}, \texttt{RANGE} ni \texttt{END}. Genera el grafo de gradientes y bájalo después con los mismos mecanismos que el forward. El hito es entrenar el primer clasificador de MNIST con tu compilador. Los datos, la pérdida y el protocolo experimental deben documentarse; este hito es una entrega propuesta, no una ejecución MNIST ya incluida entre las evidencias de Lumbre.
+
+Lectura: planificación de kernels, autodiff y laboratorio 8. La guía ampliada desarrolla el backward del broadcasting, un clasificador y las pruebas necesarias para evitar una falsa sensación de éxito basada solo en la pérdida.
+
+\section{Semana 6. Memoria, multihilo y kernels rápidos en CPU}
+Clasifica los rangos como \texttt{LOOP}, \texttt{UPCAST} o \texttt{THREAD}. Upcasting transforma trabajo de un eje en varias operaciones explícitas que el backend puede combinar o vectorizar; no significa convertir FP32 a FP64. Añade \texttt{GROUP}, que agrupa salidas \texttt{void} sin ordenar sus fuentes y tiene forma escalar \texttt{()}.
+
+Trabaja localidad, tiling, acumuladores, hilos, conteo de FLOPs, GEMM, reducciones, convoluciones y atención con memoria acotada. La CPU sigue siendo el destino. La meta del syllabus es código C competitivo con el estado del arte: una afirmación así exige suite, referencia fuerte, precisión, hilos, hardware y medidas reproducibles. Lectura: CPU rápida, benchmarks, atención eficiente y proyecto C.
+
+\section{Semanas 7--8. GPU y aceleradores}
+Introduce kernels de dispositivo, runtime GPU, mapeo de ejes a bloques e hilos, jerarquía de memoria y tensor cores. Mantén un camino correcto para formas no compatibles con el kernel especializado. CUDA e HIP son destinos del programa; validar uno no valida automáticamente el otro.
+
+La meta es competir con PyTorch en cargas acordadas. Compara operaciones equivalentes y declara si incluyes compilación, transferencias, conversiones y sincronización. Lectura: GPU básica, aceleradores, laboratorio 7 y el nuevo puente del tutorial CUDA. Las prácticas existentes de vectores, reducción, GEMM y streams ofrecen referencias para revisar el código que genere el compilador propio.
+
+\section{Semanas 9--10. Modelos reales y dimensiones simbólicas}
+Integra un modelo de lenguaje con embeddings, atención causal, normalización, bloque feed-forward, pérdida, gradientes, optimizador y checkpoints. Lleva las dimensiones simbólicas desde las restricciones del frontend hasta las comprobaciones de ejecución y la clave de caché. Un tamaño variable no puede invalidar silenciosamente un tile o una reserva.
+
+Entrena primero una configuración pequeña que puedas depurar y después escala dentro del presupuesto disponible. Registra tokens, arquitectura, memoria, tiempo por paso y evaluación. La aspiración a LLM de última generación del syllabus requiere además datos, recursos y comparación externa; los resultados existentes del repositorio acreditan un decoder pequeño. Lectura: modelo de lenguaje, entrenamiento, escalado y laboratorios 9--11.
+
+\section{Semanas 11 en adelante. Proyecto y defensa}
+Escoge una contribución sobre el compilador: reproducir una idea de un artículo, portar a hardware distinto, implementar backward de atención por tiles, mejorar selección de kernels o ampliar el entrenamiento. Los proyectos A--E del libro dan ejemplos. El syllabus deja abierto el número de semanas finales; cualquier calendario de catorce semanas de este material es una propuesta organizativa.
+
+Entrega código propio, pruebas, instrucciones, resultados, límites y una comparación que permita activar y desactivar la contribución. Para equipos de dos, ambos deben poder explicar un caso nuevo desde el tensor hasta la ejecución. Una defensa útil modifica una forma o una dependencia y pide predecir el efecto antes de ejecutar.
+
+\section{Qué se conserva entre entregas}
+Cada miércoles etiqueta una versión reproducible con especificación vigente, gramática admitida, ejemplos de IR, pruebas acumuladas y un informe breve. Al añadir una operación, registra sus propiedades, aridad, precondiciones y fase legal. Al añadir una optimización, conserva un programa mínimo que detecte su fallo más probable. Al añadir un backend, mantén los mismos valores de entrada y el mismo contrato numérico.
+
+Los capítulos «Contrato de UOps» y «De rangeify al entrenamiento» amplían el syllabus con decisiones didácticas explícitas. El formato del mensaje original es un ejemplo y no una gramática completa. No se atribuyen al curso reglas de ABI, literales o evaluación que su texto no fija.
 
 
 % SOURCE: 01_fundamentos.md
@@ -5893,6 +5991,267 @@ Puedes extender el decoder educativo con KV incremental exacta antes de explorar
 La integración de DeepGEMM-Ascend requeriría hardware Ascend y una validación propia. El experimento de medias causales solo necesita NumPy. Los tutoriales CUDA y tinygrad aportan prácticas ejecutadas en los dispositivos disponibles; estos tres alcances quedan separados en los informes del repositorio.
 
 
+% SOURCE: 24_contrato_uops.md
+\chapter{Contrato de UOps: de la especificación a una IR verificable}
+\label{curso:contrato}
+\section{Tres representaciones con responsabilidades distintas}
+El syllabus define \texttt{UOp(op, src:\allowbreak{}tuple[UOp, .\allowbreak{}..], arg)}. Este capítulo explica cómo razonar sobre ese contrato sin imponer clases, lenguaje ni biblioteca. Las propiedades \texttt{dtype}, \texttt{shape} y \texttt{addrspace} se infieren a partir de la operación, sus fuentes y su argumento. Una implementación puede memorizarlas, pero no debe permitir que una caché contradiga el cálculo de tipos.
+
+Conviene distinguir el grafo puro con formas, el grafo que hace explícitos índices y efectos, y la secuencia final del renderer. El primero expresa el modelo y permite autodiff; el segundo conserva dependencias de memoria y rangos; la última decide el orden de emisión. Confundir esas responsabilidades hace que una mejora del renderer termine cambiando el significado del modelo.
+
+Lumbre tiene una IR propia con forma y dtype almacenados, operaciones tensoriales y planificación específica. No implementa literalmente todo el catálogo del syllabus ni un lector universal \texttt{uop v1}. Aquí se especifica el trabajo que debe realizar el estudiante y se explica su relación con los mecanismos del libro. Los ejemplos de UOps son notación didáctica salvo cuando se reproduce expresamente el fragmento de intercambio original.
+
+\section{Hash-consing con tipos, ámbitos y efectos}
+Dos nodos puros con la misma operación, fuentes canónicas y argumento semántico pueden compartir identidad. Esto permite que \texttt{(x+2)*(x+2)} contenga una sola suma. El argumento debe preservar toda distinción relevante: un literal booleano no es un entero, aunque el lenguaje anfitrión compare \texttt{True} e \texttt{1} como iguales. Una representación robusta de constantes incluye etiqueta de tipo y representación del valor.
+
+Si el contrato conserva cero con signo, las constantes FP32 deben distinguir sus bits. Para NaN hay que decidir qué representaciones se admiten y si se canonicalizan. No uses igualdad ordinaria de coma flotante como definición universal de identidad estructural: NaN no es igual a sí mismo y ceros de signo distinto pueden compararse iguales.
+
+\texttt{PARAM} necesita identidad de ámbito y posición. Los parámetros cero de dos funciones diferentes no se vuelven el mismo argumento por compartir nombre. El syllabus no detalla \texttt{ParamArg} ni \texttt{CallArg}; el estudiante debe fijar sus campos y comprobarlos. Una posibilidad es que \texttt{ParamArg} identifique ámbito, slot y tipo esperado, con tamaño y espacio de direcciones cuando proceda. Esa es una decisión de implementación, no un campo añadido al estándar original.
+
+La tabla de interning no puede borrar eventos distintos de memoria. Dos \texttt{ALLOC} de igual tamaño pueden requerir almacenamiento diferente. Dos escrituras textualmente iguales pueden ocurrir en momentos diferentes. Para mantener hash-consing, la identidad o las dependencias del evento deben formar parte de su estructura; alternativamente, la implementación debe representar efectos en una capa que no los confunda con expresiones puras. En ambos casos, explica cómo se conserva esa distinción.
+
+\begin{practica}[Una clave que parece suficiente]
+Una caché utiliza \texttt{(op, src, arg)} y \texttt{arg=1} tanto para un booleano verdadero como para el entero uno. ¿Qué prueba revela el fallo?
+
+\textbf{Solución.} Construye ambos literales y consulta su \texttt{dtype}; deben seguir siendo distintos. Después construye \texttt{MUL} booleano e integer con entradas del tipo correspondiente. La regla de interning tiene que incluir la etiqueta semántica del literal, aunque la sintaxis pública del nodo siga teniendo tres campos.
+
+\end{practica}
+\section{Semana 1: operaciones puras y sus dominios}
+{\small
+\begin{longtable}{@{}P{0.28\textwidth}P{0.32\textwidth}P{0.34\textwidth}@{}}
+\toprule
+\textbf{Familia} & \textbf{Operaciones} & \textbf{Obligación del verificador}\\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Familia} & \textbf{Operaciones} & \textbf{Obligación del verificador}\\
+\midrule
+\endhead
+Entradas y aplicación & \texttt{PARAM}, \texttt{CALL}, \texttt{CONST} & Resolver ámbito y aridad; \texttt{CALL.src[0]} es el cuerpo y el resto son argumentos\\
+Unarias & \texttt{CAST}, \texttt{NEG}, \texttt{RECIP}, \texttt{EXP2}, \texttt{LOG2} & Fijar tipo de resultado, conversiones y dominios admitidos\\
+Binarias & \texttt{ADD}, \texttt{MUL}, \texttt{CMPLT}, \texttt{CMPNE}, \texttt{MAX} & Validar tipos y producir bool en comparaciones\\
+División entera & \texttt{FLOORDIV}, \texttt{FLOORMOD} & Definir redondeo, divisor cero y desbordamiento\\
+Selección & \texttt{WHERE} & Condición booleana y ramas con tipos compatibles\\
+\bottomrule
+\end{longtable}
+}
+El syllabus enumera operaciones y tipos, pero no publica todas las sobrecargas posibles. No deduzcas, por ejemplo, que \texttt{ADD} booleano significa OR: solo establece las equivalencias \texttt{MUL=AND}, \texttt{MAX=OR} y \texttt{CMPNE=XOR}. Las combinaciones adicionales deben rechazarse o especificarse expresamente. Tampoco aceptes conversiones implícitas diferentes en el evaluador y en el código C.
+
+El plegado de constantes debe seguir la precisión del destino. Si \texttt{f32} significa redondeo binario32 tras cada operación, evaluar una cadena en doble precisión y convertir al final puede dar un resultado diferente. El tratamiento de FMA, infinitos, NaN, subnormales y ceros con signo se documenta antes de introducir reglas que dependan de él. Para un primer entregable, es válido limitar el dominio si el rechazo es verificable y está declarado.
+
+\texttt{RECIP(x)} expresa el recíproco. \texttt{EXP2(x)} y \texttt{LOG2(x)} usan base dos. Reducir \texttt{LOG2(EXP2(x))} a \texttt{x} necesita hipótesis sobre rango, precisión y dominio; no es una identidad universal del programa FP32. \texttt{WHERE} selecciona valores, pero el syllabus no determina por sí solo si sus ramas se evalúan de forma perezosa. Esa distinción será decisiva para una carga enmascarada de la semana 4.
+
+\section{División hacia menos infinito y C}
+Para enteros con divisor distinto de cero, una definición de división por suelo exige $a=bq+r$, con $q=\lfloor a/b\rfloor$. Así, para $a=-7$ y $b=3$, resultan $q=-3$ y $r=2$. Con $a=7$ y $b=-3$, resultan $q=-3$ y $r=-2$. El resto tiene el signo del divisor o es cero.
+
+La división entera de C trunca hacia cero. Por eso imprimir \texttt{/} y \texttt{\%} directamente no implementa esos ejemplos. Si se parte de cociente y resto truncados, y el resto es no nulo con signo distinto del divisor, la corrección es restar uno al cociente y sumar el divisor al resto. Antes debe tratarse el divisor cero y el caso del mínimo entero dividido entre menos uno, cuyo resultado no cabe en el mismo entero con signo.
+
+\begin{comprueba}[Tabla mínima del evaluador]
+Para \texttt{(7,3)}, \texttt{(-7,3)}, \texttt{(7,-3)} y \texttt{(-7,-3)}, los pares cociente/resto por suelo son \texttt{(2,1)}, \texttt{(-3,2)}, \texttt{(-3,-2)} y \texttt{(2,-1)}. Comprueba también divisiones exactas. Las cuatro filas deben coincidir entre plegador y programa generado.
+
+\end{comprueba}
+\section{Reescribir de abajo arriba y saber cuándo detenerse}
+Visita primero las fuentes, reconstruye el nodo con sus versiones normalizadas y aplica reglas locales orientadas. Si una regla crea otro nodo reducible, vuelve a considerar el resultado con una política explícita. Conserva memoización por nodo y detecta ciclos o agotamiento de un presupuesto de reescritura. Un presupuesto sirve como diagnóstico; no demuestra que las reglas terminen.
+
+Para una familia sencilla, puede justificarse terminación mediante una medida que disminuya: cantidad de operaciones constantes pendientes y, después, tamaño de una representación canónica. No mezcles \texttt{a+b -> b+a} con su inversa. Ordenar operandos con una clave estable evita ese ciclo cuando la conmutatividad esté permitida por el contrato numérico.
+
+Una regla como \texttt{x*0 -> 0} requiere atención en flotantes: con \texttt{x} infinito, la expresión original puede producir NaN. Cambiar asociación de sumas también modifica redondeos. Mantén reglas exactas para el dominio elegido y reglas bajo relajación numérica identificadas por separado. Si el modo cambia, debe cambiar la clave del artefacto compilado.
+
+El plegador puede evaluar un \texttt{CALL} puro con argumentos constantes ligando los \texttt{PARAM} del cuerpo al entorno correspondiente. Evita sustituir parámetros de una llamada anidada por coincidencia de nombre. La recursión general, si se admite, necesita su propia semántica; no se obtiene gratuitamente de un evaluador recursivo de DAG.
+
+\section{Semana 2: tipo de valor, forma y dirección}
+\texttt{dtype} responde qué clase de dato representa un nodo; \texttt{shape} describe sus ejes lógicos; \texttt{addrspace} distingue memoria de valores de cálculo. Una dirección a un escalar \texttt{f32} y un valor \texttt{f32} no son intercambiables aunque compartan forma \texttt{()}. \texttt{void} representa ausencia de valor utilizable, como una escritura.
+
+{\small
+\begin{longtable}{@{}P{0.28\textwidth}P{0.32\textwidth}P{0.34\textwidth}@{}}
+\toprule
+\textbf{Operación} & \textbf{Contrato del syllabus} & \textbf{Consecuencia práctica}\\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Operación} & \textbf{Contrato del syllabus} & \textbf{Consecuencia práctica}\\
+\midrule
+\endhead
+\texttt{BUFFER} & Buffer global persistente, nunca definido dentro de \texttt{CALL} & Su vida supera una invocación\\
+\texttt{ALLOC} & Almacenamiento local de llamada & No puede escaparse una dirección que ya no sea válida\\
+\texttt{STACK} & Nuevo eje inicial; fuentes de igual forma & Con m fuentes de forma S, la salida tiene forma \texttt{(m,) + S}\\
+\texttt{INDEX} & Consume ejes por la izquierda mediante fuentes índice & Con k índices válidos, quedan los ejes desde k en adelante\\
+\texttt{LOAD} & Una fuente & Obtiene un valor desde memoria válida\\
+\texttt{STORE} & Dos fuentes & Escribe un valor en el destino compatible\\
+\texttt{AFTER} & \texttt{AFTER(buf, store)} & Hace depender el uso posterior del buffer de la escritura\\
+\texttt{LINEAR} & Fuentes en orden antes del renderer & La emisión debe respetar la secuencia elegida\\
+\bottomrule
+\end{longtable}
+}
+La tabla no impone una sintaxis textual para cada constructor. En particular, el orden destino/valor de \texttt{STORE}, los campos de tipos y el tratamiento exacto de \texttt{STACK} en cada espacio deben declararse al completar la especificación del proyecto. En los ejemplos siguientes usaremos destino primero y valor después.
+
+Si \texttt{x} tiene forma \texttt{(2,3)}, indexarlo con \texttt{i} produce forma \texttt{(3,)}; indexarlo con \texttt{i,j} produce \texttt{()}. Hay que verificar índices enteros y, cuando se conocen estáticamente, sus límites. Una forma escalar tiene un elemento. Una forma \texttt{(0,)} tiene cero. Confundirlas provoca reservas y accesos incorrectos.
+
+\section{Una función C sin bucles y una dependencia real}
+El primer programa de memoria puede tener esta salida C, bajo el contrato de que \texttt{p} apunta a un elemento válido y el llamador admite modificarlo:
+
+\begin{lstlisting}[language=C]
+float incrementar(float *p) {
+    float anterior = p[0];
+    p[0] = anterior + 1.0f;
+    return p[0];
+}
+\end{lstlisting}
+En una notación conceptual, indexa el buffer, carga el valor anterior, construye la suma, crea \texttt{STORE(destino, suma)} y alimenta la lectura final desde una dirección obtenida del buffer dependiente \texttt{AFTER(buffer\allowbreak{}, escritura)}. Así la lectura posterior tiene una dependencia explícita. Volver a cargar desde la dirección original sin ese vínculo permite que una optimización la trate indebidamente como la primera lectura.
+
+Con entrada 4, la primera llamada devuelve 5 y deja 5 en memoria; la segunda devuelve 6. Esta prueba detecta un runtime que no conserva buffers o un compilador que congela entradas como constantes. También debe existir una prueba con dos direcciones alias si la ABI permite aliasing. Si lo prohíbe, ese contrato debe verificarse o mantenerse como precondición pública, no esconderse en el renderer.
+
+Un orden topológico cualquiera conserva dependencias del grafo, pero no inventa las que falten. \texttt{LINEAR} es una lista final de emisión, no una reparación de aliasing. El verificador comprueba que toda fuente necesaria aparece antes, que los efectos ordenados conservan su relación y que ninguna operación fuera de ámbito usa un local de una llamada terminada.
+
+\section{Semana 3: rangos, cierre y acumulación}
+\texttt{RANGE(end, nombre)} representa el intervalo semiabierto desde cero hasta \texttt{end}. \texttt{END(passthro\allowbreak{}ugh, range)} vincula un resultado o efecto con el cierre de ese rango. El nombre por sí solo no debe mezclar dos ámbitos. Verifica correspondencia entre aperturas y cierres, anidamiento y disponibilidad de los valores usados después.
+
+La reducción suma exige inicialización una sola vez por salida. Este pseudocódigo fija el significado de una GEMM rectangular; no prescribe una representación interna de acumuladores:
+
+\begin{lstlisting}
+para i en [0, M):
+    para j en [0, N):
+        acc = 0
+        para k en [0, K):
+            acc = acc + A[i,k] * B[k,j]
+        C[i,j] = acc
+\end{lstlisting}
+Inicializar \texttt{acc} dentro del rango k dejaría solo el último producto; inicializarlo antes del rango j mezclaría columnas. La prueba con K igual a cero, si se admite, obliga a producir ceros para la suma sin leer entradas. La prueba con M o N igual a cero no debe escribir salida alguna.
+
+Para una convolución 1D válida sin invertir el filtro, usa \texttt{x=[1,2,3,4]} y \texttt{w=[2,-1]}. La suma de productos sobre ventanas produce \texttt{[0,1,2]}. Esta convención es correlación cruzada, habitual en redes neuronales; si se quiere convolución matemática, hay que invertir el filtro. El nombre de la operación no sustituye esa decisión.
+
+\section{El fragmento de intercambio proporcionado}
+El syllabus aporta este ejemplo literal:
+
+\begin{lstlisting}
+# uop v1 256x256 GEMM
+%0 = buffer 65536 : dtype=f32 slot=0
+%1 = buffer 65536 : dtype=f32 slot=1
+%2 = reshape %0, (256, 256, 1)
+%3 = reshape %1, (256, 1, 256)
+%4 = mul %2, %3
+%5 = reduce %4 : op=add pop=1
+\end{lstlisting}
+Son seis nodos. Las dos vistas conservan 65.536 elementos cada una. Bajo broadcasting, el producto lógico tiene forma \texttt{(256,256,256)}: contiene 16.777.216 valores si se materializa, 64 MiB en FP32. Una bajada que acumule directamente puede evitar esa materialización.
+
+Para interpretar la cuenta necesitamos declarar qué ejes elimina \texttt{pop=1} y cómo se interpretan los buffers. \textbf{En este desarrollo didáctico adoptamos reducción de los ejes iniciales.} Si \texttt{\%0} contiene \texttt{A[k,i]} y \texttt{\%1} contiene \texttt{B[k,j]}, el producto es \texttt{A[k,i]*B[k,j]} y la salida es la suma sobre k. Con ambos buffers vistos como matrices fila a fila, esto representa $A^T B$. Para representar $A B$ con A almacenada como \texttt{[i,k]}, se requiere la permutación correspondiente. El nombre GEMM sigue siendo adecuado, pero las dimensiones cuadradas no revelan esta diferencia.
+
+El fragmento también presupone broadcasting en \texttt{mul}. Una IR que exija formas idénticas debe insertar \texttt{EXPAND} durante la normalización. El ejemplo no especifica una gramática completa, escapes, codificación de literales, salidas, ABI ni política de errores. El alumno debe acordar esos detalles antes de prometer interoperabilidad.
+
+\section{Un intercambio que se pueda comprobar}
+Como extensión docente, el lector admite solo versiones declaradas, identificadores definidos una vez y referencias a nodos ya definidos. El impresor recorre un orden topológico estable y conserva tipos y argumentos. Las salidas se declaran con una convención documentada; no se asume para todos los programas que el último nodo sea la única salida.
+
+La prueba de ida y vuelta compara estructura semántica: leer, imprimir, volver a leer y comprobar operación, fuentes, argumentos, tipos y salidas. Los números \texttt{\%0}, \texttt{\%1} pueden cambiar por una renumeración válida. No deben cambiar slots externos, constantes, relaciones de dependencia ni disposición lógica de datos.
+
+Añade casos inválidos: versión desconocida, referencia inexistente, identificador duplicado, operación no admitida, tipo incompatible, reshape que cambia elementos y slot incompatible con la firma. El diagnóstico debe señalar nodo y propiedad. Estos casos prueban el verificador; no son excusas para aceptar silenciosamente una interpretación distinta en cada backend.
+
+\chapter{De rangeify al entrenamiento: preservar el contrato}
+\label{curso:rangeify}
+\section{Movimientos como mapas de coordenadas}
+\texttt{RESHAPE} cambia la descomposición de un índice lineal conservando el número de elementos. \texttt{EXPAND} replica lógicamente un eje de tamaño uno; su coordenada de entrada siempre es cero. \texttt{PERMUTE} reordena ejes mediante una permutación válida. \texttt{FLIP} convierte la coordenada i de un eje de longitud n en \texttt{n-1-i}. \texttt{SHRINK} desplaza la coordenada por el inicio de una región. \texttt{PAD} amplía el dominio y distingue posiciones interiores de posiciones de relleno.
+
+Estas operaciones describen valores, no necesariamente nuevas reservas. Por ejemplo, permutar una matriz \texttt{(2,3)} a \texttt{(3,2)} transforma la coordenada de salida \texttt{(j,i)} en la entrada \texttt{(i,j)}. Al consumirla en un cálculo, el compilador puede componer ese mapa con el acceso original. No es obligatorio copiar la matriz para obtener su traspuesta lógica.
+
+Para \texttt{PAD}, el predicado de validez forma parte del mapa. Con x de longitud tres, un cero a la izquierda y dos a la derecha, la salida tiene longitud seis. Su coordenada de entrada es \texttt{i-1}, válida solo si \texttt{1 <= i < 4}. En otro caso el resultado es cero. No ejecutes primero una carga fuera de límites y después un \texttt{WHERE}: si las ramas se evalúan ávidamente, el acceso inválido ya ocurrió. La bajada debe producir carga predicada o control de flujo que garantice seguridad.
+
+\section{Reducción por número de ejes}
+El syllabus define \texttt{REDUCE} mediante cantidad de ejes y operación, sin completar aquí todos sus detalles. Adoptamos para los ejemplos una reducción de los p ejes iniciales. Una suma sobre \texttt{(K,M,N)} con \texttt{p=1} da \texttt{(M,N)}. Para reducir otro conjunto, primero permuta los ejes deseados a la izquierda. Mantener o eliminar dimensiones unitarias es una decisión que debe reflejarse en el tipo de salida.
+
+Una reducción suma tiene identidad cero. Para máximo, el dominio y el tipo determinan si existe una identidad admisible o si se rechaza un eje vacío. No inicialices indiscriminadamente el máximo a cero: sobre \texttt{[-4,-2]} daría cero en lugar de -2. Tampoco cambies orden de acumulación FP32 sin considerar la política numérica.
+
+\section{Derivar GEMM con un ejemplo rectangular}
+Sean $A=\left(\begin{smallmatrix}1&2&3\\4&5&6\end{smallmatrix}\right)$ y $B=\left(\begin{smallmatrix}7&8\\9&10\\11&12\end{smallmatrix}\right)$. Para calcular AB con reducción inicial, transforma A de \texttt{(M,K)} a \texttt{(K,M)}, añade un eje final y transforma B de \texttt{(K,N)} a \texttt{(K,1,N)}. Expande ambos a \texttt{(K,M,N)}, multiplica y reduce k.
+
+\begin{lstlisting}
+A: (2,3) -> PERMUTE(1,0) -> (3,2) -> RESHAPE(3,2,1)
+B: (3,2) -> RESHAPE(3,1,2)
+EXPAND ambos a (3,2,2)
+MUL -> REDUCE(add, pop=1) -> (2,2)
+resultado: [[58,64], [139,154]]
+\end{lstlisting}
+La coordenada lógica \texttt{(k,i,j)} se traduce a \texttt{A[i*K+k]} y \texttt{B[k*N+j]} en almacenamiento contiguo. Rangeify introduce los rangos i, j y k y un acumulador por salida. El producto lógico de doce elementos no obliga a reservar doce posiciones: los productos pueden consumirse inmediatamente.
+
+Esta prueba rectangular detecta intercambios de ejes que una multiplicación de matrices cuadradas podría ocultar. Amplíala con valores distintos por fila y columna, K igual a uno y dimensiones no múltiplos del tile. Los ejemplos numéricos son deducciones exactas con estos enteros pequeños, no mediciones de rendimiento.
+
+\section{Derivar convolución sin un operador privilegiado}
+Una convolución 1D de entrada de longitud L y filtro de longitud F, sin padding y con paso uno, puede expresarse como suma de F vistas desplazadas multiplicadas por cada peso. Para el desplazamiento r, \texttt{SHRINK} selecciona \texttt{x[r:r+L-F+1]}. \texttt{STACK} agrupa esas vistas en forma \texttt{(F,L-F+1)}. El filtro se reinterpreta como \texttt{(F,1)}, se expande, se multiplica y se reduce el eje inicial.
+
+Así se obtiene el ejemplo \texttt{[0,1,2]} del capítulo anterior sin introducir una primitiva opaca de convolución. El uso explícito de \texttt{STACK} puede hacer crecer el grafo con F; una extensión con índices simbólicos evita desplegar filtros grandes. El ejercicio inicial busca demostrar semántica y composición, no escoger ya el mejor kernel industrial.
+
+Con padding, dilatación o paso distinto de uno, escribe primero la coordenada \texttt{salida*paso \allowbreak{}+ r*dilataci\allowbreak{}on - padding}. Después determina su máscara. El gradiente del filtro suma contribuciones de todas las ventanas y el de la entrada acumula las ventanas que la tocan; una copia de los índices del forward no basta para construir ambos.
+
+\section{Qué elimina rangeify y qué debe conservar}
+El resultado del pase expresa el cálculo con valores escalares, índices y rangos. Las operaciones aritméticas ya no portan los ejes tensoriales originales como una ejecución implícita. Las direcciones conservan información suficiente para generar accesos y el runtime conserva tamaños de buffers y restricciones. «Eliminar shapes de todas las ops» no significa olvidar cuántos bytes necesita el programa.
+
+Valida tres aspectos por separado: toda coordenada admitida encuentra el valor correcto, ninguna coordenada inválida produce una carga o escritura, y cada salida se calcula la cantidad de veces exigida. Un programa puede respetar límites y aun así escribir dos veces una posición dejando otra sin calcular.
+
+Conserva un dump antes y después del pase para un caso pequeño. La prueba diferencial ejecuta el grafo puro con un evaluador sencillo y el programa bajado con los mismos datos. El evaluador de referencia no debería llamar al mismo generador de índices que pretende comprobar, porque reproduciría sus errores.
+
+\section{STAGE: pagar memoria para evitar trabajo repetido}
+Si un intermedio caro tiene dos consumidores, fusionarlo en ambos puede duplicar su cálculo. \texttt{STAGE} permite materializarlo y hacer que los consumidores lo indexen. Decide su tamaño, productor, consumidores, ubicación y vida. La reserva solo puede reutilizarse cuando todos los consumidores han terminado.
+
+Supón que un intermedio cuesta C, y que escribirlo y leerlo para ambos consumidores cuesta T. Recomponerlo dos veces cuesta aproximadamente 2C; materializarlo cuesta C+T. Si C supera T, materializar podría resultar favorable. Son costes orientativos: lanzamientos, caché, vectorización y capacidad de memoria pueden cambiar la decisión, por lo que el modelo debe contrastarse con medidas.
+
+Una barrera de materialización no es equivalente a una regla de autodiff que detenga el gradiente. Mantén el grafo matemático puro para diferenciar; decide stages y efectos al bajar forward y backward. Si se inserta una anotación de stage antes, debe aclararse que no cambia la función y cómo la trata el diferenciador.
+
+\begin{practica}[Dos consumidores de una reducción]
+Sea \texttt{s=sum(x*x)} y dos salidas \texttt{s+1} y \texttt{s+2}. ¿Es mejor generar un kernel por salida?
+
+\textbf{Solución.} Si cada kernel vuelve a recorrer x, duplica la reducción. Un plan calcula s una vez y lo comparte; otro fusiona las dos salidas en un productor común. Elegir depende de la representación y del destino. La prueba de rendimiento debe contar recorridos, bytes y lanzamientos, además del número de kernels.
+
+\end{practica}
+\section{Autodiff antes de introducir efectos}
+Recorre el grafo puro en orden topológico inverso y acumula contribuciones para cada entrada diferenciable. En \texttt{y=a*a}, a recibe dos contribuciones. Sustituir la suma de gradientes por una asignación conserva solo una y produce un error por factor dos. Los tipos enteros y booleanos se usan para índices y condiciones; la entrega debe declarar qué nodos admiten derivación.
+
+Para \texttt{z=x+b} con x de forma \texttt{(B,D)} y b de forma \texttt{(D,)}, el gradiente de b suma sobre el eje de lote. En un \texttt{EXPAND}, el backward reduce ejes replicados. En una permutación, aplica la inversa. En un reshape, restaura la forma. En un flip, invierte el mismo eje. En padding y shrink, el backward recorta o rellena según corresponda. Acumula las contribuciones de vistas solapadas.
+
+En un máximo con empate o una función no diferenciable, documenta la convención. No compruebes diferencias finitas exactamente en el punto de quiebre y después atribuyas el desacuerdo al compilador. Para funciones suaves y entradas pequeñas, compara gradientes analíticos, autodiff y diferencias centrales con una perturbación y tolerancia justificadas.
+
+\texttt{STORE}, \texttt{CALL}, \texttt{AFTER}, \texttt{RANGE} y \texttt{END} quedan fuera del autodiff descrito por el syllabus. Aunque un \texttt{CALL} matemáticamente puro pudiera diferenciarse mediante otra extensión, esa no es la ruta exigida aquí. Expande o expresa el modelo en el grafo puro admitido antes de diferenciar, y vuelve a aplicar planificación y rangeify al grafo resultante.
+
+\section{El primer entrenamiento: MNIST como entrega}
+Una propuesta mínima de laboratorio es un clasificador lineal con imágenes aplanadas de 784 componentes, pesos de forma \texttt{(784,10)} y sesgo \texttt{(10,)}. Con lote B, los logits son \texttt{XW+b}, de forma \texttt{(B,10)}. Este modelo deja visibles GEMM, broadcasting, reducción y gradientes. Una capa oculta puede añadirse después como extensión.
+
+Usa entropía cruzada estable. Para una fila de logits z y etiqueta y, resta su máximo m antes de exponenciar y calcula \texttt{m + log(sum(\allowbreak{}exp(z-m))) -\allowbreak{} z[y]}. Con las primitivas del syllabus, \texttt{exp(x)} puede expresarse como \texttt{EXP2(x*log2(e))} y \texttt{log(x)} como \texttt{LOG2(x)*ln(2)}, bajo la precisión acordada. La resta se expresa con \texttt{ADD} y \texttt{NEG}.
+
+La selección de etiqueta puede formularse con una máscara one-hot externa y una reducción si todavía no existe gather diferenciable. Los datos y etiquetas son entradas; no se necesita derivar respecto a ellos para optimizar los pesos. Normaliza la pérdida una sola vez por lote y aplica una actualización simple antes de introducir un optimizador más complejo.
+
+Primero comprueba un lote artificial, luego sobreajusta un conjunto diminuto de ejemplos y finalmente utiliza una partición de entrenamiento y evaluación. Registra procedencia de datos, normalización, semilla, tamaño de lote, pasos, pérdida y exactitud. No uses evaluación para ajustar indefinidamente el modelo. El libro no fija una exactitud conseguida: el estudiante aporta su resultado y la configuración que lo produce.
+
+\section{Semana 6: LOOP, UPCAST, THREAD y GROUP}
+Un rango \texttt{LOOP} se ejecuta mediante iteración. \texttt{UPCAST} expone varias posiciones como operaciones o acumuladores distintos, permitiendo desenrollado y posible vectorización. \texttt{THREAD} reparte trabajo entre trabajadores. Esta clasificación describe cómo ejecutar un eje; no autoriza a repartir una reducción con escrituras concurrentes sin combinar sus parciales.
+
+Para sumar un vector, una propuesta segura reparte bloques disjuntos, calcula una suma privada por trabajador y combina las sumas en un orden definido. Usar \texttt{total += x[i]} desde todos los hilos sin sincronización introduce una carrera. Si cambia el orden FP32, la prueba compara según el contrato numérico, no exige identidad de bits accidental entre planes diferentes.
+
+\texttt{GROUP} reúne múltiples resultados \texttt{void} sin establecer orden entre sus fuentes; su forma es \texttt{()}. Si dos salidas escriben posiciones independientes, pueden agruparse. Si una lee lo que otra escribe, hace falta una dependencia explícita. Ni el orden textual de argumentos de \texttt{GROUP} ni un renderer determinista sustituyen ese vínculo.
+
+\section{Contar operaciones y localizar el límite}
+Con la convención habitual de contar multiplicación y suma como dos operaciones, una GEMM M por K por N realiza aproximadamente $2MKN$ FLOPs. Para 256 en los tres ejes son 33.554.432 FLOPs. FLOPs es cantidad de trabajo; FLOP/s es tasa. Divide por segundos de la fase medida, no por tiempo de compilación salvo que estudies expresamente el coste completo.
+
+Un tile de salida de 16 por 16 que recorre K necesita reutilizar cada valor cargado tantas veces como permita su organización. Aumentar tile puede mejorar reutilización y a la vez consumir más registros o caché. Mide formas pequeñas, grandes e irregulares; un único cuadrado no describe la carga del modelo.
+
+La comparación CPU debe fijar hilos, precisión, biblioteca de referencia y fronteras de medición. Separa ejecución residente, preparación y extremo a extremo. Para declarar competitividad con el estado del arte, la referencia debe ser pertinente y los casos desfavorables deben permanecer en el informe. Los resultados CPU existentes de Lumbre no se convierten en esa afirmación por añadir una tabla de metas.
+
+\section{Atención online y el objetivo FlashAttention}
+El artículo FlashAttention estudia atención exacta organizada por tiles para reducir tráfico entre niveles de memoria. Ese principio conecta directamente con la semana de jerarquías de memoria. Implementar la recurrencia en CPU permite comprobar la matemática antes de abordar un kernel GPU especializado. \cite{flash1}
+
+Para una fila de scores, mantén máximo m, suma normalizadora l y numerador vectorial o. Al recibir otro bloque, actualiza el máximo, reescala el estado anterior y añade las contribuciones del bloque. El resultado final es o dividido por l. Atiende explícitamente el primer bloque no vacío y las filas completamente enmascaradas para evitar operaciones indeterminadas con infinitos.
+
+La forma densa es un buen oráculo para longitudes pequeñas. Compara salidas y gradientes con máscara causal y longitudes no múltiplos del bloque. Un forward con menos memoria no garantiza un backward con la misma propiedad: la validación actual de Lumbre recompone operaciones densas en backward. Para alcanzar el hito completo hay que diseñar y medir también esa fase.
+
+\section{GPU: la dependencia lógica se convierte en ejecución}
+En las semanas 7--8, un eje de salidas independientes puede mapearse a bloques e hilos. Un eje de reducción necesita coordinación y una estrategia de parciales. Las dependencias \texttt{AFTER} y los tiempos de vida deben conservarse cuando un lanzamiento es asíncrono: regresar al host no implica que el dispositivo haya terminado de leer un temporal.
+
+Una barrera de bloque solo coordina ese bloque. Las dependencias entre kernels necesitan el orden que establezca el runtime en sus colas o eventos. Las operaciones matriciales especializadas añaden restricciones de tipos, layouts y participación de hilos. El tutorial CUDA desarrolla ejercicios para convertir estos requisitos en criterios de selección y pruebas.
+
+\section{Formas simbólicas y el paso de entrenamiento}
+Una dimensión simbólica representa una familia de tamaños con restricciones. Si el kernel requiere K múltiplo de ocho, el compilador puede demostrarlo, comprobarlo al lanzar o escoger otro kernel. No debe reutilizar una variante suponiendo que el tamaño anterior sigue vigente. Incluye en la caché las decisiones que afectan al código: destino, tipos, especializaciones y modo numérico.
+
+Antes de entrenar un LLM, fija el contrato de un paso: entradas y etiquetas desplazadas, máscara causal, pérdida normalizada, gradientes, actualización y contador. Un checkpoint de reanudación conserva pesos, estados del optimizador, contador y estados aleatorios o del flujo de datos necesarios. Guardar solo pesos permite inferencia o reinicio, pero no acredita continuar exactamente la misma trayectoria.
+
+La aceptación de las semanas 9--10 incluye una prueba de causalidad, comprobación de gradientes en un caso pequeño, reanudación comparada y medición del paso completo. El objetivo de escala se elige según memoria y tiempo disponibles. Se conserva el modelo pequeño como regresión incluso cuando el proyecto final trabaje con un modelo mayor.
+
+
 \appendix
 \chapter{Código completo de Lumbre y sus pruebas}\label{app:codigo}
 El código siguiente coincide con los archivos del paquete de esta edición. Los comentarios del software se conservan en inglés para facilitar trabajo técnico; el desarrollo didáctico del libro está en español. La revisión local valida CUDA en una RTX 5070 Ti Laptop; HIP sigue pendiente de hardware compatible.\par
@@ -7925,23 +8284,23 @@ El paquete incluye además los capítulos fuente y \texttt{build\_book.py}. Al e
 \chapter{Mapa de cobertura y puertas del semestre}\label{app:cobertura}
 
 \section{Correspondencia con el temario solicitado}
-Este mapa sirve para localizar los contenidos, no para sustituir su lectura. Las páginas son referencias internas del PDF y pueden cambiar al recompilar con otra edición o tipografía.
+Este mapa sirve para localizar los contenidos, no para sustituir su lectura. El programa completo aparece en la p.\pageref{curso:programa}; el contrato de UOps, en la p.\pageref{curso:contrato}; y su desarrollo hasta entrenamiento, en la p.\pageref{curso:rangeify}. Las páginas son referencias internas del PDF y pueden cambiar al recompilar con otra edición o tipografía.
 
 \begin{longtable}{@{}P{.22\textwidth}P{.43\textwidth}P{.29\textwidth}@{}}
 \toprule\textbf{Bloque} & \textbf{Núcleo del libro} & \textbf{Práctica y evaluación}\\\midrule\endhead
 Preparación desde cero & Programas y taller, p.\pageref{ch:programa}; tensores, p.\pageref{ch:tensores}; números, p.\pageref{ch:numeros}. & Predicciones manuales y programas mínimos.\\
 Semanas 1--2: UOps, elementwise, symbolic, rewrites, renderer & UOps, p.\pageref{ch:uops}; C, p.\pageref{ch:renderer}; índices, p.\pageref{ch:symbolic}; reescrituras, p.\pageref{ch:rewrites}. & Laboratorios 1--2, pp.\pageref{lab:uno} y \pageref{lab:dos}.\\
 Semanas 3--4: loops, movement, reduction, rangeify & Vistas, p.\pageref{ch:movement}; recorridos, p.\pageref{ch:rangeify}; reducción, p.\pageref{ch:reducciones}; kernels, p.\pageref{ch:schedule}. & Laboratorios 3--4, pp.\pageref{lab:tres} y \pageref{lab:cuatro}.\\
-Semanas 5--6: jerarquía, upcasting, GEMM, conv & Memoria, p.\pageref{ch:jerarquia}; SIMD, p.\pageref{ch:simd}; GEMM, p.\pageref{ch:gemm}; conv, p.\pageref{ch:convs}. & Laboratorios 5--6 y proyecto competitivo, p.\pageref{project:competitivo}.\\
+Semanas 5--6: fisión, fusión, autodiff, MNIST y CPU rápida & Kernels, p.\pageref{ch:schedule}; autodiff, p.\pageref{ch:autodiff}; memoria, p.\pageref{ch:jerarquia}; SIMD, p.\pageref{ch:simd}; GEMM y conv. & Laboratorios 4--6 y 8. MNIST es una entrega propuesta, no un resultado local acreditado.\\
 Semanas 7--8: call, GPU, aceleradores, tensor cores & GPU, p.\pageref{ch:gpu}; runtime, p.\pageref{ch:runtime}; memoria, p.\pageref{ch:gpu_memoria}; tensor cores, p.\pageref{ch:tensorcores}; AMD y Ascend. & Laboratorio 7, p.\pageref{lab:siete}; pasaporte, p.\pageref{project:pasaporte}; CUDA validada, HIP pendiente.\\
-Semanas 9--10: modelos y autodiff & Derivadas, p.\pageref{ch:derivada}; VJP, p.\pageref{ch:autodiff}; decoder, p.\pageref{ch:decoder-completo}; entrenamiento, p.\pageref{ch:train}. & Laboratorios 8--11; entrenamiento y checkpoint ejecutados.\\
+Semanas 9--10: modelos reales y formas simbólicas & Contrato simbólico, p.\pageref{curso:rangeify}; decoder, p.\pageref{ch:decoder-completo}; entrenamiento, p.\pageref{ch:train}. & Laboratorios 9--11; reutilización de autodiff, entrenamiento y checkpoint.\\
 Escala LLM moderna & Atención eficiente, p.\pageref{ch:flash}; memoria, p.\pageref{ch:escalar}; precisión, p.\pageref{ch:precision-mixta}; distribuido, p.\pageref{ch:distribuido}; MoE y KV cache. & Proyecto LLM, p.\pageref{project:llm}; separar arquitectura estudiada de escala ejecutada.\\
 Semanas 11--final: proyectos & Atención, p.\pageref{project:atencion}; pasaporte, p.\pageref{project:pasaporte}; rendimiento, p.\pageref{project:competitivo}; agentes, p.\pageref{project:agente}; LLM mayor. & Hipótesis, implementación, pruebas, ablación, informe y defensa.\\
 Investigación y repositorios & tinygrad, p.\pageref{ch:atlas-tinygrad}; Tiny Corp, p.\pageref{ch:tinycorp-sistemas}; LLVM/MLIR, p.\pageref{ch:ssa-mlir}; lenguajes, p.\pageref{ch:atlas-lenguajes}; artículos, p.\pageref{ch:articulos-2026}. & Lectura por contratos y atribución de evidencia; bibliografía enlazada.\\
 \bottomrule\end{longtable}
 
 \section{Qué tiene que saber explicar el estudiante}
-Al terminar las semanas 1--2 debe construir un grafo, justificar una reescritura y localizar su efecto en el C. Al terminar las semanas 3--4 debe obtener índices y vidas de memoria de una composición de vistas y reducciones. En las semanas 5--6 debe medir una mejora y explicar el baseline. En las semanas 7--8 debe distinguir cálculo, lanzamiento y sincronización, y validar en hardware las rutas que vaya a afirmar como ejecutadas.
+Al terminar las semanas 1--2 debe construir un grafo, justificar una reescritura y localizar su efecto en el C. Al terminar las semanas 3--4 debe obtener índices de una composición de vistas y reducciones. En las semanas 5--6 debe planificar kernels, diferenciar el grafo puro, entrenar su primer MNIST y medir una mejora CPU con un baseline explicado. En las semanas 7--8 debe distinguir cálculo, lanzamiento y sincronización, y validar en hardware las rutas que vaya a afirmar como ejecutadas.
 
 En las semanas 9--10 debe comprobar una pérdida, generar gradientes y reanudar entrenamiento conservando el estado. El proyecto final añade una hipótesis propia y una contribución identificable. Un resultado negativo con explicación puede cumplir ese objetivo. Una afirmación de SOTA sin suite, fecha, contrato y comparación no lo cumple.
 

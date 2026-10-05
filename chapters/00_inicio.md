@@ -36,11 +36,11 @@ Durante el semestre, una organización posible combina explicación, lectura de 
 |---|---|---|
 | Preparación | ¿Puedo ejecutar y comprobar un bucle? | Programa C y prueba manual |
 | Semanas 1–2 | ¿Puedo transformar un grafo sin alterar su contrato? | UOps, simplificador, generador C |
-| Semanas 3–4 | ¿Puedo convertir tensores en recorridos? | Índices, reducciones, plan de kernels |
-| Semanas 5–6 | ¿Puedo justificar una mejora CPU? | GEMM, convolución y benchmark |
+| Semanas 3–4 | ¿Puedo convertir tensores en recorridos? | Bucles, movimientos, reducciones y rangeify |
+| Semanas 5–6 | ¿Puedo diferenciar, entrenar y mejorar CPU? | Fisión, fusión, autodiff, MNIST y kernels rápidos |
 | Semanas 7–8 | ¿Puedo ejecutar sin carreras en una GPU? | Runtime, mapeo de ejes y kernels |
-| Semanas 9–10 | ¿Puedo construir y entrenar un decoder? | Autodiff, optimizador, checkpoint |
-| Semanas 11–14 | ¿Puedo defender una extensión original? | Proyecto, informe y reproducción |
+| Semanas 9–10 | ¿Puedo construir y entrenar un decoder? | Formas simbólicas, modelo, optimizador y checkpoint |
+| Semanas 11 en adelante | ¿Puedo defender una extensión original? | Proyecto, informe y reproducción |
 
 ## Cómo utilizar el código entregado
 

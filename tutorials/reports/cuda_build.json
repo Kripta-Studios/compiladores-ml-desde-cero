@@ -3,22 +3,22 @@
     {
       "pass": 1,
       "returncode": 0,
-      "seconds": 1.2543506850197446
+      "seconds": 38.917180300006294
     },
     {
       "pass": 2,
       "returncode": 0,
-      "seconds": 1.9747150029870681
+      "seconds": 35.28959179999947
     },
     {
       "pass": 3,
       "returncode": 0,
-      "seconds": 1.5885481029981747
+      "seconds": 36.76325179999549
     }
   ],
-  "source_sha256": "52b0d439b13778f139868dca61e965b81f9fe3e358757f180c7b4c79fbcc58dd",
-  "pdf_sha256": "e0d15593b5e38d8e4cce6457c3c60ddbd15a2874ab80cd05a929d920e22279e0",
-  "engine": "pdfTeX 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian)",
+  "source_sha256": "8c2e03a21abf71f03e35c34425206a7bfcb0336e1de440300b79a2f2f520d418",
+  "pdf_sha256": "2450a8978ac685b1bb83fd848f3e800b65e6ced0d632249c8dde14b73224b50a",
+  "engine": "MiKTeX-pdfTeX 4.26 (MiKTeX 26.2)",
   "references_converged": true,
   "overfull_boxes": 0,
   "underfull_boxes": 0,

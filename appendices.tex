@@ -126,23 +126,23 @@ El paquete incluye además los capítulos fuente y \texttt{build\_book.py}. Al e
 \chapter{Mapa de cobertura y puertas del semestre}\label{app:cobertura}
 
 \section{Correspondencia con el temario solicitado}
-Este mapa sirve para localizar los contenidos, no para sustituir su lectura. Las páginas son referencias internas del PDF y pueden cambiar al recompilar con otra edición o tipografía.
+Este mapa sirve para localizar los contenidos, no para sustituir su lectura. El programa completo aparece en la p.\pageref{curso:programa}; el contrato de UOps, en la p.\pageref{curso:contrato}; y su desarrollo hasta entrenamiento, en la p.\pageref{curso:rangeify}. Las páginas son referencias internas del PDF y pueden cambiar al recompilar con otra edición o tipografía.
 
 \begin{longtable}{@{}P{.22\textwidth}P{.43\textwidth}P{.29\textwidth}@{}}
 \toprule\textbf{Bloque} & \textbf{Núcleo del libro} & \textbf{Práctica y evaluación}\\\midrule\endhead
 Preparación desde cero & Programas y taller, p.\pageref{ch:programa}; tensores, p.\pageref{ch:tensores}; números, p.\pageref{ch:numeros}. & Predicciones manuales y programas mínimos.\\
 Semanas 1--2: UOps, elementwise, symbolic, rewrites, renderer & UOps, p.\pageref{ch:uops}; C, p.\pageref{ch:renderer}; índices, p.\pageref{ch:symbolic}; reescrituras, p.\pageref{ch:rewrites}. & Laboratorios 1--2, pp.\pageref{lab:uno} y \pageref{lab:dos}.\\
 Semanas 3--4: loops, movement, reduction, rangeify & Vistas, p.\pageref{ch:movement}; recorridos, p.\pageref{ch:rangeify}; reducción, p.\pageref{ch:reducciones}; kernels, p.\pageref{ch:schedule}. & Laboratorios 3--4, pp.\pageref{lab:tres} y \pageref{lab:cuatro}.\\
-Semanas 5--6: jerarquía, upcasting, GEMM, conv & Memoria, p.\pageref{ch:jerarquia}; SIMD, p.\pageref{ch:simd}; GEMM, p.\pageref{ch:gemm}; conv, p.\pageref{ch:convs}. & Laboratorios 5--6 y proyecto competitivo, p.\pageref{project:competitivo}.\\
+Semanas 5--6: fisión, fusión, autodiff, MNIST y CPU rápida & Kernels, p.\pageref{ch:schedule}; autodiff, p.\pageref{ch:autodiff}; memoria, p.\pageref{ch:jerarquia}; SIMD, p.\pageref{ch:simd}; GEMM y conv. & Laboratorios 4--6 y 8. MNIST es una entrega propuesta, no un resultado local acreditado.\\
 Semanas 7--8: call, GPU, aceleradores, tensor cores & GPU, p.\pageref{ch:gpu}; runtime, p.\pageref{ch:runtime}; memoria, p.\pageref{ch:gpu_memoria}; tensor cores, p.\pageref{ch:tensorcores}; AMD y Ascend. & Laboratorio 7, p.\pageref{lab:siete}; pasaporte, p.\pageref{project:pasaporte}; CUDA validada, HIP pendiente.\\
-Semanas 9--10: modelos y autodiff & Derivadas, p.\pageref{ch:derivada}; VJP, p.\pageref{ch:autodiff}; decoder, p.\pageref{ch:decoder-completo}; entrenamiento, p.\pageref{ch:train}. & Laboratorios 8--11; entrenamiento y checkpoint ejecutados.\\
+Semanas 9--10: modelos reales y formas simbólicas & Contrato simbólico, p.\pageref{curso:rangeify}; decoder, p.\pageref{ch:decoder-completo}; entrenamiento, p.\pageref{ch:train}. & Laboratorios 9--11; reutilización de autodiff, entrenamiento y checkpoint.\\
 Escala LLM moderna & Atención eficiente, p.\pageref{ch:flash}; memoria, p.\pageref{ch:escalar}; precisión, p.\pageref{ch:precision-mixta}; distribuido, p.\pageref{ch:distribuido}; MoE y KV cache. & Proyecto LLM, p.\pageref{project:llm}; separar arquitectura estudiada de escala ejecutada.\\
 Semanas 11--final: proyectos & Atención, p.\pageref{project:atencion}; pasaporte, p.\pageref{project:pasaporte}; rendimiento, p.\pageref{project:competitivo}; agentes, p.\pageref{project:agente}; LLM mayor. & Hipótesis, implementación, pruebas, ablación, informe y defensa.\\
 Investigación y repositorios & tinygrad, p.\pageref{ch:atlas-tinygrad}; Tiny Corp, p.\pageref{ch:tinycorp-sistemas}; LLVM/MLIR, p.\pageref{ch:ssa-mlir}; lenguajes, p.\pageref{ch:atlas-lenguajes}; artículos, p.\pageref{ch:articulos-2026}. & Lectura por contratos y atribución de evidencia; bibliografía enlazada.\\
 \bottomrule\end{longtable}
 
 \section{Qué tiene que saber explicar el estudiante}
-Al terminar las semanas 1--2 debe construir un grafo, justificar una reescritura y localizar su efecto en el C. Al terminar las semanas 3--4 debe obtener índices y vidas de memoria de una composición de vistas y reducciones. En las semanas 5--6 debe medir una mejora y explicar el baseline. En las semanas 7--8 debe distinguir cálculo, lanzamiento y sincronización, y validar en hardware las rutas que vaya a afirmar como ejecutadas.
+Al terminar las semanas 1--2 debe construir un grafo, justificar una reescritura y localizar su efecto en el C. Al terminar las semanas 3--4 debe obtener índices de una composición de vistas y reducciones. En las semanas 5--6 debe planificar kernels, diferenciar el grafo puro, entrenar su primer MNIST y medir una mejora CPU con un baseline explicado. En las semanas 7--8 debe distinguir cálculo, lanzamiento y sincronización, y validar en hardware las rutas que vaya a afirmar como ejecutadas.
 
 En las semanas 9--10 debe comprobar una pérdida, generar gradientes y reanudar entrenamiento conservando el estado. El proyecto final añade una hipótesis propia y una contribución identificable. Un resultado negativo con explicación puede cumplir ese objetivo. Una afirmación de SOTA sin suite, fecha, contrato y comparación no lo cumple.
 
